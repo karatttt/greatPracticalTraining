@@ -69,13 +69,29 @@
 ### 2. **准备环境**
    ```bash
    JDK >= 1.8 (推荐1.8版本)
-   Mysql >= 5.7.0 (推荐5.7版本)[点击配置阿里云在线数据库]()
+   Mysql >= 5.7.0 (推荐5.7版本)
    Maven >= 3.0
    ```
+[点击配置阿里云在线数据库](#databas)
 
-### 3. **安装依赖**
+### 3. **安装依赖和Redis**
 然后选择 Maven -> Existing Maven Projects，点击 Next> 按钮，选择工作目录，然后点击 Finish 按钮，即可成功导入。
 
+安装Homebrew后，在终端执行以下命令**安装Redis**：
+```bash
+brew install redis
+# 安装完成后，可以通过以下命令启动Redis服务：
+brew services start redis
+# 你也可以手动启动Redis服务：
+redis-server /usr/local/etc/redis.conf
+# 通过redis-cli命令测试Redis是否正常工作：
+redis-cli ping
+# 如果返回PONG，则表示Redis已成功安装并运行。
+# 注意：以上步骤可能随着时间和操作系统的不同而有所变化，请确保你的Homebrew是最新版本，以提供最新的Redis安装包。
+```
+
+
+<a id="databas"></a>
 ### 4. 连接数据库
 
 为了确保数据打通、功能连贯、风格一致，我们使用了阿里云云端数据库连接。如果你使用的是 IntelliJ IDEA，可以按照以下步骤连接数据库：
@@ -91,22 +107,31 @@
 3. **测试连接**：
    - 点击“测试连接”按钮，确保连接成功。
 
+### 5. **修改配置**
+- 如果使用Mac需要修改application.yml文件路径profile，修改数据库连接，编辑resources目录下的application-druid.yml
+- 如果使用Linux 提示表不存在，设置大小写敏感配置在/etc/my.cnf添加lower_case_table_names=1，重启MYSQL服务 
+- 如果提示当前权限不足，无法写入文件请检查application.yml中的profile路径或logback.xml中的log.path路径是否有可读可写操作权限
 
-### 5. **运行代码**
-打开项目运行softcostEstimator-admin/src/main/java/com/softcostEstimator/RuoYiApplication.java，出现如下图表示启动成功
-   ```bash
+### 6. **运行代码**
+1. 打开项目运行softcostEstimator-admin/src/main/java/com/softcostEstimator/RuoYiApplication.java，出现如下图表示启动成功
+```bash
    (♥◠‿◠)ﾉﾞ  SoftcostEstimator启动成功    ლ(´ڡ`ლ)ﾞ                  
 ,--.  ,--.,------.,--. ,--. ,---.   ,--.  ,---.   ,---. 
 |  ,'.|  ||  .---'|  | |  |'.-.  \ /    \'.-.  \ /    | 
 |  |' '  ||  `--, |  | |  | .-' .'|  ()  |.-' .'/  '  | 
 |  | `   ||  `---.'  '-'  '/   '-. \    //   '-.'--|  | 
-`--'  `--'`------' `-----' '-----'  `--' '-----'   `--' 
-                           
-   ```
-### 6. **预览说明**
-打开浏览器，输入：(http://localhost:80 (opens new window)) （默认账户/密码 admin/admin123）
-若能正确展示登录页面，并能成功登录，菜单及页面展示正常，则表明环境搭建成功
+`--'  `--'`------' `-----' '-----'  `--' '-----'   `--'
+```
+2. 前端vue在/softcostEstimator-ui/package.json中的"dev": "vue-cli-service serve",
+```
+# 启动服务
+npm run dev
+```
 
+
+### 7. **预览说明**
+1. 打开浏览器，输入：(http://localhost:80 (opens new window)) （默认账户/密码 admin/admin123)
+2. 若能正确展示登录页面，并能成功登录，菜单及页面展示正常，则表明环境搭建成功
 
 ---
 
