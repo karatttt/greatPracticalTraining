@@ -1,0 +1,138 @@
+<div align="center">
+  <img alt="Logo" src="https://i.ibb.co/RC5jjDh/GitHub.png" width="20%" />
+  <h1>软件造价通softcostEstimator</h1>
+</div>
+
+<p align="center">
+  <img alt="release" src="https://img.shields.io/badge/release-v0.0.1-brightgreen" />
+  <img alt="python" src="https://img.shields.io/badge/java-v23.0.1-brightgreen" />
+  <img alt="state" src="https://img.shields.io/badge/state-孵化-brightgreen" />
+  <img alt="domain" src="https://img.shields.io/badge/domain-AI+软件造价评估-brightgreen" />
+  <img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen" />
+  <img alt="docs" src="https://img.shields.io/badge/docs-latest-blue" />
+  <img alt="code style" src="https://img.shields.io/badge/code%20style-black-000000" />
+</p>
+
+---
+
+## 📘 项目介绍
+该项目于 11 月 12 日启动，旨在构建一个基于若依后台管理系统的 AI+ 软件成本评估系统：软件造价通softcostEstimator，专注于租户和项目管理子系统、功能点分析子系统、造价综合评估子系统和报告生成与展示子系统四个子系统。
+
+项目地址：
+[伟大的实训](https://gitcode.com/zzq20226705/greatPracticalTraining.git)
+[项目文档](https://gitcode.com/zzq20226705/greatPracticalTraining/overview)
+
+本项目利用人工智能技术（特别是大语言模型中的多智能体编排）来优化项目展演过程，提供高效的功能点分析、造价综合评估和报告生成与展示，并使用阿里云数据库存储确保数据打通、功能连贯、风格一致。
+
+---
+
+## 🔧 主要功能
+1. **租户和项目管理子系统：**
+- 系统支持多租户环境，租户可以管理其团队成员（评估师、审核员）的角色和权限，确保数据的安全性和隐私性。
+- 租户可以邀请团队成员加入项目，共同进行项目成本估算和管理，提高团队协作效率。
+- 租户可以创建新的软件造价评估项目，并配置项目的基本信息，如项目名称、项目需求、时间等，并可以分配评估师和审核员。
+2. **功能点分析子系统：**
+- 评估师可以录入和管理软件项目的功能结构，为后续的造价评估提供基础数据。
+- 评估师基于软件项目的功能需求，对软件规模进行度量。这通常包括识别内部逻辑文件（ILF）、外部接口文件（EIF）、外部输入（EI）、外部输出（EO）以及外部查询（EQ）等功能点，并根据预设的参数计算未调整的功能点数量。
+- 参考GSC和规模变更调整因子两种方法，计算调整的功能点数。
+3. **造价综合评估子系统：**
+- 评估师基于行业基准数据或团队历史项目数据确定PDR取值。
+- 考虑各种影响软件造价的因素（软件因素、开发因素和PDR等），评估师可以计算软件项目工作量
+- 参考当年发布的行业区域人员成本，以及项目的风险和质量因素，评估师可以计算软件项目综合造价。
+4. **报告生成与展示子系统：**
+- 评估师可以生成详细的软件造价评估报告（Word版），报告内容包括项目基本信息、功能点分析、调整因子设置、造价评估结果等。
+- 审核员可以评审报告。
+- 系统提供软件造价数据看板，租户可以通过图表、折线图等形式直观地查看各个评估项目的进度状态、评估结果、任务分配等数据。
+---
+
+## 🛠 技术特点
+- **本地化部署**：保障数据安全与隐私。
+- **模块化设计**：便于扩展与维护。
+- **高性能**：优化模型推理速度。
+- **可定制性**：支持自定义评分标准与题目模板。
+
+---
+
+## 📞 交流方式
+- **邮箱**：zzq18368326181@icloud.com
+- **项目 Issues**：欢迎在 GitCode 提交问题与建议。
+
+---
+
+## 🚀 快速开始
+
+### 1. **克隆项目**
+   ```bash
+   git clone https://gitcode.com/zzq20226705/greatPracticalTraining.git
+   ```
+
+### 2. **准备环境**
+   ```bash
+   JDK >= 1.8 (推荐1.8版本)
+  Mysql >= 5.7.0 (推荐5.7版本)[点击配置阿里云在线数据库]()
+  Maven >= 3.0
+   ```
+
+### 3. **安装依赖**
+   然后选择 Maven -> Existing Maven Projects，点击 Next> 按钮，选择工作目录，然后点击 Finish 按钮，即可成功导入。
+
+### 4. **连接数据库**
+   ```bash
+   pip install crewai
+   ```
+    创建数据库ry并导入数据脚本ry_2021xxxx.sql，quartz.sql
+   安装主 CrewAI 包和工具包：
+   ```bash
+   pip install 'crewai[tools]'
+   ```
+
+### 5. **运行代码**
+   ```bash
+   python ./crewaiwithqwen/main.py
+   ```
+
+   或运行测试代码：
+   ```bash
+   python ./demo.py
+   ```
+---
+
+## 🤝 贡献指南
+
+### 组长贡献指南
+1. 按照组长姓名创建分支，例如：zzq
+2. 组长仅能上传自己的分支
+3. 讨论整合后提交到main分支
+
+### 组内贡献指南
+1. Fork 本仓库
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 提交 Pull Request
+（也可以组内都提交到组长分支）
+---
+
+## 🐞 问题反馈
+
+如遇到问题，欢迎通过以下方式反馈：
+- 提交 [Issue](https://gitcode.com/zzq20226705/AIQuestion/issues)
+- 邮件联系：zzq18368326181@icloud.com
+
+---
+
+[//]: # (## 📜 许可证)
+
+[//]: # (本项目采用 MIT 许可证 - 详情请参阅 [LICENSE]&#40;LICENSE&#41; 文件。)
+[//]: # (---)
+
+## 👤 作者
+- **庄正奇** - [zzq](https://gitcode.com/zzq20226705)
+- **李嘉豪** 
+- **张新锐**
+> 暂时先写组长
+---
+
+## 💬 致谢
+- 感谢所有贡献者的付出。
+- 特别感谢 [东北大学软件学院 软件产品构建课题组](http://sc.neu.edu.cn) 的支持。
