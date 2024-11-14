@@ -157,7 +157,7 @@ git checkout -b bqy origin/bqy
 ```bash
 git checkout bqy
 ```
-
+**注意**：请各组管理自己小组的分支，不要提交代码到其他小组的分支
 
 ### 组内贡献指南
 1. Fork 本仓库
