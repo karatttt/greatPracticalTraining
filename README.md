@@ -89,7 +89,7 @@ redis-cli ping
 # 如果返回PONG，则表示Redis已成功安装并运行。
 # 注意：以上步骤可能随着时间和操作系统的不同而有所变化，请确保你的Homebrew是最新版本，以提供最新的Redis安装包。
 ```
-
+_**注意**：请在每次运行项目前检查redis运行状态，多数无法运行时由于redis没有运行_
 
 <a id="databas"></a>
 ### 4. 连接数据库
@@ -103,6 +103,7 @@ redis-cli ping
    - 主机地址：`rm-2zesz8131iv74g50gqo.mysql.rds.aliyuncs.com`
    - 用户名：`bqy`
    - 密码：`Abc123456`
+   - 架构：`main`
 
 3. **测试连接**：
    - 点击“测试连接”按钮，确保连接成功。
