@@ -144,6 +144,21 @@ npm run dev
 2. 组长仅能上传自己的分支
 3. 讨论整合后提交到main分支
 
+#### 拉取分支指南（以bqy分支为例）
+- 若要从远程仓库拉取 bqy 分支并切换到该分支，先确保本地仓库是最新的：
+```bash
+git fetch origin
+```
+- 拉取远程的 bqy 分支并切换到该分支:
+```bash
+git checkout -b bqy origin/bqy
+```
+- 若 bqy 分支已存在，则切换到该分支:
+```bash
+git checkout bqy
+```
+
+
 ### 组内贡献指南
 1. Fork 本仓库
 2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
