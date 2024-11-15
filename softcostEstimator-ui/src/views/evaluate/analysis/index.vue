@@ -125,38 +125,55 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="analysisList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="项目ID" align="center" prop="projectId" />
-      <el-table-column label="ILF" align="center" prop="ILF" />
-      <el-table-column label="EIF" align="center" prop="EIF" />
-      <el-table-column label="EI" align="center" prop="EI" />
-      <el-table-column label="EO" align="center" prop="EO" />
-      <el-table-column label="EQ" align="center" prop="EQ" />
-      <el-table-column label="UFP" align="center" prop="UFP" />
-      <el-table-column label="GSC" align="center" prop="GSC" />
-      <el-table-column label="TCF" align="center" prop="TCF" />
-      <el-table-column label="AFP" align="center" prop="AFP" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['evaluate:analysis:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['evaluate:analysis:remove']"
-          >删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    
+    <div class="app-container" style="height: 100%;">
+      <!-- 布局容器 -->
+      <el-row>
+        <!-- 表格部分 -->
+        <el-col :span="20">
+          <el-table v-loading="loading" :data="analysisList" @selection-change="handleSelectionChange">
+            <el-table-column type="selection" width="55" align="center" />
+            <el-table-column label="项目ID" align="center" prop="projectId" />
+            <el-table-column label="ILF" align="center" prop="ILF" />
+            <el-table-column label="EIF" align="center" prop="EIF" />
+            <el-table-column label="EI" align="center" prop="EI" />
+            <el-table-column label="EO" align="center" prop="EO" />
+            <el-table-column label="EQ" align="center" prop="EQ" />
+<!--            <el-table-column label="UFP" align="center" prop="UFP" />-->
+<!--            <el-table-column label="GSC" align="center" prop="GSC" />-->
+<!--            <el-table-column label="TCF" align="center" prop="TCF" />-->
+            <el-table-column label="AFP" align="center" prop="AFP" />
+            <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+              <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  type="text"
+                  icon="el-icon-edit"
+                  @click="handleUpdate(scope.row)"
+                  v-hasPermi="['evaluate:analysis:edit']"
+                >修改</el-button>
+                <el-button
+                  size="mini"
+                  type="text"
+                  icon="el-icon-delete"
+                  @click="handleDelete(scope.row)"
+                  v-hasPermi="['evaluate:analysis:remove']"
+                >删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+        <!-- 柱状图部分 -->
+        <el-col :span="10">
+          <div id="chart" style="width: 100%; height: 400px;"></div>
+        </el-col>
+        <el-col :span="10">
+          <div id="chart" style="width: 100%; height: 400px;"></div>
+        </el-col>
+
+      </el-row>
+
+    </div>
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -206,6 +223,7 @@
 
 <script>
 import { listAnalysis, getAnalysis, delAnalysis, addAnalysis, updateAnalysis } from "@/api/evaluate/analysis";
+import * as echarts from 'echarts';
 
 export default {
   name: "Analysis",
@@ -220,7 +238,7 @@ export default {
       // 非多个禁用
       multiple: true,
       // 显示搜索条件
-      showSearch: true,
+      showSearch: false,
       // 总条数
       total: 0,
       // 功能点分析表格数据
@@ -262,11 +280,17 @@ export default {
         EQ: [
           { required: true, message: "EQ不能为空", trigger: "blur" }
         ],
-      }
+      },
+      chart: null,
+
     };
   },
   created() {
     this.getList();
+  },
+  mounted() {
+    this.initChart();
+    this.generateData(); // 生成随机数据
   },
   methods: {
     /** 查询功能点分析列表 */
@@ -366,6 +390,25 @@ export default {
       this.download('evaluate/analysis/export', {
         ...this.queryParams
       }, `analysis_${new Date().getTime()}.xlsx`)
+    },
+    /** 生成柱状图 */
+    initChart() {
+      this.chart = echarts.init(document.getElementById('chart'));
+      const option = {
+        // 柱状图配置项
+        xAxis: {
+          type: 'category',
+          data: ['ILF', 'EIF', 'EI', 'EO', 'EQ', 'UFP', 'GSC', 'TCF', 'AFP']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [{
+          data: [120, 200, 150, 80, 70, 110, 130, 100, 90],
+          type: 'bar'
+        }]
+      };
+      this.chart.setOption(option);
     }
   }
 };
