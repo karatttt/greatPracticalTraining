@@ -7,215 +7,213 @@ import com.softcostEstimator.common.core.domain.BaseEntity;
 
 /**
  * 综合评估对象 productbudget
- * 
+ *
  * @author ruoyi
- * @date 2024-11-14
+ * @date 2024-11-15
  */
 public class Productbudget extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** 项目ID */
+    /** $column.columnComment */
     private Long productID;
 
-    /** PDR */
-    @Excel(name = "PDR")
-    private float PDR;
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private Double PDR;
 
-    /** SF */
-    @Excel(name = "SF")
-    private float SF;
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private Double SF;
 
-    /** BD */
-    @Excel(name = "BD")
-    private float BD;
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private Double BD;
 
-    /** AT */
-    @Excel(name = "AT")
-    private float AT;
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private Double AT;
 
-    /** QR */
-    @Excel(name = "QR")
-    private float QR;
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private Double QR;
 
-    /** SL */
-    @Excel(name = "SL")
-    private float SL;
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private Double SL;
 
-    /** DT */
-    @Excel(name = "DT")
-    private float DT;
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private Double DT;
 
-    /** RSK */
-    @Excel(name = "RSK")
-    private float RSK;
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private Double RSK;
 
-    /** F */
-    @Excel(name = "F")
-    private float F;
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private Double F;
 
-    /** DNC */
-    @Excel(name = "DNC")
-    private float DNC;
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private Double DNC;
 
-    /** SDC */
-    @Excel(name = "SDC")
-    private float SDC;
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private Double SDC;
 
-    /** ESDC */
-    @Excel(name = "ESDC")
-    private float ESDC;
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private Double ESDC;
 
-    @Excel(name = "tenantryID")
-    private int tenantryID;
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private Long tenantryID;
 
-    public void setProductID(Long productID) 
+    public void setProductID(Long productID)
     {
         this.productID = productID;
     }
 
-    public Long getProductID() 
+    public Long getProductID()
     {
         return productID;
     }
-    public void setPDR(Long PDR) 
+    public void setPDR(Double PDR)
     {
         this.PDR = PDR;
     }
 
-    public float getPDR()
+    public Double getPDR()
     {
         return PDR;
     }
-    public void setSF(float SF)
+    public void setSF(Double SF)
     {
         this.SF = SF;
     }
 
-    public float getSF()
+    public Double getSF()
     {
         return SF;
     }
-    public void setBD(float BD)
+    public void setBD(Double BD)
     {
         this.BD = BD;
     }
 
-    public float getBD()
+    public Double getBD()
     {
         return BD;
     }
-    public void setAT(float AT)
+    public void setAT(Double AT)
     {
         this.AT = AT;
     }
 
-    public float getAT()
+    public Double getAT()
     {
         return AT;
     }
-    public void setQR(float QR)
+    public void setQR(Double QR)
     {
         this.QR = QR;
     }
 
-    public float getQR()
+    public Double getQR()
     {
         return QR;
     }
-    public void setSL(float SL)
+    public void setSL(Double SL)
     {
         this.SL = SL;
     }
 
-    public float getSL()
+    public Double getSL()
     {
         return SL;
     }
-    public void setDT(float DT)
+    public void setDT(Double DT)
     {
         this.DT = DT;
     }
 
-    public float getDT()
+    public Double getDT()
     {
         return DT;
     }
-    public void setRSK(float RSK)
+    public void setRSK(Double RSK)
     {
         this.RSK = RSK;
     }
 
-    public float getRSK()
+    public Double getRSK()
     {
         return RSK;
     }
-    public void setF(float F)
+    public void setF(Double F)
     {
         this.F = F;
     }
 
-    public float getF()
+    public Double getF()
     {
         return F;
     }
-    public void setDNC(float DNC)
+    public void setDNC(Double DNC)
     {
         this.DNC = DNC;
     }
 
-    public float getDNC()
+    public Double getDNC()
     {
         return DNC;
     }
-    public void setSDC(float SDC)
+    public void setSDC(Double SDC)
     {
         this.SDC = SDC;
     }
 
-    public float getSDC()
+    public Double getSDC()
     {
         return SDC;
     }
-    public void setESDC(float ESDC)
+    public void setESDC(Double ESDC)
     {
         this.ESDC = ESDC;
     }
 
-    public float getESDC()
+    public Double getESDC()
     {
         return ESDC;
     }
-
-    public void setPDR(float PDR) {
-        this.PDR = PDR;
-    }
-
-    public int getTenantryID() {
-        return tenantryID;
-    }
-
-    public void setTenantryID(int tenantryID) {
+    public void setTenantryID(Long tenantryID)
+    {
         this.tenantryID = tenantryID;
+    }
+
+    public Long getTenantryID()
+    {
+        return tenantryID;
     }
 
     @Override
     public String toString() {
-        return "Productbudget{" +
-                "productID=" + productID +
-                ", PDR=" + PDR +
-                ", SF=" + SF +
-                ", BD=" + BD +
-                ", AT=" + AT +
-                ", QR=" + QR +
-                ", SL=" + SL +
-                ", DT=" + DT +
-                ", RSK=" + RSK +
-                ", F=" + F +
-                ", DNC=" + DNC +
-                ", SDC=" + SDC +
-                ", ESDC=" + ESDC +
-                ", tenantryID=" + tenantryID +
-                '}';
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+                .append("productID", getProductID())
+                .append("PDR", getPDR())
+                .append("SF", getSF())
+                .append("BD", getBD())
+                .append("AT", getAT())
+                .append("QR", getQR())
+                .append("SL", getSL())
+                .append("DT", getDT())
+                .append("RSK", getRSK())
+                .append("F", getF())
+                .append("DNC", getDNC())
+                .append("SDC", getSDC())
+                .append("ESDC", getESDC())
+                .append("tenantryID", getTenantryID())
+                .toString();
     }
 }

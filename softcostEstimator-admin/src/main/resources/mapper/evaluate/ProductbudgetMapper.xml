@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.softcostEstimator.evaluate.mapper.ProductbudgetMapper">
-    
+
     <resultMap type="Productbudget" id="ProductbudgetResult">
         <result property="productID"    column="productID"    />
         <result property="PDR"    column="PDR"    />
@@ -22,12 +22,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectProductbudgetVo">
-        select productID, PDR, SF, BD, AT, QR, SL, DT, RSK, F, DNC, SDC, ESDC ,tenantryID from productbudget
+        select productID, PDR, SF, BD, AT, QR, SL, DT, RSK, F, DNC, SDC, ESDC, tenantryID from productbudget
     </sql>
 
     <select id="selectProductbudgetList" parameterType="Productbudget" resultMap="ProductbudgetResult">
         <include refid="selectProductbudgetVo"/>
-        <where>  
+        <where>
             <if test="PDR != null "> and PDR = #{PDR}</if>
             <if test="SF != null "> and SF = #{SF}</if>
             <if test="BD != null "> and BD = #{BD}</if>
@@ -43,7 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="tenantryID != null "> and tenantryID = #{tenantryID}</if>
         </where>
     </select>
-    
+
     <select id="selectProductbudgetByProductID" parameterType="Long" resultMap="ProductbudgetResult">
         <include refid="selectProductbudgetVo"/>
         where productID = #{productID}
@@ -66,7 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="SDC != null">SDC,</if>
             <if test="ESDC != null">ESDC,</if>
             <if test="tenantryID != null">tenantryID,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="productID != null">#{productID},</if>
             <if test="PDR != null">#{PDR},</if>
@@ -82,7 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="SDC != null">#{SDC},</if>
             <if test="ESDC != null">#{ESDC},</if>
             <if test="tenantryID != null">#{tenantryID},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateProductbudget" parameterType="Productbudget">
@@ -110,7 +110,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteProductbudgetByProductIDs" parameterType="String">
-        delete from productbudget where productID in 
+        delete from productbudget where productID in
         <foreach item="productID" collection="array" open="(" separator="," close=")">
             #{productID}
         </foreach>
