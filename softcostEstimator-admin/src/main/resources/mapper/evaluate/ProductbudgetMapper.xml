@@ -18,10 +18,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="DNC"    column="DNC"    />
         <result property="SDC"    column="SDC"    />
         <result property="ESDC"    column="ESDC"    />
+        <result property="tenantryID"    column="tenantryID"    />
     </resultMap>
 
     <sql id="selectProductbudgetVo">
-        select productID, PDR, SF, BD, AT, QR, SL, DT, RSK, F, DNC, SDC, ESDC from productbudget
+        select productID, PDR, SF, BD, AT, QR, SL, DT, RSK, F, DNC, SDC, ESDC ,tenantryID from productbudget
     </sql>
 
     <select id="selectProductbudgetList" parameterType="Productbudget" resultMap="ProductbudgetResult">
@@ -39,6 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="DNC != null "> and DNC = #{DNC}</if>
             <if test="SDC != null "> and SDC = #{SDC}</if>
             <if test="ESDC != null "> and ESDC = #{ESDC}</if>
+            <if test="tenantryID != null "> and tenantryID = #{tenantryID}</if>
         </where>
     </select>
     
@@ -63,6 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="DNC != null">DNC,</if>
             <if test="SDC != null">SDC,</if>
             <if test="ESDC != null">ESDC,</if>
+            <if test="tenantryID != null">tenantryID,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="productID != null">#{productID},</if>
@@ -78,6 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="DNC != null">#{DNC},</if>
             <if test="SDC != null">#{SDC},</if>
             <if test="ESDC != null">#{ESDC},</if>
+            <if test="tenantryID != null">#{tenantryID},</if>
          </trim>
     </insert>
 
@@ -96,6 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="DNC != null">DNC = #{DNC},</if>
             <if test="SDC != null">SDC = #{SDC},</if>
             <if test="ESDC != null">ESDC = #{ESDC},</if>
+            <if test="tenantryID != null">tenantryID = #{tenantryID},</if>
         </trim>
         where productID = #{productID}
     </update>

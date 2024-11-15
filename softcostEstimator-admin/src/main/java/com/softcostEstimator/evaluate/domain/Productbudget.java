@@ -20,51 +20,54 @@ public class Productbudget extends BaseEntity
 
     /** PDR */
     @Excel(name = "PDR")
-    private Long PDR;
+    private float PDR;
 
     /** SF */
     @Excel(name = "SF")
-    private Long SF;
+    private float SF;
 
     /** BD */
     @Excel(name = "BD")
-    private Long BD;
+    private float BD;
 
     /** AT */
     @Excel(name = "AT")
-    private Long AT;
+    private float AT;
 
     /** QR */
     @Excel(name = "QR")
-    private Long QR;
+    private float QR;
 
     /** SL */
     @Excel(name = "SL")
-    private Long SL;
+    private float SL;
 
     /** DT */
     @Excel(name = "DT")
-    private Long DT;
+    private float DT;
 
     /** RSK */
     @Excel(name = "RSK")
-    private Long RSK;
+    private float RSK;
 
     /** F */
     @Excel(name = "F")
-    private Long F;
+    private float F;
 
     /** DNC */
     @Excel(name = "DNC")
-    private Long DNC;
+    private float DNC;
 
     /** SDC */
     @Excel(name = "SDC")
-    private Long SDC;
+    private float SDC;
 
     /** ESDC */
     @Excel(name = "ESDC")
-    private Long ESDC;
+    private float ESDC;
+
+    @Excel(name = "tenantryID")
+    private int tenantryID;
 
     public void setProductID(Long productID) 
     {
@@ -80,126 +83,139 @@ public class Productbudget extends BaseEntity
         this.PDR = PDR;
     }
 
-    public Long getPDR() 
+    public float getPDR()
     {
         return PDR;
     }
-    public void setSF(Long SF) 
+    public void setSF(float SF)
     {
         this.SF = SF;
     }
 
-    public Long getSF() 
+    public float getSF()
     {
         return SF;
     }
-    public void setBD(Long BD) 
+    public void setBD(float BD)
     {
         this.BD = BD;
     }
 
-    public Long getBD() 
+    public float getBD()
     {
         return BD;
     }
-    public void setAT(Long AT) 
+    public void setAT(float AT)
     {
         this.AT = AT;
     }
 
-    public Long getAT() 
+    public float getAT()
     {
         return AT;
     }
-    public void setQR(Long QR) 
+    public void setQR(float QR)
     {
         this.QR = QR;
     }
 
-    public Long getQR() 
+    public float getQR()
     {
         return QR;
     }
-    public void setSL(Long SL) 
+    public void setSL(float SL)
     {
         this.SL = SL;
     }
 
-    public Long getSL() 
+    public float getSL()
     {
         return SL;
     }
-    public void setDT(Long DT) 
+    public void setDT(float DT)
     {
         this.DT = DT;
     }
 
-    public Long getDT() 
+    public float getDT()
     {
         return DT;
     }
-    public void setRSK(Long RSK) 
+    public void setRSK(float RSK)
     {
         this.RSK = RSK;
     }
 
-    public Long getRSK() 
+    public float getRSK()
     {
         return RSK;
     }
-    public void setF(Long F) 
+    public void setF(float F)
     {
         this.F = F;
     }
 
-    public Long getF() 
+    public float getF()
     {
         return F;
     }
-    public void setDNC(Long DNC) 
+    public void setDNC(float DNC)
     {
         this.DNC = DNC;
     }
 
-    public Long getDNC() 
+    public float getDNC()
     {
         return DNC;
     }
-    public void setSDC(Long SDC) 
+    public void setSDC(float SDC)
     {
         this.SDC = SDC;
     }
 
-    public Long getSDC() 
+    public float getSDC()
     {
         return SDC;
     }
-    public void setESDC(Long ESDC) 
+    public void setESDC(float ESDC)
     {
         this.ESDC = ESDC;
     }
 
-    public Long getESDC() 
+    public float getESDC()
     {
         return ESDC;
     }
 
+    public void setPDR(float PDR) {
+        this.PDR = PDR;
+    }
+
+    public int getTenantryID() {
+        return tenantryID;
+    }
+
+    public void setTenantryID(int tenantryID) {
+        this.tenantryID = tenantryID;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("productID", getProductID())
-            .append("PDR", getPDR())
-            .append("SF", getSF())
-            .append("BD", getBD())
-            .append("AT", getAT())
-            .append("QR", getQR())
-            .append("SL", getSL())
-            .append("DT", getDT())
-            .append("RSK", getRSK())
-            .append("F", getF())
-            .append("DNC", getDNC())
-            .append("SDC", getSDC())
-            .append("ESDC", getESDC())
-            .toString();
+        return "Productbudget{" +
+                "productID=" + productID +
+                ", PDR=" + PDR +
+                ", SF=" + SF +
+                ", BD=" + BD +
+                ", AT=" + AT +
+                ", QR=" + QR +
+                ", SL=" + SL +
+                ", DT=" + DT +
+                ", RSK=" + RSK +
+                ", F=" + F +
+                ", DNC=" + DNC +
+                ", SDC=" + SDC +
+                ", ESDC=" + ESDC +
+                ", tenantryID=" + tenantryID +
+                '}';
     }
 }
