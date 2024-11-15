@@ -1,5 +1,6 @@
 package com.softcostEstimator.evaluate.domain;
 
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.softcostEstimator.common.annotation.Excel;
@@ -11,6 +12,7 @@ import com.softcostEstimator.common.core.domain.BaseEntity;
  * @author ruoyi
  * @date 2024-11-14
  */
+@Data
 public class Productbudget extends BaseEntity
 {
     private static final long serialVersionUID = 1L;

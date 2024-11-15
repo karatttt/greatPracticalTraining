@@ -58,4 +58,5 @@ public interface IProductbudgetService
      * @return 结果
      */
     public int deleteProductbudgetByProductID(Long productID);
+    String getJson(Productbudget productbudget);
 }

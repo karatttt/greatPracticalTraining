@@ -1,11 +1,15 @@
 package com.softcostEstimator.evaluate.service.impl;
 
 import java.util.List;
+
+import cn.hutool.json.JSONUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.softcostEstimator.evaluate.mapper.ProductbudgetMapper;
 import com.softcostEstimator.evaluate.domain.Productbudget;
 import com.softcostEstimator.evaluate.service.IProductbudgetService;
+
+import javax.annotation.Resource;
 
 /**
  * 综合评估Service业务层处理
@@ -16,7 +20,7 @@ import com.softcostEstimator.evaluate.service.IProductbudgetService;
 @Service
 public class ProductbudgetServiceImpl implements IProductbudgetService 
 {
-    @Autowired
+    @Resource
     private ProductbudgetMapper productbudgetMapper;
 
     /**
@@ -90,4 +94,10 @@ public class ProductbudgetServiceImpl implements IProductbudgetService
     {
         return productbudgetMapper.deleteProductbudgetByProductID(productID);
     }
+    @Override
+    public String getJson(Productbudget productbudget) {
+        String json = JSONUtil.toJsonStr(productbudget);
+        return json;
+    }
+
 }

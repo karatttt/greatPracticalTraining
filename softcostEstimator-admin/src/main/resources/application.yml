@@ -127,3 +127,6 @@ xss:
   excludes: /system/notice
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
+ai:
+  apiKey: sk-050b42af20b4467e97b1510365a4eb0c
+  apiId: 52738a316e7442eb808e79ff41d742a0
