@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询造价评估列表
+// 查询综合评估列表
 export function listProductbudget(query) {
   return request({
     url: '/evaluate/productbudget/list',
@@ -9,7 +9,7 @@ export function listProductbudget(query) {
   })
 }
 
-// 查询造价评估详细
+// 查询综合评估详细
 export function getProductbudget(productID) {
   return request({
     url: '/evaluate/productbudget/' + productID,
@@ -17,7 +17,7 @@ export function getProductbudget(productID) {
   })
 }
 
-// 新增造价评估
+// 新增综合评估
 export function addProductbudget(data) {
   return request({
     url: '/evaluate/productbudget',
@@ -26,7 +26,7 @@ export function addProductbudget(data) {
   })
 }
 
-// 修改造价评估
+// 修改综合评估
 export function updateProductbudget(data) {
   return request({
     url: '/evaluate/productbudget',
@@ -35,7 +35,7 @@ export function updateProductbudget(data) {
   })
 }
 
-// 删除造价评估
+// 删除综合评估
 export function delProductbudget(productID) {
   return request({
     url: '/evaluate/productbudget/' + productID,
