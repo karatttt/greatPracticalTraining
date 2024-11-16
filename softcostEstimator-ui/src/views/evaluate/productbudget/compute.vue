@@ -155,6 +155,7 @@ export default {
     return {
       activeStep: 0, // 当前步骤
       form: {
+        productID:null,
         pdr: null,
         sfOption: null, // SF 情况
         sf: null, // SF 数值
@@ -354,13 +355,14 @@ export default {
 
     // 准备表单数据，只保留需要提交的字段
     prepareFormData() {
-      const {
+      const {productID,
         pdr, sf, bd, at, qr,
         swf, sl, dt, rdf, ae, f, dnc,
         sdc, rsk, esdc
       } = this.form;
       // 构建需要提交的数据对象
       return {
+        productID,
         pdr,
         sf,
         bd,
@@ -377,7 +379,10 @@ export default {
     },
     // 提交表单
     submitForm() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const productid= urlParams.get('productID'); // 获取参数 productID
       const submitData = this.prepareFormData();
+      submitData.productID=productid;
       this.$refs.form.validate((valid) => {
         if (valid) {
           // 提交逻辑
