@@ -351,12 +351,37 @@ export default {
         this.activeStep -= 1;
       }
     },
+
+    // 准备表单数据，只保留需要提交的字段
+    prepareFormData() {
+      const {
+        pdr, sf, bd, at, qr,
+        swf, sl, dt, rdf, ae, f, dnc,
+        sdc, rsk, esdc
+      } = this.form;
+      // 构建需要提交的数据对象
+      return {
+        pdr,
+        sf,
+        bd,
+        at,
+        qr,
+        sl,
+        dt,
+        f,
+        dnc,
+        rsk,
+        sdc,
+        esdc
+      };
+    },
     // 提交表单
     submitForm() {
+      const submitData = this.prepareFormData();
       this.$refs.form.validate((valid) => {
         if (valid) {
           // 提交逻辑
-          console.log(this.form);
+          console.log(submitData);
           this.$message.success("提交成功");
         } else {
           this.$message.error("请完善表单信息");
