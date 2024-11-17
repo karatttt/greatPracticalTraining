@@ -11,14 +11,12 @@ import com.softcostEstimator.evaluate.domain.Productbudget;
 import com.softcostEstimator.evaluate.service.IProductbudgetService;
 import com.softcostEstimator.evaluate.service.impl.ProductbudgetServiceImpl;
 
-import javax.annotation.Resource;
-import java.util.Arrays;
 
 public class main {
     public static void appCall()
             throws ApiException, NoApiKeyException, InputRequiredException {
 
-         IProductbudgetService productbudgetService = new ProductbudgetServiceImpl();
+        IProductbudgetService productbudgetService = new ProductbudgetServiceImpl();
 
         Productbudget productbudget = new Productbudget();
         productbudget.setProductID(1L);
@@ -33,7 +31,7 @@ public class main {
         productbudget.setSF(12L);
         productbudget.setSL(13L);
         String json = productbudgetService.getJson(productbudget);
-
+//        String jsonStr = json.substring(1,json.length()-1);
 
 
 
