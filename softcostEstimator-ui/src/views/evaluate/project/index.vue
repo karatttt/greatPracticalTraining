@@ -379,7 +379,7 @@
 </template>
 
 <script>
-import { longPolling } from "@/api/evaluate/project"; // 引入长轮询函数
+import { longPolling , send } from "@/api/evaluate/project"; // 引入长轮询函数
 
 export default {
   name: "Project",
@@ -390,7 +390,7 @@ export default {
       pollingActive: false, // 是否正在长轮询
       isEnd: false, // 标记是否结束轮询
       currentAiMessageId: null, // 当前正在回复的 AI 消息的 ID
-
+      userMsgData: {},
       // 原有内容
       showSearch: true,
       queryParams: {}
@@ -410,6 +410,9 @@ export default {
         content: this.userInput,
         from: "user"
       });
+
+      this.userMsgData.content = this.userInput
+      send(this.userMsgData);
 
       // 清空输入框
       this.userInput = "";
