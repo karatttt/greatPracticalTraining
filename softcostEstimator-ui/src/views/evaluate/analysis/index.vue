@@ -129,7 +129,7 @@
       <!-- 布局容器 -->
       <el-row>
         <!-- 表格部分 -->
-        <el-col :span="20">
+        <el-col :span="24">
           <el-table v-loading="loading" :data="analysisList" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column label="项目ID" align="center" prop="projectId" />
@@ -138,9 +138,9 @@
             <el-table-column label="EI" align="center" prop="EI" />
             <el-table-column label="EO" align="center" prop="EO" />
             <el-table-column label="EQ" align="center" prop="EQ" />
-<!--            <el-table-column label="UFP" align="center" prop="UFP" />-->
-<!--            <el-table-column label="GSC" align="center" prop="GSC" />-->
-<!--            <el-table-column label="TCF" align="center" prop="TCF" />-->
+            <el-table-column label="UFP" align="center" prop="UFP" />
+            <el-table-column label="GSC" align="center" prop="GSC" />
+            <el-table-column label="TCF" align="center" prop="TCF" />
             <el-table-column label="AFP" align="center" prop="AFP" />
             <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
               <template slot-scope="scope">
@@ -163,12 +163,12 @@
           </el-table>
         </el-col>
         <!-- 柱状图部分 -->
-        <el-col :span="10">
-          <div id="chart" style="width: 100%; height: 400px;"></div>
-        </el-col>
-        <el-col :span="10">
-          <div id="chart" style="width: 100%; height: 400px;"></div>
-        </el-col>
+<!--        <el-col :span="10">-->
+<!--          <div id="chart" style="width: 100%; height: 400px;"></div>-->
+<!--        </el-col>-->
+<!--        <el-col :span="10">-->
+<!--          <div id="chart" style="width: 100%; height: 400px;"></div>-->
+<!--        </el-col>-->
 
       </el-row>
 
@@ -182,9 +182,9 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改功能点分析对话框 -->
+    <!-- 添加或修改功能点分析对话框1 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="ILF" prop="ILF">
           <el-input v-model="form.ILF" placeholder="请输入ILF" />
         </el-form-item>
@@ -200,21 +200,57 @@
         <el-form-item label="EQ" prop="EQ">
           <el-input v-model="form.EQ" placeholder="请输入EQ" />
         </el-form-item>
-        <el-form-item label="UFP" prop="UFP">
-          <el-input v-model="form.UFP" placeholder="请输入UFP" />
-        </el-form-item>
-        <el-form-item label="GSC" prop="GSC">
-          <el-input v-model="form.GSC" placeholder="请输入GSC" />
-        </el-form-item>
-        <el-form-item label="TCF" prop="TCF">
-          <el-input v-model="form.TCF" placeholder="请输入TCF" />
-        </el-form-item>
-        <el-form-item label="AFP" prop="AFP">
-          <el-input v-model="form.AFP" placeholder="请输入AFP" />
-        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button type="primary" @click="submitForm">下一页</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 添加或修改功能点分析对话框2 -->
+    <el-dialog :title="title" :visible.sync="open2" width="800px" append-to-body>
+      <el-row>
+        <el-col :span="12">
+          <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+            <el-form-item label="ILF复杂度">
+              <el-rate
+                v-model="valueILF"
+                show-text>
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="EIF复杂度">
+              <el-rate
+                v-model="valueEIF"
+                show-text>
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="EI复杂度">
+              <el-rate
+                v-model="valueEI"
+                show-text>
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="EO复杂度">
+              <el-rate
+                v-model="valueEO"
+                show-text>
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="EQ复杂度">
+              <el-rate
+                v-model="valueEQ"
+                show-text>
+              </el-rate>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="12">
+          <el-image :src="UFP_imageUrl">
+          </el-image>
+        </el-col>
+      </el-row>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">下一页</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -247,6 +283,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      open2: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -282,6 +319,14 @@ export default {
         ],
       },
       chart: null,
+      //星星打分
+      valueILF: null,
+      valueEIF: null,
+      valueEI: null,
+      valueEO: null,
+      valueEQ: null,
+
+      UFP_imageUrl:require('@/assets/images/UFP.png')
 
     };
   },
@@ -357,23 +402,25 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          if (this.form.projectId != null) {
-            updateAnalysis(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
-          } else {
-            addAnalysis(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
-          }
-        }
-      });
+      // this.$refs["form"].validate(valid => {
+      //   if (valid) {
+      //     if (this.form.projectId != null) {
+      //       updateAnalysis(this.form).then(response => {
+      //         this.$modal.msgSuccess("修改成功");
+      //         this.open = false;
+      //         this.getList();
+      //       });
+      //     } else {
+      //       addAnalysis(this.form).then(response => {
+      //         this.$modal.msgSuccess("新增成功");
+      //         this.open = false;
+      //         this.getList();
+      //       });
+      //     }
+      //   }
+      // });
+      this.open=false;
+      this.open2=true;
     },
     /** 删除按钮操作 */
     handleDelete(row) {
@@ -392,24 +439,24 @@ export default {
       }, `analysis_${new Date().getTime()}.xlsx`)
     },
     /** 生成柱状图 */
-    initChart() {
-      this.chart = echarts.init(document.getElementById('chart'));
-      const option = {
-        // 柱状图配置项
-        xAxis: {
-          type: 'category',
-          data: ['ILF', 'EIF', 'EI', 'EO', 'EQ', 'UFP', 'GSC', 'TCF', 'AFP']
-        },
-        yAxis: {
-          type: 'value'
-        },
-        series: [{
-          data: [120, 200, 150, 80, 70, 110, 130, 100, 90],
-          type: 'bar'
-        }]
-      };
-      this.chart.setOption(option);
-    }
+    // initChart() {
+    //   this.chart = echarts.init(document.getElementById('chart'));
+    //   const option = {
+    //     // 柱状图配置项
+    //     xAxis: {
+    //       type: 'category',
+    //       data: ['ILF', 'EIF', 'EI', 'EO', 'EQ', 'UFP', 'GSC', 'TCF', 'AFP']
+    //     },
+    //     yAxis: {
+    //       type: 'value'
+    //     },
+    //     series: [{
+    //       data: [120, 200, 150, 80, 70, 110, 130, 100, 90],
+    //       type: 'bar'
+    //     }]
+    //   };
+    //   this.chart.setOption(option);
+    // }
   }
 };
 </script>
