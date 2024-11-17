@@ -4,6 +4,8 @@
     <el-table v-loading="loading" :data="productbudgetList" @selection-change="handleSelectionChange">
 <!--      <el-table-column type="selection" width="55" align="center" />-->
       <el-table-column label="项目ID" align="center" prop="productID" />
+
+      <el-table-column label="评估工作量" align="center" prop="ae" />
 <!--      <el-table-column label="PDR" align="center" prop="pdr" />
       <el-table-column label="SF" align="center" prop="sf" />
       <el-table-column label="BD" align="center" prop="bd" />

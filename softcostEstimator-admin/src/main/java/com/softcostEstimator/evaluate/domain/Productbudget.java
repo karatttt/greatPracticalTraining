@@ -15,60 +15,66 @@ public class Productbudget extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** $column.columnComment */
+    /** 项目ID */
     private Long productID;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** PDR */
+    @Excel(name = "PDR", readConverterExp = "PDR")
     private Double PDR;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** SF */
+    @Excel(name = "SF", readConverterExp = "SF")
     private Double SF;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** BD */
+    @Excel(name = "BD", readConverterExp = "BD")
     private Double BD;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** AT */
+    @Excel(name = "AT", readConverterExp = "AT")
     private Double AT;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** QR */
+    @Excel(name = "QR", readConverterExp = "QR")
     private Double QR;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** SL */
+    @Excel(name = "SL", readConverterExp = "SL")
     private Double SL;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** DT */
+    @Excel(name = "DT", readConverterExp = "DT")
     private Double DT;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** RSK */
+    @Excel(name = "RSK", readConverterExp = "RSK")
     private Double RSK;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** F */
+    @Excel(name = "F", readConverterExp = "F")
     private Double F;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** DNC */
+    @Excel(name = "DNC", readConverterExp = "DNC")
     private Double DNC;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** SDC */
+    @Excel(name = "SDC", readConverterExp = "SDC")
     private Double SDC;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** ESDC */
+    @Excel(name = "ESDC", readConverterExp = "ESDC")
     private Double ESDC;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** AE */
+    @Excel(name = "评估工作量", readConverterExp = "AE")
+    private Double AE; // 新增的评估工作量字段
+
+    /** tenantryID */
+    @Excel(name = "TenantryID", readConverterExp = "tenantryID")
     private Long tenantryID;
+
+    // Getter 和 Setter 方法
 
     public void setProductID(Long productID)
     {
@@ -79,6 +85,7 @@ public class Productbudget extends BaseEntity
     {
         return productID;
     }
+
     public void setPDR(Double PDR)
     {
         this.PDR = PDR;
@@ -88,6 +95,7 @@ public class Productbudget extends BaseEntity
     {
         return PDR;
     }
+
     public void setSF(Double SF)
     {
         this.SF = SF;
@@ -97,6 +105,7 @@ public class Productbudget extends BaseEntity
     {
         return SF;
     }
+
     public void setBD(Double BD)
     {
         this.BD = BD;
@@ -106,6 +115,7 @@ public class Productbudget extends BaseEntity
     {
         return BD;
     }
+
     public void setAT(Double AT)
     {
         this.AT = AT;
@@ -115,6 +125,7 @@ public class Productbudget extends BaseEntity
     {
         return AT;
     }
+
     public void setQR(Double QR)
     {
         this.QR = QR;
@@ -124,6 +135,7 @@ public class Productbudget extends BaseEntity
     {
         return QR;
     }
+
     public void setSL(Double SL)
     {
         this.SL = SL;
@@ -133,6 +145,7 @@ public class Productbudget extends BaseEntity
     {
         return SL;
     }
+
     public void setDT(Double DT)
     {
         this.DT = DT;
@@ -142,6 +155,7 @@ public class Productbudget extends BaseEntity
     {
         return DT;
     }
+
     public void setRSK(Double RSK)
     {
         this.RSK = RSK;
@@ -151,6 +165,7 @@ public class Productbudget extends BaseEntity
     {
         return RSK;
     }
+
     public void setF(Double F)
     {
         this.F = F;
@@ -160,6 +175,7 @@ public class Productbudget extends BaseEntity
     {
         return F;
     }
+
     public void setDNC(Double DNC)
     {
         this.DNC = DNC;
@@ -169,6 +185,7 @@ public class Productbudget extends BaseEntity
     {
         return DNC;
     }
+
     public void setSDC(Double SDC)
     {
         this.SDC = SDC;
@@ -178,6 +195,7 @@ public class Productbudget extends BaseEntity
     {
         return SDC;
     }
+
     public void setESDC(Double ESDC)
     {
         this.ESDC = ESDC;
@@ -187,6 +205,17 @@ public class Productbudget extends BaseEntity
     {
         return ESDC;
     }
+
+    public void setAE(Double AE)
+    {
+        this.AE = AE;
+    }
+
+    public Double getAE()
+    {
+        return AE;
+    }
+
     public void setTenantryID(Long tenantryID)
     {
         this.tenantryID = tenantryID;
@@ -213,6 +242,7 @@ public class Productbudget extends BaseEntity
                 .append("DNC", getDNC())
                 .append("SDC", getSDC())
                 .append("ESDC", getESDC())
+                .append("AE", getAE()) // 更新toString方法，添加AE字段
                 .append("tenantryID", getTenantryID())
                 .toString();
     }
