@@ -133,15 +133,15 @@
           <el-table v-loading="loading" :data="analysisList" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column label="项目ID" align="center" prop="projectId" />
-            <el-table-column label="ILF" align="center" prop="ILF" />
-            <el-table-column label="EIF" align="center" prop="EIF" />
-            <el-table-column label="EI" align="center" prop="EI" />
-            <el-table-column label="EO" align="center" prop="EO" />
-            <el-table-column label="EQ" align="center" prop="EQ" />
-            <el-table-column label="UFP" align="center" prop="UFP" />
-            <el-table-column label="GSC" align="center" prop="GSC" />
-            <el-table-column label="TCF" align="center" prop="TCF" />
-            <el-table-column label="AFP" align="center" prop="AFP" />
+            <el-table-column label="ILF" align="center" prop="ilf" />
+            <el-table-column label="EIF" align="center" prop="eif" />
+            <el-table-column label="EI" align="center" prop="ei" />
+            <el-table-column label="EO" align="center" prop="eo" />
+            <el-table-column label="EQ" align="center" prop="eq" />
+            <el-table-column label="UFP" align="center" prop="ufp" />
+            <el-table-column label="GSC" align="center" prop="gsc" />
+            <el-table-column label="TCF" align="center" prop="tcf" />
+            <el-table-column label="AFP" align="center" prop="afp" />
             <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
               <template slot-scope="scope">
                 <el-button
@@ -177,20 +177,20 @@
     <!-- 添加或修改功能点分析对话框1 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="ILF" prop="ILF">
-          <el-input v-model="form.ILF" placeholder="请输入ILF" />
+        <el-form-item label="ILF" prop="ilf">
+          <el-input v-model="form.ilf" placeholder="请输入ILF" />
         </el-form-item>
-        <el-form-item label="EIF" prop="EIF">
-          <el-input v-model="form.EIF" placeholder="请输入EIF" />
+        <el-form-item label="EIF" prop="eif">
+          <el-input v-model="form.eif" placeholder="请输入EIF" />
         </el-form-item>
-        <el-form-item label="EI" prop="EI">
-          <el-input v-model="form.EI" placeholder="请输入EI" />
+        <el-form-item label="EI" prop="ei">
+          <el-input v-model="form.ei" placeholder="请输入EI" />
         </el-form-item>
-        <el-form-item label="EO" prop="EO">
-          <el-input v-model="form.EO" placeholder="请输入EO" />
+        <el-form-item label="EO" prop="eo">
+          <el-input v-model="form.eo" placeholder="请输入EO" />
         </el-form-item>
-        <el-form-item label="EQ" prop="EQ">
-          <el-input v-model="form.EQ" placeholder="请输入EQ" />
+        <el-form-item label="EQ" prop="eq">
+          <el-input v-model="form.eq" placeholder="请输入EQ" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -383,44 +383,44 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        ILF: null,
-        EIF: null,
-        EI: null,
-        EO: null,
-        EQ: null,
-        UFP: null,
-        GSC: null,
-        TCF: null,
-        AFP: null
+        ilf: null,
+        eif: null,
+        ei: null,
+        eo: null,
+        eq: null,
+        ufp: null,
+        gsc: null,
+        tcf: null,
+        afp: null
       },
       // 表单参数
       form: {
         projectId: null,
-        ILF: null,
-        EIF: null,
-        EI: null,
-        EO: null,
-        EQ: null,
-        UFP:null,
-        GSC:null,
-        TCF:null,
-        AFP:null,
+        ilf: null,
+        eif: null,
+        ei: null,
+        eo: null,
+        eq: null,
+        ufp:null,
+        gsc:null,
+        tcf:null,
+        afp:null,
       },
       // 表单校验
       rules: {
-        ILF: [
+        ilf: [
           { required: true, message: "ILF不能为空", trigger: "blur" }
         ],
-        EIF: [
+        eif: [
           { required: true, message: "EIF不能为空", trigger: "blur" }
         ],
-        EI: [
+        ei: [
           { required: true, message: "EI不能为空", trigger: "blur" }
         ],
-        EO: [
+        eo: [
           { required: true, message: "EO不能为空", trigger: "blur" }
         ],
-        EQ: [
+        eq: [
           { required: true, message: "EQ不能为空", trigger: "blur" }
         ],
       },
@@ -480,15 +480,15 @@ export default {
     reset() {
       this.form = {
         projectId: null,
-        ILF: null,
-        EIF: null,
-        EI: null,
-        EO: null,
-        EQ: null,
-        UFP:null,
-        GSC:null,
-        TCF:null,
-        AFP:null,
+        ilf: null,
+        eif: null,
+        ei: null,
+        eo: null,
+        eq: null,
+        ufp:null,
+        gsc:null,
+        tcf:null,
+        afp:null,
       };
       this.resetForm("form");
     },
@@ -544,8 +544,18 @@ export default {
       //   }
       // });
       if(this.open == true){
-        this.open=false;
-        // this.$refs.form.validate
+        this.$refs.form.validate((valid)=> {
+            if (valid) {
+              if (this.form.projectId != null) {
+                updateAnalysis(this.form).then(response => {
+                  this.$modal.msgSuccess("修改成功");
+                  this.open = false;
+                  this.getList();
+                });
+              }
+            }
+          }
+        );
         this.open2=true;
       }else if(this.open2 == true){
         this.open2=false;
