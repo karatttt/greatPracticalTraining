@@ -17,11 +17,19 @@
       <el-table-column label="SDC" align="center" prop="sdc" />-->
       <el-table-column label="评估成本" align="center" prop="esdc" />
 
-      <!-- 状态列 -->
-      <el-table-column label="状态" align="center">
+       <!-- 状态列 -->
+       <el-table-column label="状态" align="center">
         <template slot-scope="scope">
-          <!-- 将 esdc 转换为数字后判断 -->
-          <span v-if="Number(scope.row.esdc) > 0.0">已评估</span>
+          <span v-if="Number(scope.row.esdc) > 0.0">
+            已评估
+            <a
+              href="javascript:void(0)"
+              @click="goToEvaluationPage(scope.row)"
+              style="margin-left: 10px; color: #409EFF; cursor: pointer;"
+            >
+              重新评估
+            </a>
+          </span>
           <el-button
             v-else
             type="primary"
