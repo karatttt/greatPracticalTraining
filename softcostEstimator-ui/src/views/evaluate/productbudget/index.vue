@@ -134,7 +134,16 @@ export default {
     goToEvaluationPage(row) {
       // 跳转到评估页面
      // window.location.href = `http://localhost/evaluate/compute`;
-     window.location.href = `http://localhost/evaluate/compute?productID=${row.productID}`;
+     //window.location.href = `http://localhost/evaluate/compute?productID=${row.productID}`;
+     this.$router.push({
+        name: 'EvaluationCompute',
+        query: { productID: row.productID }
+      }).catch(err => {
+        // 处理可能的导航错误，例如重复导航
+        if (err.name !== 'NavigationDuplicated') {
+          console.error(err);
+        }
+      })
     }
   }
 };

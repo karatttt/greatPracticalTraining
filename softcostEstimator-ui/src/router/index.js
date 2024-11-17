@@ -6,6 +6,8 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 
+const EvaluationCompute = () => import('@/views/evaluate/productbudget/compute.vue')
+
 /**
  * Note: 路由配置项
  *
@@ -85,6 +87,20 @@ export const constantRoutes = [
         component: () => import('@/views/system/user/profile/index'),
         name: 'Profile',
         meta: { title: '个人中心', icon: 'user' }
+      }
+    ]
+  },
+  // 新增的评估计算路由
+  {
+    path: '/evaluate',
+    component: Layout,
+    hidden: true, // 不在侧边栏显示
+    children: [
+      {
+        path: 'compute',
+        component: EvaluationCompute,
+        name: 'EvaluationCompute',
+        meta: { title: '评估计算', noCache: true }
       }
     ]
   }
