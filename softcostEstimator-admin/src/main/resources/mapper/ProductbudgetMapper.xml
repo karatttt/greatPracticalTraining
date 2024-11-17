@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="generator.mapper.ProductbudgetMapper">
+
+    <resultMap id="BaseResultMap" type="generator.domain.Productbudget">
+            <id property="productID" column="productID" jdbcType="BIGINT"/>
+            <result property="PDR" column="PDR" jdbcType="FLOAT"/>
+            <result property="SF" column="SF" jdbcType="FLOAT"/>
+            <result property="BD" column="BD" jdbcType="FLOAT"/>
+            <result property="AT" column="AT" jdbcType="FLOAT"/>
+            <result property="QR" column="QR" jdbcType="FLOAT"/>
+            <result property="SL" column="SL" jdbcType="FLOAT"/>
+            <result property="DT" column="DT" jdbcType="FLOAT"/>
+            <result property="RSK" column="RSK" jdbcType="FLOAT"/>
+            <result property="f" column="F" jdbcType="FLOAT"/>
+            <result property="DNC" column="DNC" jdbcType="FLOAT"/>
+            <result property="SDC" column="SDC" jdbcType="FLOAT"/>
+            <result property="ESDC" column="ESDC" jdbcType="FLOAT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        productID,PDR,SF,
+        BD,AT,QR,
+        SL,DT,RSK,
+        F,DNC,SDC,
+        ESDC
+    </sql>
+</mapper>
