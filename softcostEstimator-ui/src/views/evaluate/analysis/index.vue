@@ -162,14 +162,6 @@
             </el-table-column>
           </el-table>
         </el-col>
-        <!-- 柱状图部分 -->
-<!--        <el-col :span="10">-->
-<!--          <div id="chart" style="width: 100%; height: 400px;"></div>-->
-<!--        </el-col>-->
-<!--        <el-col :span="10">-->
-<!--          <div id="chart" style="width: 100%; height: 400px;"></div>-->
-<!--        </el-col>-->
-
       </el-row>
 
     </div>
@@ -254,6 +246,108 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 添加或修改功能点分析对话框3 -->
+    <el-dialog :title="title" :visible.sync="open3" width="800px" append-to-body>
+      <el-row>
+        <el-col :span="12">
+          <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+            <el-form-item label="数据通信">
+              <el-rate
+                v-model="valueGSC1"
+                show-text>
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="分布式数据处理">
+              <el-rate
+                v-model="valueGSC2"
+                show-text>
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="性能">
+              <el-rate
+                v-model="valueGSC3"
+                show-text>
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="大业务量配置">
+              <el-rate
+                v-model="valueGSC4"
+                show-text>
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="交易处理率">
+              <el-rate
+                v-model="valueGSC5"
+                show-text>
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="在线数据输入">
+              <el-rate
+                v-model="valueGSC6"
+                show-text>
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="最终用户效率">
+              <el-rate
+                v-model="valueGSC7"
+                show-text>
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="在线更新">
+              <el-rate
+                v-model="valueGSC8"
+                show-text>
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="复杂处理">
+              <el-rate
+                v-model="valueGSC9"
+                show-text>
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="可复用性">
+              <el-rate
+                v-model="valueGSCA"
+                show-text>
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="易安装性">
+              <el-rate
+                v-model="valueGSCB"
+                show-text>
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="易操作性">
+              <el-rate
+                v-model="valueGSCC"
+                show-text>
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="多场地">
+              <el-rate
+                v-model="valueGSCD"
+                show-text>
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="支持变更">
+              <el-rate
+                v-model="valueGSCCE"
+                show-text>
+              </el-rate>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="12">
+          <el-image :src="GSC_imageUrl">
+          </el-image>
+        </el-col>
+      </el-row>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">下一页</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -284,6 +378,7 @@ export default {
       // 是否显示弹出层
       open: false,
       open2: false,
+      open3:false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -299,7 +394,18 @@ export default {
         AFP: null
       },
       // 表单参数
-      form: {},
+      form: {
+        projectId: null,
+        ILF: null,
+        EIF: null,
+        EI: null,
+        EO: null,
+        EQ: null,
+        UFP:null,
+        GSC:null,
+        TCF:null,
+        AFP:null,
+      },
       // 表单校验
       rules: {
         ILF: [
@@ -325,8 +431,24 @@ export default {
       valueEI: null,
       valueEO: null,
       valueEQ: null,
-
-      UFP_imageUrl:require('@/assets/images/UFP.png')
+      //计算Gsc
+      valueGSC1: null,
+      valueGSC2: null,
+      valueGSC3: null,
+      valueGSC4: null,
+      valueGSC5: null,
+      valueGSC6: null,
+      valueGSC7: null,
+      valueGSC8: null,
+      valueGSC9: null,
+      valueGSCA: null,
+      valueGSCB: null,
+      valueGSCC: null,
+      valueGSCD: null,
+      valueGSCE: null,
+      //图片地址
+      UFP_imageUrl:require('@/assets/images/UFP.png'),
+      GSC_imageUrl:require('@/assets/images/GSC.png'),
 
     };
   },
@@ -350,6 +472,8 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
+      this.open2 = false;
+      this.open3 = false;
       this.reset();
     },
     // 表单重置
@@ -361,10 +485,10 @@ export default {
         EI: null,
         EO: null,
         EQ: null,
-        UFP: null,
-        GSC: null,
-        TCF: null,
-        AFP: null
+        UFP:null,
+        GSC:null,
+        TCF:null,
+        AFP:null,
       };
       this.resetForm("form");
     },
@@ -419,8 +543,17 @@ export default {
       //     }
       //   }
       // });
-      this.open=false;
-      this.open2=true;
+      if(this.open == true){
+        this.open=false;
+        // this.$refs.form.validate
+        this.open2=true;
+      }else if(this.open2 == true){
+        this.open2=false;
+        this.open3=true;
+      }else if(this.open3 == true){
+        this.open3=false;
+      }
+
     },
     /** 删除按钮操作 */
     handleDelete(row) {
@@ -438,25 +571,7 @@ export default {
         ...this.queryParams
       }, `analysis_${new Date().getTime()}.xlsx`)
     },
-    /** 生成柱状图 */
-    // initChart() {
-    //   this.chart = echarts.init(document.getElementById('chart'));
-    //   const option = {
-    //     // 柱状图配置项
-    //     xAxis: {
-    //       type: 'category',
-    //       data: ['ILF', 'EIF', 'EI', 'EO', 'EQ', 'UFP', 'GSC', 'TCF', 'AFP']
-    //     },
-    //     yAxis: {
-    //       type: 'value'
-    //     },
-    //     series: [{
-    //       data: [120, 200, 150, 80, 70, 110, 130, 100, 90],
-    //       type: 'bar'
-    //     }]
-    //   };
-    //   this.chart.setOption(option);
-    // }
+
   }
 };
 </script>
