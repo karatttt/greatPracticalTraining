@@ -100,7 +100,7 @@
             <if test="DNC != null">DNC = #{DNC},</if>
             <if test="SDC != null">SDC = #{SDC},</if>
             <if test="ESDC != null">ESDC = #{ESDC},</if>
-            <if test="tenantryID != null">tenantryID = #{tenantryID},</if>
+<!--             <if test="tenantryID != null">tenantryID = #{tenantryID},</if>-->
         </trim>
         where productID = #{productID}
     </update>

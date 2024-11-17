@@ -3,98 +3,149 @@
     <el-steps :active="activeStep" finish-status="success" class="mb20">
       <el-step title="确定PDR" />
       <el-step title="计算工作量AE" />
-      <el-step title="计算总造价SDC" />
+      <el-step title="计算总造价" />
     </el-steps>
 
-    <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+    <el-form ref="form" :model="form" :rules="rules" label-width="200px">
       <!-- 步骤1：确定PDR -->
       <div v-if="activeStep === 0">
-        <el-form-item label="PDR" prop="pdr">
-          <el-input v-model="form.pdr" placeholder="请输入PDR" clearable />
-        </el-form-item>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item label="PDR" prop="pdr">
+              <el-input v-model="form.pdr" placeholder="请输入PDR" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </div>
 
       <!-- 步骤2：计算工作量AE -->
       <div v-if="activeStep === 1">
         <!-- SF -->
-        <el-form-item label="SF" prop="sfOption">
-          <el-select v-model="form.sfOption" placeholder="请选择SF" @change="updateSFValue">
-            <el-option label="a" value="a" />
-            <el-option label="b" value="b" />
-            <el-option label="c" value="c" />
-            <el-option label="d" value="d" />
-          </el-select>
-          <!-- 这里绑定的是 SF 数值 -->
-          <el-input v-model.number="form.sf" placeholder="手动输入SF" clearable />
-        </el-form-item>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item label="SF(规模调整因子)" prop="sfOption">
+              <el-select v-model="form.sfOption" placeholder="请选择SF" @change="updateSFValue">
+                <el-option label="哈哈" value="a" />
+                <el-option label="b" value="b" />
+                <el-option label="c" value="c" />
+                <el-option label="d" value="d" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="" prop="sf">
+              <el-input v-model.number="form.sf" placeholder="手动输入SF" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
 
         <!-- BD -->
-        <el-form-item label="BD" prop="bdOption">
-          <el-select v-model="form.bdOption" placeholder="请选择BD" @change="updateBDValue">
-            <el-option label="a" value="a" />
-            <el-option label="b" value="b" />
-            <el-option label="c" value="c" />
-            <el-option label="d" value="d" />
-          </el-select>
-          <el-input v-model.number="form.bd" placeholder="手动输入BD" clearable />
-        </el-form-item>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item label="BD(业务领域调整因子)" prop="bdOption">
+              <el-select v-model="form.bdOption" placeholder="请选择BD" @change="updateBDValue">
+                <el-option label="a" value="a" />
+                <el-option label="b" value="b" />
+                <el-option label="c" value="c" />
+                <el-option label="d" value="d" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="" prop="bd">
+              <el-input v-model.number="form.bd" placeholder="手动输入BD" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
 
         <!-- AT -->
-        <el-form-item label="AT" prop="atOption">
-          <el-select v-model="form.atOption" placeholder="请选择AT" @change="updateATValue">
-            <el-option label="a" value="a" />
-            <el-option label="b" value="b" />
-            <el-option label="c" value="c" />
-            <el-option label="d" value="d" />
-          </el-select>
-          <el-input v-model.number="form.at" placeholder="手动输入AT" clearable />
-        </el-form-item>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item label="AT(应用类型调整因子)" prop="atOption">
+              <el-select v-model="form.atOption" placeholder="请选择AT" @change="updateATValue">
+                <el-option label="a" value="a" />
+                <el-option label="b" value="b" />
+                <el-option label="c" value="c" />
+                <el-option label="d" value="d" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="" prop="at">
+              <el-input v-model.number="form.at" placeholder="手动输入AT" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
 
         <!-- QR -->
-        <el-form-item label="QR" prop="qrOption">
-          <el-select v-model="form.qrOption" placeholder="请选择QR" @change="updateQRValue">
-            <el-option label="a" value="a" />
-            <el-option label="b" value="b" />
-            <el-option label="c" value="c" />
-            <el-option label="d" value="d" />
-          </el-select>
-          <el-input v-model.number="form.qr" placeholder="手动输入QR" clearable />
-        </el-form-item>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item label="QR(质量特性调整因子)" prop="qrOption">
+              <el-select v-model="form.qrOption" placeholder="请选择QR" @change="updateQRValue">
+                <el-option label="a" value="a" />
+                <el-option label="b" value="b" />
+                <el-option label="c" value="c" />
+                <el-option label="d" value="d" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="" prop="qr">
+              <el-input v-model.number="form.qr" placeholder="手动输入QR" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
 
         <!-- SWF 中间变量展示 -->
-        <el-form-item label="SWF" :prop="null">
+        <el-form-item label="SWF(软件因素调整因子)" :prop="null">
           <el-input :value="form.swf" placeholder="SWF" disabled />
         </el-form-item>
 
         <!-- SL -->
-        <el-form-item label="SL" prop="slOption">
-          <el-select v-model="form.slOption" placeholder="请选择SL" @change="updateSLValue">
-            <el-option label="a" value="a" />
-            <el-option label="b" value="b" />
-            <el-option label="c" value="c" />
-            <el-option label="d" value="d" />
-          </el-select>
-          <el-input v-model.number="form.sl" placeholder="手动输入SL" clearable />
-        </el-form-item>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item label="SL(开发语言调整因子)" prop="slOption">
+              <el-select v-model="form.slOption" placeholder="请选择SL" @change="updateSLValue">
+                <el-option label="a" value="a" />
+                <el-option label="b" value="b" />
+                <el-option label="c" value="c" />
+                <el-option label="d" value="d" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="" prop="sl">
+              <el-input v-model.number="form.sl" placeholder="手动输入SL" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
 
         <!-- DT -->
-        <el-form-item label="DT" prop="dtOption">
-          <el-select v-model="form.dtOption" placeholder="请选择DT" @change="updateDTValue">
-            <el-option label="a" value="a" />
-            <el-option label="b" value="b" />
-            <el-option label="c" value="c" />
-            <el-option label="d" value="d" />
-          </el-select>
-          <el-input v-model.number="form.dt" placeholder="手动输入DT" clearable />
-        </el-form-item>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item label="DT(开发团队调整因子)" prop="dtOption">
+              <el-select v-model="form.dtOption" placeholder="请选择DT" @change="updateDTValue">
+                <el-option label="a" value="a" />
+                <el-option label="b" value="b" />
+                <el-option label="c" value="c" />
+                <el-option label="d" value="d" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="" prop="dt">
+              <el-input v-model.number="form.dt" placeholder="手动输入DT" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
 
         <!-- RDF 中间变量展示 -->
-        <el-form-item label="RDF" :prop="null">
+        <el-form-item label="RDF(开发因素调整因子)" :prop="null">
           <el-input :value="form.rdf" placeholder="RDF" disabled />
         </el-form-item>
 
         <!-- AE 计算 -->
-        <el-form-item label="AE" :prop="null">
+        <el-form-item label="AE(估算工作量)" :prop="null">
           <el-input :value="form.ae" placeholder="AE" disabled />
         </el-form-item>
       </div>
@@ -102,38 +153,54 @@
       <!-- 步骤3：计算总造价SDC -->
       <div v-if="activeStep === 2">
         <!-- F -->
-        <el-form-item label="F" prop="fOption">
-          <el-select v-model="form.fOption" placeholder="请选择F" @change="updateFValue">
-            <el-option label="a" value="a" />
-            <el-option label="b" value="b" />
-            <el-option label="c" value="c" />
-            <el-option label="d" value="d" />
-          </el-select>
-          <el-input v-model.number="form.f" placeholder="手动输入F" clearable />
-        </el-form-item>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item label="F(人力成本费率)" prop="fOption">
+              <el-select v-model="form.fOption" placeholder="请选择F" @change="updateFValue">
+                <el-option label="a" value="a" />
+                <el-option label="b" value="b" />
+                <el-option label="c" value="c" />
+                <el-option label="d" value="d" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="" prop="f">
+              <el-input v-model.number="form.f" placeholder="手动输入F" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
 
         <!-- DNC -->
-        <el-form-item label="DNC" prop="dncOption">
-          <el-select v-model="form.dncOption" placeholder="请选择DNC" @change="updateDNCValue">
-            <el-option label="a" value="a" />
-            <el-option label="b" value="b" />
-            <el-option label="c" value="c" />
-            <el-option label="d" value="d" />
-          </el-select>
-          <el-input v-model.number="form.dnc" placeholder="手动输入DNC" clearable />
-        </el-form-item>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item label="DNC(直接非人力成本)" prop="dncOption">
+              <el-select v-model="form.dncOption" placeholder="请选择DNC" @change="updateDNCValue">
+                <el-option label="a" value="a" />
+                <el-option label="b" value="b" />
+                <el-option label="c" value="c" />
+                <el-option label="d" value="d" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="" prop="dnc">
+              <el-input v-model.number="form.dnc" placeholder="手动输入DNC" clearable />
+            </el-form-item>
+          </el-col>
+        </el-row>
 
         <!-- 计算出的SDC -->
-        <el-form-item label="SDC" :prop="null">
+        <el-form-item label="SDC(软件开发成本)" :prop="null">
           <el-input :value="form.sdc" placeholder="SDC" disabled />
         </el-form-item>
 
-        <el-form-item label="RSK" prop="rsk">
+        <el-form-item label="RSK(风险等级因子)" prop="rsk">
           <el-input v-model="form.rsk" placeholder="请输入RSK" clearable />
         </el-form-item>
 
         <!-- ESDC计算 -->
-        <el-form-item label="ESDC" :prop="null">
+        <el-form-item label="ESDC(调整后软件开发成本)" :prop="null">
           <el-input :value="form.esdc" placeholder="ESDC" disabled />
         </el-form-item>
       </div>
@@ -148,7 +215,11 @@
   </div>
 </template>
 
+
 <script>
+import {updateAnalysis} from "@/api/evaluate/analysis";
+import {updateProductbudget} from "@/api/evaluate/productbudget";
+
 export default {
   name: "CostEvaluation",
   data() {
@@ -386,6 +457,14 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           // 提交逻辑
+          if (productid != null) {
+            updateProductbudget(submitData).then(response => {
+              this.$modal.msgSuccess("修改成功");
+              this.open = false;
+              window.location.href = `http://localhost/evaluate/productbudget`;
+              //这里可以继续增加跳转
+            });
+            }
           console.log(submitData);
           this.$message.success("提交成功");
         } else {
