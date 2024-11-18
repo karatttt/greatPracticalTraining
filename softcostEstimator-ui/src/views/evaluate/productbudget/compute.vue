@@ -258,16 +258,27 @@
       <div v-if="activeStep === 2">
         <!-- F -->
         <el-row :gutter="20">
+          <!-- F 选择框 -->
           <el-col :span="8">
             <el-form-item label="F(人力成本费率)" prop="fOption">
-              <el-select v-model="form.fOption" placeholder="请选择F" @change="updateFValue">
-                <el-option label="a" value="a" />
-                <el-option label="b" value="b" />
-                <el-option label="c" value="c" />
-                <el-option label="d" value="d" />
+              <el-select
+                v-model="form.fOption"
+                placeholder="请选择F"
+                filterable
+                :filter-method="filterFOptions"
+                @change="updateFValue"
+              >
+                <el-option
+                  v-for="option in filteredOptions"
+                  :key="option.key"
+                  :label="option.label"
+                  :value="option.value"
+                ></el-option>
               </el-select>
             </el-form-item>
           </el-col>
+
+          <!-- F 输入框 -->
           <el-col :span="8">
             <el-form-item label="" prop="f">
               <el-input v-model="form.f" placeholder="手动输入F" clearable />
@@ -379,6 +390,7 @@ export default {
   mounted() {
     this.fetchProjectList(); // 初始化获取项目列表
     this.fetchProjectRequirement(); // 获取当前项目的需求内容
+    this.loadFOptions(); // 在组件挂载时加载 JSON 数据
   },
 
   data() {
@@ -412,8 +424,8 @@ export default {
         dt: null, // DT 数值
         rdf: null,
         ae: null,
-        fOption: null, // F 情况
-        f: null, // F 数值
+        fOption: '', // 下拉选择的 F 值
+        f: '', // 输入框的 F 值
         //各种费用
         officeExpense: 0,
         travelExpense: 0,
@@ -476,7 +488,9 @@ export default {
         { value: 3, label: '3' },
         { value: 2, label: '2' },
         { value: 1, label: '1' }
-      ]
+      ],
+      fOptions: [], // 从 JSON 文件加载的数据
+      filteredOptions: [] // 筛选后的选项
     };
   },
   watch: {
@@ -641,6 +655,17 @@ export default {
       } else {
         this.form.rsk = '';
       }
+
+      this.filteredOptions = this.fOptions
+        .filter(
+          (item) =>
+            item.city.includes(query) ||
+            item.rate.toString().includes(query)
+        )
+        .map((item) => ({
+          label: `${item.city} - ${item.rate}`,
+          value: item.rate
+        }));
     },
 
     // 计算 ESDC
@@ -705,18 +730,38 @@ export default {
         this.form.dt = 1.2;
       }
     },
-    updateFValue(newValue) {
-      // 根据 F 选择情况更新数值
-      if (newValue === 'a') {
-        this.form.f = 4;
-      } else if (newValue === 'b') {
-        this.form.f = 8;
-      } else if (newValue === 'c') {
-        this.form.f = 12;
-      } else if (newValue === 'd') {
-        this.form.f = 15;
+
+
+    // 加载 JSON 文件
+    async loadFOptions() {
+      try {
+        const response = await fetch('http://localhost:8080/fOptions.json'); // 请求 JSON 文件
+        this.fOptions = await response.json(); // 将数据存储到 fOptions
+        // 初始化筛选数据
+        this.filteredOptions = this.fOptions.map((item) => ({
+          label: `${item.city} - ${item.rate}`,
+          value: item.rate
+        }));
+      } catch (error) {
+        console.error('加载F选项失败:', error);
       }
     },
+    // 筛选逻辑
+    filterFOptions(query) {
+      if (!query) {
+        this.filteredOptions = this.fOptions.map((item) => ({
+          label: `${item.city} - ${item.rate}`,
+          value: item.rate,
+          key: item.id
+        }));
+        return;
+      }
+    },
+    // 更新输入框值
+    updateFValue(value) {
+      this.form.f = value; // 将选择的值同步到输入框
+    },
+
     // 下一步
     nextStep() {
       this.$refs.form.validate((valid) => {
