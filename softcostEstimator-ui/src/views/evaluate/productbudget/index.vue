@@ -2,11 +2,21 @@
   <div class="app-container">
     <!-- 表格部分 -->
     <el-table v-loading="loading" :data="productbudgetList" @selection-change="handleSelectionChange">
-<!--      <el-table-column type="selection" width="55" align="center" />-->
+      <!--      <el-table-column type="selection" width="55" align="center" />-->
       <el-table-column label="项目ID" align="center" prop="productID" />
 
-      <el-table-column label="评估工作量" align="center" prop="ae" />
-<!--      <el-table-column label="PDR" align="center" prop="pdr" />
+      <el-table-column label="评估工作量" align="center" prop="ae">
+        <template slot-scope="scope">
+          <span v-if="Number(scope.row.esdc) > 0.0">
+            {{ scope.row.ae }}
+          </span>
+          <span v-else>
+            待评估
+          </span>
+        </template>
+      </el-table-column>
+
+      <!--      <el-table-column label="PDR" align="center" prop="pdr" />
       <el-table-column label="SF" align="center" prop="sf" />
       <el-table-column label="BD" align="center" prop="bd" />
       <el-table-column label="AT" align="center" prop="at" />
@@ -17,34 +27,36 @@
       <el-table-column label="F" align="center" prop="f" />
       <el-table-column label="DNC" align="center" prop="dnc" />
       <el-table-column label="SDC" align="center" prop="sdc" />-->
-      <el-table-column label="评估成本" align="center" prop="esdc" />
+      <el-table-column label="评估成本" align="center" prop="esdc">
+        <template slot-scope="scope">
+          <span v-if="Number(scope.row.esdc) > 0.0">
+            {{ scope.row.esdc }}
+          </span>
+          <span v-else>
+            待评估
+          </span>
+        </template>
+      </el-table-column>
 
-       <!-- 状态列 -->
-       <el-table-column label="状态" align="center">
+
+      <!-- 状态列 -->
+      <el-table-column label="状态" align="center">
         <template slot-scope="scope">
           <span v-if="Number(scope.row.esdc) > 0.0">
             已评估
-            <a
-              href="javascript:void(0)"
-              @click="goToEvaluationPage(scope.row)"
-              style="margin-left: 10px; color: #409EFF; cursor: pointer;"
-            >
+            <a href="javascript:void(0)" @click="goToEvaluationPage(scope.row)"
+              style="margin-left: 10px; color: #409EFF; cursor: pointer;">
               重新评估
             </a>
           </span>
-          <el-button
-            v-else
-            type="primary"
-            size="mini"
-            @click="goToEvaluationPage(scope.row)"
-          >
+          <el-button v-else type="primary" size="mini" @click="goToEvaluationPage(scope.row)">
             去评估
           </el-button>
         </template>
       </el-table-column>
 
 
-<!--      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <!--      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -64,13 +76,8 @@
       </el-table-column>-->
     </el-table>
 
-    <pagination
-      v-show="total > 0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
+      @pagination="getList" />
   </div>
 </template>
 
@@ -127,15 +134,15 @@ export default {
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      }).catch(() => {});
+      }).catch(() => { });
     },
 
     /** 去评估按钮点击，跳转到评估页面 */
     goToEvaluationPage(row) {
       // 跳转到评估页面
-     // window.location.href = `http://localhost/evaluate/compute`;
-     //window.location.href = `http://localhost/evaluate/compute?productID=${row.productID}`;
-     this.$router.push({
+      // window.location.href = `http://localhost/evaluate/compute`;
+      //window.location.href = `http://localhost/evaluate/compute?productID=${row.productID}`;
+      this.$router.push({
         name: 'EvaluationCompute',
         query: { productID: row.productID }
       }).catch(err => {
