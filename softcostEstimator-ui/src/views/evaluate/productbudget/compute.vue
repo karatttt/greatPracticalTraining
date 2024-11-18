@@ -10,6 +10,37 @@
       <!-- 步骤1：确定PDR -->
 
       <div v-if="activeStep === 0">
+        <!-- 项目名称选择 -->
+        <el-row :gutter="20" class="mt20">
+          <el-col :span="24">
+            <el-alert
+              title="提示：基于历史项目选择PDR？"
+              type="info"
+              description="请选择历史评估过的项目，以确定PDR取值"
+              show-icon
+              effect="dark"
+            />
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="选择项目名称" prop="selectedProjectName">
+              <el-select
+                v-model="selectedProjectName"
+                placeholder="请选择项目名称"
+                @change="fetchPDRByProjectName"
+              >
+                <el-option
+                  v-for="project in projectList"
+                  :key="project.id"
+                  :label="project.name"
+                  :value="project.name"
+                />
+              </el-select>
+            </el-form-item>
+
+          </el-col>
+
+        </el-row>
+
         <!-- PDR 选择表格 -->
         <el-row :gutter="20">
           <el-col :span="24">
@@ -323,11 +354,18 @@
 
 
 <script>
+import { listProject } from '@/api/evaluate/project'; // 替换为实际路径
+import { listProductbudget } from '@/api/evaluate/productbudget'; // 替换为实际路径
+
 import {updateAnalysis} from "@/api/evaluate/analysis";
 import {updateProductbudget} from "@/api/evaluate/productbudget";
 
 export default {
   name: "CostEvaluation",
+  mounted() {
+    this.fetchProjectList(); // 初始化获取项目列表
+  },
+
   data() {
     return {
       activeStep: 0, // 当前步骤
@@ -374,6 +412,20 @@ export default {
         rsk: null,
         esdc: null,
       },
+      queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        name: null, // 用于按名称查询项目
+        requireContent: null,
+        createTime: null,
+        endTime: null,
+        appraiserID: null,
+        auditorID: null,
+        tenantryID: null,
+        description: null,
+      },
+      projectList: [], // 存储获取到的项目列表
+      selectedProjectName: null, // 用户选择的项目名称
       pdrOptions: [
         { label: "P10", value: 1.79, description: "乐观估计，适用于高效团队或低风险项目" },
         { label: "P25", value: 3.58, description: "偏乐观估计，适用于成熟团队或低中风险项目" },
@@ -429,6 +481,38 @@ export default {
     'form.otherExpense': 'calculateDNC'
   },
   methods: {
+
+    // 获取项目列表
+    fetchProjectList() {
+      this.loading = true;
+      listProject(this.queryParams).then((response) => {
+        this.projectList = response.rows; // 获取到的项目列表
+        this.loading = false;
+      });
+    },
+    // 根据项目名称查询对应的 PDR
+    fetchPDRByProjectName(projectName) {
+      const selectedProject = this.projectList.find(
+        (project) => project.name === projectName
+      );
+      if (selectedProject) {
+        // 查询 productbudget 表，获取对应的 PDR
+        const queryParams = { projectID: selectedProject.projectID }; // 确保 queryParams 包含所需字段
+        listProductbudget(queryParams).then((response) => {
+          const productBudget = response.rows.find(
+            (item) => item.projectID === selectedProject.projectID
+          );
+          if (productBudget) {
+            this.form.pdr = productBudget.pdr; // 更新 PDR 值到表单中
+          } else {
+            this.$message.warning("未找到对应的PDR数据！");
+          }
+        });
+      } else {
+        this.$message.warning("未找到对应的项目！");
+      }
+    },
+
     // 计算 QR
     calculateQR() {
       const qr = (this.form.distributedProcessing + this.form.performance + this.form.reliability + this.form.multiSite)*0.025+1;
