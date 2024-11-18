@@ -1,6 +1,5 @@
 package com.softcostEstimator.evaluate.controller;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -11,15 +10,19 @@ import com.alibaba.dashscope.app.ApplicationResult;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
-import com.alibaba.dashscope.threads.ContentText;
 import com.softcostEstimator.common.BaseResponse;
 import com.softcostEstimator.common.ResultUtils;
-import com.softcostEstimator.common.core.domain.R;
+import com.softcostEstimator.evaluate.domain.FunctionPointAnalysis;
+import com.softcostEstimator.evaluate.domain.Project;
+import com.softcostEstimator.evaluate.domain.request.AiGenenrateReportRequest;
+import com.softcostEstimator.evaluate.service.IFunctionPointAnalysisService;
+import com.softcostEstimator.evaluate.service.IProjectService;
+import com.softcostEstimator.evaluate.transform.TransFactory;
+import com.softcostEstimator.evaluate.transform.TransUtil;
 import io.reactivex.Flowable;
-import javafx.scene.text.Text;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -51,6 +54,11 @@ public class ProductbudgetController extends BaseController
     @Resource
     private IProductbudgetService productbudgetService;
 
+    @Resource
+    private IProjectService projectService;
+
+    @Resource
+    private IFunctionPointAnalysisService functionPointAnalysisService;
 
     /**
      * 查询综合评估列表
@@ -122,14 +130,29 @@ public class ProductbudgetController extends BaseController
     @PreAuthorize("@ss.hasPermi('evaluate:productbudget:generate:report')")
     @Log(title = "综合评估", businessType = BusinessType.GENERATE_REPORT)
     @PostMapping("/generate/report")
-    public BaseResponse<String> generateReportByAi(@RequestBody Productbudget productbudget) {
-        String json = productbudgetService.getJson(productbudget);
+    public BaseResponse<String> generateReportByAi(@RequestBody AiGenenrateReportRequest aiGenenrateReportRequest) {
+       Long projectId = aiGenenrateReportRequest.getProjectId();
+       String type = aiGenenrateReportRequest.getType();
+        //根据id获取所有实体类
+        FunctionPointAnalysis functionPointAnalysis = functionPointAnalysisService.selectFunctionPointAnalysisByProjectId(projectId);
+        Project project = projectService.selectProjectByProjectID(projectId);
+        Productbudget productbudget = productbudgetService.selectProductbudgetByProductID(projectId);
+        //将每个实体类转为json格式
+        String functionJson = functionPointAnalysisService.getJson(functionPointAnalysis);
+        String projectJson = projectService.getJson(project);
+        String productbudgetJson = productbudgetService.getJson(productbudget);
+        //去括号
+        String subFunctionJson = functionJson.substring(1,functionJson.length()-1);
+        String subProjectJson = projectJson.substring(1,projectJson.length()-1);
+        String subProductBudgetJson = productbudgetJson.substring(1,productbudgetJson.length()-1);
+        //合并
+        StringBuilder json = new StringBuilder().append(subFunctionJson).append(subProjectJson).append(subProductBudgetJson);
         StringBuilder output = new StringBuilder();
         ApplicationParam param = ApplicationParam.builder()
                 // 若没有配置环境变量，可用百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
                 .apiKey("sk-050b42af20b4467e97b1510365a4eb0c")
                 .appId("18de7db29ca44e629d156837394a7a3b")
-                .prompt(json)
+                .prompt(json.toString())
                 .incrementalOutput(true)
                 .build();
         Application application = new Application();
@@ -143,9 +166,23 @@ public class ProductbudgetController extends BaseController
             log.error(e.getMessage());
         }
 
+        TransUtil transUtil = TransFactory.newInstance(type);
+        String path = transUtil.transForm(output.toString());
+        return ResultUtils.success(path);
 
-        return ResultUtils.success(output.toString());
 
 
+    }
+    @PostMapping("/transform/report")
+    public BaseResponse<String> transformReport(@RequestBody String text,String type){
+        if(StringUtils.isAllBlank(text,type)){
+            throw new RuntimeException("内容为空");
+        }
+        TransUtil transUtil = TransFactory.newInstance(type);
+        String path = transUtil.transForm(text);
+        if(StringUtils.isBlank(path)){
+            throw new RuntimeException("未找到");
+        }
+        return ResultUtils.success(path);
     }
 }

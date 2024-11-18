@@ -50,3 +50,4 @@ public class ResultUtils {
         return new BaseResponse(errorCode.getCode(), null, message);
     }
 }
+

@@ -61,4 +61,6 @@ public interface IProjectService
      */
     public int deleteProjectByProjectID(Long projectID);
 
+    String getJson(Project project);
+
 }

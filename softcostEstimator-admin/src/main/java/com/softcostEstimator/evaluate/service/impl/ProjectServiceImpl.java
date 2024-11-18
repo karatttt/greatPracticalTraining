@@ -1,6 +1,8 @@
 package com.softcostEstimator.evaluate.service.impl;
 
 import java.util.List;
+
+import cn.hutool.json.JSONUtil;
 import com.softcostEstimator.common.utils.DateUtils;
 import com.softcostEstimator.evaluate.domain.Productbudget;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,5 +98,10 @@ public class ProjectServiceImpl implements IProjectService
         return projectMapper.deleteProjectByProjectID(projectID);
     }
 
+    @Override
+    public String getJson(Project project) {
 
+        String json = JSONUtil.toJsonStr(project);
+        return json;
+    }
 }

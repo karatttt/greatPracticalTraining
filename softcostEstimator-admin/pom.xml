@@ -10,7 +10,13 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <artifactId>softcostEstimator-admin</artifactId>
-
+<repositories>
+    <repository>
+        <id>com.e-iceblue</id>
+        <name>e-iceblue</name>
+        <url>https://repo.e-iceblue.cn/repository/maven-public</url>
+    </repository>
+</repositories>
     <description>
         web服务入口
     </description>
@@ -93,6 +99,20 @@
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi2-spring-boot-starter</artifactId>
             <version>4.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark</artifactId>
+            <version>0.21.0</version>
+        </dependency>
+        <dependency>
+            <groupId>e-iceblue</groupId>
+            <artifactId>spire.doc</artifactId>
+            <version>12.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
 
     </dependencies>

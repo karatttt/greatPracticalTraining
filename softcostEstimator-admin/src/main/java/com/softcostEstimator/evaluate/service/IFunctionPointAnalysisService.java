@@ -2,6 +2,7 @@ package com.softcostEstimator.evaluate.service;
 
 import java.util.List;
 import com.softcostEstimator.evaluate.domain.FunctionPointAnalysis;
+import com.softcostEstimator.evaluate.domain.Productbudget;
 
 /**
  * 功能点分析Service接口
@@ -58,4 +59,6 @@ public interface IFunctionPointAnalysisService
      * @return 结果
      */
     public int deleteFunctionPointAnalysisByProjectId(Long projectId);
+
+    String getJson(FunctionPointAnalysis functionPointAnalysis);
 }
