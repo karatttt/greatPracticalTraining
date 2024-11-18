@@ -23,18 +23,8 @@
         <!-- SF -->
         <el-row :gutter="20">
           <el-col :span="8">
-            <el-form-item label="SF(规模调整因子)" prop="sfOption">
-              <el-select v-model="form.sfOption" placeholder="请选择SF" @change="updateSFValue">
-                <el-option label="哈哈" value="a" />
-                <el-option label="b" value="b" />
-                <el-option label="c" value="c" />
-                <el-option label="d" value="d" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="" prop="sf">
-              <el-input v-model.number="form.sf" placeholder="手动输入SF" clearable />
+            <el-form-item label="SF(规模调整因子)" prop="sf">
+              <el-input v-model.number="form.sf" placeholder="请输入SF" clearable />
             </el-form-item>
           </el-col>
         </el-row>
@@ -44,10 +34,10 @@
           <el-col :span="8">
             <el-form-item label="BD(业务领域调整因子)" prop="bdOption">
               <el-select v-model="form.bdOption" placeholder="请选择BD" @change="updateBDValue">
-                <el-option label="a" value="a" />
-                <el-option label="b" value="b" />
-                <el-option label="c" value="c" />
-                <el-option label="d" value="d" />
+                <el-option label="政府（含公共管理和社会组织）" value="a" />
+                <el-option label="信息技术、电信" value="b" />
+                <el-option label="金融" value="c" />
+                <el-option label="其他" value="d" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -63,10 +53,14 @@
           <el-col :span="8">
             <el-form-item label="AT(应用类型调整因子)" prop="atOption">
               <el-select v-model="form.atOption" placeholder="请选择AT" @change="updateATValue">
-                <el-option label="a" value="a" />
-                <el-option label="b" value="b" />
-                <el-option label="c" value="c" />
-                <el-option label="d" value="d" />
+                <el-option label="业务处理（办公自动化系统:人事、会计、工资、销售等经营管理及业务处理用软件等）" value="a" />
+                <el-option label="应用集成（企业服务总线、应用集成等）" value="b" />
+                <el-option label="科技（科学计算、模拟、统计等）" value="c" />
+                <el-option label="多媒体（图形、影像、声音等多媒体应用领域:地理信息系统;教育和娱乐应用等）" value="d" />
+                <el-option label="智能信息（自然语言处理、人工智能、专家系统等）" value="e" />
+                <el-option label="系统（操作系统、数据库系统、集成开发环境、自动化开发/设计工具等）" value="f" />
+                <el-option label="通信控制（通信协议、仿真、交换机软件、全球定位系统等）" value="g" />
+                <el-option label="流程控制（生产管理、仪器控制、机器人控制、实时控制、嵌入式软件等）" value="h" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -80,12 +74,34 @@
         <!-- QR -->
         <el-row :gutter="20">
           <el-col :span="8">
-            <el-form-item label="QR(质量特性调整因子)" prop="qrOption">
-              <el-select v-model="form.qrOption" placeholder="请选择QR" @change="updateQRValue">
-                <el-option label="a" value="a" />
-                <el-option label="b" value="b" />
-                <el-option label="c" value="c" />
-                <el-option label="d" value="d" />
+            <el-form-item label="QR(质量特性调整因子)" >
+              <el-select v-model="form.distributedProcessing" placeholder="请选择分布式处理调整因子" @change="calculateQR">
+                <el-option label="没有明示对分布式处理的需求事项" :value="-1" />
+                <el-option label="通过网络进行客户端/服务器及网络基础应用分布处理和传输" :value="0" />
+                <el-option label="在多个服务器及处理器上同时相互执行应用中的处理功能" :value="1" />
+              </el-select>
+
+              <el-select v-model="form.performance" placeholder="请选择性能调整因子" @change="calculateQR">
+                <el-option label="没有明示对性能的特别需求事项或活动，因此提供基本性能" :value="-1" />
+                <el-option label="应答时间或处理率对高峰时间或所有业务时间来说都很重要，存在对连动系统结束处理时间的限制" :value="0" />
+                <el-option label="为满足性能需求事项，要求设计阶段开始进行性能分析，或在设计、开发阶段使用分析工具" :value="1" />
+              </el-select>
+
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item>
+              <el-select v-model="form.reliability" placeholder="请选择可靠性调整因子" @change="calculateQR">
+                <el-option label="没有明示对分布式处理的需求事项" :value="-1" />
+                <el-option label="通过网络进行客户端/服务器及网络基础应用分布处理和传输" :value="0" />
+                <el-option label="在多个服务器及处理器上同时相互执行应用中的处理功能" :value="1" />
+              </el-select>
+
+              <el-select v-model="form.multiSite" placeholder="请选择多重站点调整因子" @change="calculateQR">
+                <el-option label="没有明示对分布式处理的需求事项" :value="-1" />
+                <el-option label="通过网络进行客户端/服务器及网络基础应用分布处理和传输" :value="0" />
+                <el-option label="在多个服务器及处理器上同时相互执行应用中的处理功能" :value="1" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -106,10 +122,9 @@
           <el-col :span="8">
             <el-form-item label="SL(开发语言调整因子)" prop="slOption">
               <el-select v-model="form.slOption" placeholder="请选择SL" @change="updateSLValue">
-                <el-option label="a" value="a" />
-                <el-option label="b" value="b" />
-                <el-option label="c" value="c" />
-                <el-option label="d" value="d" />
+                <el-option label="C及其他同级别语言/平台" value="a" />
+                <el-option label="JAVA、C++、C#及其他同级别语言/平台" value="b" />
+                <el-option label="PowerBuilder、ASP 及其他同级别语言/平台" value="c" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -125,10 +140,9 @@
           <el-col :span="8">
             <el-form-item label="DT(开发团队调整因子)" prop="dtOption">
               <el-select v-model="form.dtOption" placeholder="请选择DT" @change="updateDTValue">
-                <el-option label="a" value="a" />
-                <el-option label="b" value="b" />
-                <el-option label="c" value="c" />
-                <el-option label="d" value="d" />
+                <el-option label="为本行业开发过类似的项目" value="a" />
+                <el-option label="为其他行业开发过类似的项目，或为本行业开发过不同但相关的项目" value="b" />
+                <el-option label="没有同类项目的背景" value="c" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -173,19 +187,41 @@
 
         <!-- DNC -->
         <el-row :gutter="20">
-          <el-col :span="8">
-            <el-form-item label="DNC(直接非人力成本)" prop="dncOption">
-              <el-select v-model="form.dncOption" placeholder="请选择DNC" @change="updateDNCValue">
-                <el-option label="a" value="a" />
-                <el-option label="b" value="b" />
-                <el-option label="c" value="c" />
-                <el-option label="d" value="d" />
-              </el-select>
+          <el-col>
+            <el-form-item label="DNC(直接非人力成本)" prop="dnc">
+              <el-input v-model="form.dnc" disabled />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="" prop="dnc">
-              <el-input v-model.number="form.dnc" placeholder="手动输入DNC" clearable />
+            <el-form-item label="办公费" prop="officeExpense">
+              <el-input v-model.number="form.officeExpense" placeholder="请输入办公费" clearable @change="calculateDNC"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="差旅费" prop="travelExpense">
+              <el-input v-model.number="form.travelExpense" placeholder="请输入差旅费" clearable @change="calculateDNC"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="培训费" prop="trainingExpense">
+              <el-input v-model.number="form.trainingExpense" placeholder="请输入培训费" clearable @change="calculateDNC"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item label="业务费" prop="businessExpense">
+              <el-input v-model.number="form.businessExpense" placeholder="请输入业务费" clearable @change="calculateDNC"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="采购费" prop="purchaseExpense">
+              <el-input v-model.number="form.purchaseExpense" placeholder="请输入采购费" clearable @change="calculateDNC"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="其他" prop="otherExpense">
+              <el-input v-model.number="form.otherExpense" placeholder="请输入其他费用" clearable @change="calculateDNC"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -234,6 +270,12 @@ export default {
         bd: null, // BD 数值
         atOption: null, // AT 情况
         at: null, // AT 数值
+        //各种质量特性调整因子
+        distributedProcessing:null,
+        performance:null,
+        reliability:null,
+        multiSite:null,
+        //
         qrOption: null, // QR 情况
         qr: null, // QR 数值
         swf: null,
@@ -245,6 +287,14 @@ export default {
         ae: null,
         fOption: null, // F 情况
         f: null, // F 数值
+        //各种费用
+        officeExpense: 0,
+        travelExpense: 0,
+        trainingExpense: 0,
+        businessExpense: 0,
+        purchaseExpense: 0,
+        otherExpense: 0,
+        //
         dncOption: null, // DNC 情况
         dnc: null, // DNC 数值
         sdc: null,
@@ -276,8 +326,21 @@ export default {
     "form.f": "calculateSDC",
     "form.dnc": "calculateSDC",
     "form.rsk": "calculateESDC",
+    'form.officeExpense': 'calculateDNC',
+    'form.travelExpense': 'calculateDNC',
+    'form.trainingExpense': 'calculateDNC',
+    'form.businessExpense': 'calculateDNC',
+    'form.purchaseExpense': 'calculateDNC',
+    'form.otherExpense': 'calculateDNC'
   },
   methods: {
+    // 计算 QR
+    calculateQR() {
+      const qr = (this.form.distributedProcessing + this.form.performance + this.form.reliability + this.form.multiSite)*0.025+1;
+      console.log(this.form.distributedProcessing+this.form.performance+this.form.reliability+this.form.multiSite)
+      this.form.qr = this.formatDecimal(qr);  // 格式化为四位小数
+      this.calculateAE(); // 更新 AE
+    },
     // 计算 SWF
     calculateSWF() {
       const swf = (this.form.sf || 0) * (this.form.bd || 0) * (this.form.at || 0) * (this.form.qr || 0);
@@ -295,6 +358,16 @@ export default {
       const ae = (this.form.swf || 0) * (this.form.rdf || 0) * (this.form.pdr || 0);
       this.form.ae = this.formatDecimal(ae);  // 格式化为四位小数
     },
+    //计算DNC
+    calculateDNC() {
+        const dnc=this.form.officeExpense +
+        this.form.travelExpense +
+        this.form.trainingExpense +
+        this.form.businessExpense +
+        this.form.purchaseExpense +
+        this.form.otherExpense;
+        this.form.dnc=this.formatDecimal(dnc)
+    },
     // 计算 SDC
     //SDC公式暂时这么写
     calculateSDC() {
@@ -311,80 +384,60 @@ export default {
       return parseFloat(value).toFixed(4);  // 保留四位小数
     },
 
-    updateSFValue(newValue) {
-      // 根据 SF 选择情况更新数值
-      if (newValue === 'a') {
-        this.form.sf = 1;
-      } else if (newValue === 'b') {
-        this.form.sf = 10;
-      } else if (newValue === 'c') {
-        this.form.sf = 20;
-      } else if (newValue === 'd') {
-        this.form.sf = 30;
-      }
-    },
     updateBDValue(newValue) {
       // 根据 BD 选择情况更新数值
       if (newValue === 'a') {
-        this.form.bd = 5;
+        this.form.bd = 0.93;
       } else if (newValue === 'b') {
-        this.form.bd = 10;
+        this.form.bd = 1.02;
       } else if (newValue === 'c') {
-        this.form.bd = 15;
+        this.form.bd = 2.62;
       } else if (newValue === 'd') {
-        this.form.bd = 20;
+        this.form.bd = 1;
       }
     },
     updateATValue(newValue) {
       // 根据 AT 选择情况更新数值
       if (newValue === 'a') {
-        this.form.at = 3;
+        this.form.at = 1;
       } else if (newValue === 'b') {
-        this.form.at = 7;
+        this.form.at = 1.2;
       } else if (newValue === 'c') {
-        this.form.at = 8;
+        this.form.at = 1.2;
       } else if (newValue === 'd') {
-        this.form.at = 12;
-      }
-    },
-    updateQRValue(newValue) {
-      // 根据 QR 选择情况更新数值
-      if (newValue === 'a') {
-        this.form.qr = 10;
-      } else if (newValue === 'b') {
-        this.form.qr = 15;
-      } else if (newValue === 'c') {
-        this.form.qr = 25;
-      } else if (newValue === 'd') {
-        this.form.qr = 30;
+        this.form.at = 1.3;
+      } else if (newValue === 'e') {
+        this.form.at = 1.7;
+      } else if (newValue === 'f') {
+        this.form.at = 1.7;
+      } else if (newValue === 'g') {
+        this.form.at = 1.9;
+      } else if (newValue === 'h') {
+        this.form.at = 2;
       }
     },
     updateSLValue(newValue) {
       // 根据 SL 选择情况更新数值
       if (newValue === 'a') {
-        this.form.sl = 4;
+        this.form.sl = 1.5;
       } else if (newValue === 'b') {
-        this.form.sl = 8;
+        this.form.sl = 1;
       } else if (newValue === 'c') {
-        this.form.sl = 12;
-      } else if (newValue === 'd') {
-        this.form.sl = 15;
+        this.form.sl = 0.6;
       }
     },
     updateDTValue(newValue) {
       // 根据 DT 选择情况更新数值
       if (newValue === 'a') {
-        this.form.dt = 9;
+        this.form.dt = 0.8;
       } else if (newValue === 'b') {
-        this.form.dt = 10;
+        this.form.dt = 1;
       } else if (newValue === 'c') {
-        this.form.dt = 18;
-      } else if (newValue === 'd') {
-        this.form.dt = 20;
+        this.form.dt = 1.2;
       }
     },
     updateFValue(newValue) {
-      // 根据 SL 选择情况更新数值
+      // 根据 F 选择情况更新数值
       if (newValue === 'a') {
         this.form.f = 4;
       } else if (newValue === 'b') {
@@ -393,18 +446,6 @@ export default {
         this.form.f = 12;
       } else if (newValue === 'd') {
         this.form.f = 15;
-      }
-    },
-    updateDNCValue(newValue) {
-      // 根据 SL 选择情况更新数值
-      if (newValue === 'a') {
-        this.form.dnc = 4;
-      } else if (newValue === 'b') {
-        this.form.dnc = 8;
-      } else if (newValue === 'c') {
-        this.form.dnc = 12;
-      } else if (newValue === 'd') {
-        this.form.dnc = 15;
       }
     },
     // 下一步
