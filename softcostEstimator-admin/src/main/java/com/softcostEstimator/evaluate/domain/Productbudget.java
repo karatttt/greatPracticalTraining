@@ -16,7 +16,7 @@ public class Productbudget extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 项目ID */
-    private Long productID;
+    private Long projectID;
 
     /** PDR */
     @Excel(name = "PDR", readConverterExp = "PDR")
@@ -76,14 +76,14 @@ public class Productbudget extends BaseEntity
 
     // Getter 和 Setter 方法
 
-    public void setProductID(Long productID)
+    public void setProjectID(Long projectID)
     {
-        this.productID = productID;
+        this.projectID = projectID;
     }
 
-    public Long getProductID()
+    public Long getProjectID()
     {
-        return productID;
+        return projectID;
     }
 
     public void setPDR(Double PDR)
@@ -229,7 +229,7 @@ public class Productbudget extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-                .append("productID", getProductID())
+                .append("projectID", getProjectID())
                 .append("PDR", getPDR())
                 .append("SF", getSF())
                 .append("BD", getBD())

@@ -63,10 +63,10 @@ public class ProductbudgetController extends BaseController
      * 获取综合评估详细信息
      */
     @PreAuthorize("@ss.hasPermi('evaluate:productbudget:query')")
-    @GetMapping(value = "/{productID}")
-    public AjaxResult getInfo(@PathVariable("productID") Long productID)
+    @GetMapping(value = "/{projectID}")
+    public AjaxResult getInfo(@PathVariable("projectID") Long projectID)
     {
-        return success(productbudgetService.selectProductbudgetByProductID(productID));
+        return success(productbudgetService.selectProductbudgetByProjectID(projectID));
     }
 
     /**
@@ -96,9 +96,9 @@ public class ProductbudgetController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('evaluate:productbudget:remove')")
     @Log(title = "综合评估", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{productIDs}")
-    public AjaxResult remove(@PathVariable Long[] productIDs)
+    @DeleteMapping("/{projectIDs}")
+    public AjaxResult remove(@PathVariable Long[] projectIDs)
     {
-        return toAjax(productbudgetService.deleteProductbudgetByProductIDs(productIDs));
+        return toAjax(productbudgetService.deleteProductbudgetByProjectIDs(projectIDs));
     }
 }

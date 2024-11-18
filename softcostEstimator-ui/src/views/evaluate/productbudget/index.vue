@@ -3,7 +3,7 @@
     <!-- 表格部分 -->
     <el-table v-loading="loading" :data="productbudgetList" @selection-change="handleSelectionChange">
       <!--      <el-table-column type="selection" width="55" align="center" />-->
-      <el-table-column label="项目ID" align="center" prop="productID" />
+      <el-table-column label="项目ID" align="center" prop="projectID" />
 
       <el-table-column label="评估工作量" align="center" prop="ae">
         <template slot-scope="scope">
@@ -116,7 +116,7 @@ export default {
 
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.productID);
+      this.ids = selection.map(item => item.projectID);
       this.single = selection.length !== 1;
       this.multiple = !selection.length;
     },
@@ -128,9 +128,9 @@ export default {
 
     /** 删除按钮操作 */
     handleDelete(row) {
-      const productIDs = row.productID || this.ids;
-      this.$modal.confirm('是否确认删除综合评估编号为"' + productIDs + '"的数据项？').then(() => {
-        return delProductbudget(productIDs);
+      const projectIDs = row.projectID || this.ids;
+      this.$modal.confirm('是否确认删除综合评估编号为"' + projectIDs + '"的数据项？').then(() => {
+        return delProductbudget(projectIDs);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -141,10 +141,10 @@ export default {
     goToEvaluationPage(row) {
       // 跳转到评估页面
       // window.location.href = `http://localhost/evaluate/compute`;
-      //window.location.href = `http://localhost/evaluate/compute?productID=${row.productID}`;
+      //window.location.href = `http://localhost/evaluate/compute?projectID=${row.projectID}`;
       this.$router.push({
         name: 'EvaluationCompute',
-        query: { productID: row.productID }
+        query: { projectID: row.projectID }
       }).catch(err => {
         // 处理可能的导航错误，例如重复导航
         if (err.name !== 'NavigationDuplicated') {

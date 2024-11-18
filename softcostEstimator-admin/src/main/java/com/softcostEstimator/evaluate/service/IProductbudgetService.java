@@ -14,10 +14,10 @@ public interface IProductbudgetService
     /**
      * 查询综合评估
      *
-     * @param productID 综合评估主键
+     * @param projectID 综合评估主键
      * @return 综合评估
      */
-    public Productbudget selectProductbudgetByProductID(Long productID);
+    public Productbudget selectProductbudgetByProjectID(Long projectID);
 
     /**
      * 查询综合评估列表
@@ -46,16 +46,16 @@ public interface IProductbudgetService
     /**
      * 批量删除综合评估
      *
-     * @param productIDs 需要删除的综合评估主键集合
+     * @param projectIDs 需要删除的综合评估主键集合
      * @return 结果
      */
-    public int deleteProductbudgetByProductIDs(Long[] productIDs);
+    public int deleteProductbudgetByProjectIDs(Long[] projectIDs);
 
     /**
      * 删除综合评估信息
      *
-     * @param productID 综合评估主键
+     * @param projectID 综合评估主键
      * @return 结果
      */
-    public int deleteProductbudgetByProductID(Long productID);
+    public int deleteProductbudgetByProjectID(Long projectID);
 }

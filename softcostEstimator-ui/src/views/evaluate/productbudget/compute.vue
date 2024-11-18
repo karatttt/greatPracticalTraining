@@ -262,7 +262,7 @@ export default {
     return {
       activeStep: 0, // 当前步骤
       form: {
-        productID:null,
+        projectID:null,
         pdr: null,
         sfOption: null, // SF 情况
         sf: null, // SF 数值
@@ -467,14 +467,14 @@ export default {
 
     // 准备表单数据，只保留需要提交的字段
     prepareFormData() {
-      const {productID,
+      const {projectID,
         pdr, sf, bd, at, qr,
         swf, sl, dt, rdf, ae, f, dnc,
         sdc, rsk, esdc
       } = this.form;
       // 构建需要提交的数据对象
       return {
-        productID,
+        projectID,
         pdr,
         sf,
         bd,
@@ -492,13 +492,13 @@ export default {
     // 提交表单
     submitForm() {
       const urlParams = new URLSearchParams(window.location.search);
-      const productid= urlParams.get('productID'); // 获取参数 productID
+      const projectid= urlParams.get('projectID'); // 获取参数 projectID
       const submitData = this.prepareFormData();
-      submitData.productID=productid;
+      submitData.projectID=projectid;
       this.$refs.form.validate((valid) => {
         if (valid) {
           // 提交逻辑
-          if (productid != null) {
+          if (projectid != null) {
             updateProductbudget(submitData).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;

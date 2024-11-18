@@ -22,13 +22,13 @@ public class ProductbudgetServiceImpl implements IProductbudgetService
     /**
      * 查询综合评估
      *
-     * @param productID 综合评估主键
+     * @param projectID 综合评估主键
      * @return 综合评估
      */
     @Override
-    public Productbudget selectProductbudgetByProductID(Long productID)
+    public Productbudget selectProductbudgetByProjectID(Long projectID)
     {
-        return productbudgetMapper.selectProductbudgetByProductID(productID);
+        return productbudgetMapper.selectProductbudgetByProjectID(projectID);
     }
 
     /**
@@ -70,24 +70,24 @@ public class ProductbudgetServiceImpl implements IProductbudgetService
     /**
      * 批量删除综合评估
      *
-     * @param productIDs 需要删除的综合评估主键
+     * @param projectIDs 需要删除的综合评估主键
      * @return 结果
      */
     @Override
-    public int deleteProductbudgetByProductIDs(Long[] productIDs)
+    public int deleteProductbudgetByProjectIDs(Long[] projectIDs)
     {
-        return productbudgetMapper.deleteProductbudgetByProductIDs(productIDs);
+        return productbudgetMapper.deleteProductbudgetByProjectIDs(projectIDs);
     }
 
     /**
      * 删除综合评估信息
      *
-     * @param productID 综合评估主键
+     * @param projectID 综合评估主键
      * @return 结果
      */
     @Override
-    public int deleteProductbudgetByProductID(Long productID)
+    public int deleteProductbudgetByProjectID(Long projectID)
     {
-        return productbudgetMapper.deleteProductbudgetByProductID(productID);
+        return productbudgetMapper.deleteProductbudgetByProjectID(projectID);
     }
 }
