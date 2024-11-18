@@ -137,6 +137,14 @@ npm run dev
 
 ---
 
+### 8. **其他说明**
+1. 页面用到了element的组件，所以运行前需要安装element-plus
+```bash
+npm install element-plus
+# 安装时请用国内镜像或者更换代理，不然会出现连接失败
+```
+---
+
 ## 🤝 贡献指南
 
 ### 组长贡献指南

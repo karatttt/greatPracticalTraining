@@ -39,9 +39,9 @@ import com.softcostEstimator.common.core.page.TableDataInfo;
 
 /**
  * 综合评估Controller
- * 
+ *
  * @author ruoyi
- * @date 2024-11-14
+ * @date 2024-11-15
  */
 @RestController
 @RequestMapping("/evaluate/productbudget")
@@ -114,7 +114,7 @@ public class ProductbudgetController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('evaluate:productbudget:remove')")
     @Log(title = "综合评估", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{productIDs}")
+    @DeleteMapping("/{productIDs}")
     public AjaxResult remove(@PathVariable Long[] productIDs)
     {
         return toAjax(productbudgetService.deleteProductbudgetByProductIDs(productIDs));
