@@ -6,6 +6,20 @@
       <el-step title="计算总造价" />
     </el-steps>
 
+    <el-button type="primary" @click="showRequirementDialog = true">查看项目需求</el-button>
+
+    <el-dialog
+      title="项目需求"
+      :visible.sync="showRequirementDialog"
+      width="50%"
+    >
+      <p v-if="projectRequirement">{{ projectRequirement }}</p>
+      <p v-else>加载中...</p>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="showRequirementDialog = false">关闭</el-button>
+  </span>
+    </el-dialog>
+
     <el-form ref="form" :model="form" :rules="rules" label-width="200px">
       <!-- 步骤1：确定PDR -->
 
@@ -364,10 +378,13 @@ export default {
   name: "CostEvaluation",
   mounted() {
     this.fetchProjectList(); // 初始化获取项目列表
+    this.fetchProjectRequirement(); // 获取当前项目的需求内容
   },
 
   data() {
     return {
+      showRequirementDialog: false, // 控制弹窗显示
+      projectRequirement: "暂无项目需求内容", // 默认显示内容
       activeStep: 0, // 当前步骤
       form: {
         projectID:null,
@@ -481,7 +498,30 @@ export default {
     'form.otherExpense': 'calculateDNC'
   },
   methods: {
+    stripHtml(html) {
+  return html.replace(/<[^>]+>/g, '').trim();  // 去掉所有HTML标签
+},
+    // 获取当前项目的需求内容
+    fetchProjectRequirement() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const projectid = urlParams.get('projectID'); // 获取项目ID
 
+      if (!projectid) {
+        this.$message.error("无法获取项目ID，请检查URL参数！");
+        return;
+      }
+      // 请求获取项目需求
+      listProject({ projectID: projectid }).then((response) => {
+        if (response.rows && response.rows.length > 0) {
+          const project = response.rows[0];
+          // 清理项目需求内容，去掉冗余的HTML标签
+          this.projectRequirement = this.stripHtml(project.requireContent);
+        } else {
+          this.$message.warning("未找到该项目的需求内容！");
+          this.projectRequirement = "暂无项目需求内容";
+        }
+      });
+    },
     // 获取项目列表
     fetchProjectList() {
       this.loading = true;
