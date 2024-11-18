@@ -59,4 +59,6 @@ public interface IProductbudgetService
      */
     public int deleteProductbudgetByProductID(Long productID);
     String getJson(Productbudget productbudget);
+
+    Productbudget selectProductbudgetByProductID2(Long projectId);
 }

@@ -6,5 +6,5 @@ import lombok.Data;
 public class AiGenenrateReportRequest {
 
     private Long projectId;
-    private String type;
+
 }

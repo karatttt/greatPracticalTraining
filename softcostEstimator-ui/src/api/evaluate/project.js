@@ -1,5 +1,11 @@
 import request from '@/utils/request'
-
+export function createReport(id) {
+  return request({
+    url: '/evaluate/productbudget/generate/report',
+    method: 'get',
+    params: { id }
+  })
+}
 export function longPolling() {
   return request({
     url: '/chat', // 请求的接口路径（基于你的后端）

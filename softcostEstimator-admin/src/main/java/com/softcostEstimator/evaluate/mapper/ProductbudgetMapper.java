@@ -14,10 +14,10 @@ public interface ProductbudgetMapper
     /**
      * 查询综合评估
      *
-     * @param productID 综合评估主键
+     * @param projectID 综合评估主键
      * @return 综合评估
      */
-    public Productbudget selectProductbudgetByProductID(Long productID);
+    public Productbudget selectProductbudgetByProductID(Long projectID);
 
     /**
      * 查询综合评估列表

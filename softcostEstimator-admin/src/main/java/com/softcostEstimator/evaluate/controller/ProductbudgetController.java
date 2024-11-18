@@ -1,5 +1,6 @@
 package com.softcostEstimator.evaluate.controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -10,10 +11,12 @@ import com.alibaba.dashscope.app.ApplicationResult;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.threads.ContentText;
 import com.softcostEstimator.common.BaseResponse;
 import com.softcostEstimator.common.ResultUtils;
 import com.softcostEstimator.evaluate.domain.FunctionPointAnalysis;
 import com.softcostEstimator.evaluate.domain.Project;
+import com.softcostEstimator.evaluate.domain.ReportData;
 import com.softcostEstimator.evaluate.domain.request.AiGenenrateReportRequest;
 import com.softcostEstimator.evaluate.service.IFunctionPointAnalysisService;
 import com.softcostEstimator.evaluate.service.IProjectService;
@@ -23,6 +26,7 @@ import io.reactivex.Flowable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -129,14 +133,14 @@ public class ProductbudgetController extends BaseController
     }
     @PreAuthorize("@ss.hasPermi('evaluate:productbudget:generate:report')")
     @Log(title = "综合评估", businessType = BusinessType.GENERATE_REPORT)
-    @PostMapping("/generate/report")
-    public BaseResponse<String> generateReportByAi(@RequestBody AiGenenrateReportRequest aiGenenrateReportRequest) {
-       Long projectId = aiGenenrateReportRequest.getProjectId();
-       String type = aiGenenrateReportRequest.getType();
+    @GetMapping("/generate/report")
+    public ReportData generateReportByAi(Long id) {
+       Long projectId = id;
+
         //根据id获取所有实体类
         FunctionPointAnalysis functionPointAnalysis = functionPointAnalysisService.selectFunctionPointAnalysisByProjectId(projectId);
         Project project = projectService.selectProjectByProjectID(projectId);
-        Productbudget productbudget = productbudgetService.selectProductbudgetByProductID(projectId);
+        Productbudget productbudget = productbudgetService.selectProductbudgetByProductID2(projectId);
         //将每个实体类转为json格式
         String functionJson = functionPointAnalysisService.getJson(functionPointAnalysis);
         String projectJson = projectService.getJson(project);
@@ -166,10 +170,11 @@ public class ProductbudgetController extends BaseController
             log.error(e.getMessage());
         }
 
-        TransUtil transUtil = TransFactory.newInstance(type);
-        String path = transUtil.transForm(output.toString());
-        return ResultUtils.success(path);
+//        TransUtil transUtil = TransFactory.newInstance(type);
+//        String path = transUtil.transForm(output.toString());
+        return new ReportData(output.toString());
 
+//        return ResultUtils.success(output.toString());
 
 
     }

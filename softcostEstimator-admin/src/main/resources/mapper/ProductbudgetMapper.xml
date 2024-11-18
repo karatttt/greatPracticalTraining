@@ -5,7 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.softcostEstimator.evaluate.mapper.ProductbudgetMapper">
     
     <resultMap type="Productbudget" id="ProductbudgetResult">
-        <result property="productID"    column="productID"    />
+        <result property="projectID"    column="projectID"    />
         <result property="PDR"    column="PDR"    />
         <result property="SF"    column="SF"    />
         <result property="BD"    column="BD"    />
@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectProductbudgetVo">
-        select productID, PDR, SF, BD, AT, QR, SL, DT, RSK, F, DNC, SDC, ESDC from productbudget
+        select * from productbudget
     </sql>
 
     <select id="selectProductbudgetList" parameterType="Productbudget" resultMap="ProductbudgetResult">
@@ -44,13 +44,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectProductbudgetByProductID" parameterType="Long" resultMap="ProductbudgetResult">
         <include refid="selectProductbudgetVo"/>
-        where productID = #{productID}
+        where projectID = #{projectID}
     </select>
 
     <insert id="insertProductbudget" parameterType="Productbudget">
         insert into productbudget
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="productID != null">productID,</if>
+            <if test="projectID != null">projectID,</if>
             <if test="PDR != null">PDR,</if>
             <if test="SF != null">SF,</if>
             <if test="BD != null">BD,</if>
@@ -65,7 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ESDC != null">ESDC,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="productID != null">#{productID},</if>
+            <if test="projectID != null">#{projectID},</if>
             <if test="PDR != null">#{PDR},</if>
             <if test="SF != null">#{SF},</if>
             <if test="BD != null">#{BD},</if>
@@ -97,17 +97,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="SDC != null">SDC = #{SDC},</if>
             <if test="ESDC != null">ESDC = #{ESDC},</if>
         </trim>
-        where productID = #{productID}
+        where projectID = #{projectID}
     </update>
 
-    <delete id="deleteProductbudgetByProductID" parameterType="Long">
-        delete from productbudget where productID = #{productID}
+    <delete id="deleteProductbudgetByprojectID" parameterType="Long">
+        delete from productbudget where projectID = #{projectID}
     </delete>
 
-    <delete id="deleteProductbudgetByProductIDs" parameterType="String">
-        delete from productbudget where productID in 
-        <foreach item="productID" collection="array" open="(" separator="," close=")">
-            #{productID}
+    <delete id="deleteProductbudgetByprojectIDs" parameterType="String">
+        delete from productbudget where projectID in 
+        <foreach item="projectID" collection="array" open="(" separator="," close=")">
+            #{projectID}
         </foreach>
     </delete>
 </mapper>
