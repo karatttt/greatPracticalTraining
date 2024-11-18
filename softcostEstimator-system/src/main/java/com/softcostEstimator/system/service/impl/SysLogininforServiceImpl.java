@@ -7,6 +7,8 @@ import com.softcostEstimator.system.domain.SysLogininfor;
 import com.softcostEstimator.system.mapper.SysLogininforMapper;
 import com.softcostEstimator.system.service.ISysLogininforService;
 
+import javax.annotation.Resource;
+
 /**
  * 系统访问日志情况信息 服务层处理
  * 
@@ -16,7 +18,7 @@ import com.softcostEstimator.system.service.ISysLogininforService;
 public class SysLogininforServiceImpl implements ISysLogininforService
 {
 
-    @Autowired
+    @Resource
     private SysLogininforMapper logininforMapper;
 
     /**

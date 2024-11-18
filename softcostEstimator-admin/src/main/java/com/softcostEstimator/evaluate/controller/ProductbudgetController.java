@@ -48,7 +48,7 @@ import com.softcostEstimator.common.core.page.TableDataInfo;
 @Slf4j
 public class ProductbudgetController extends BaseController
 {
-    @Autowired
+    @Resource
     private IProductbudgetService productbudgetService;
 
 
@@ -119,11 +119,12 @@ public class ProductbudgetController extends BaseController
     {
         return toAjax(productbudgetService.deleteProductbudgetByProductIDs(productIDs));
     }
-
+    @PreAuthorize("@ss.hasPermi('evaluate:productbudget:generate:report')")
+    @Log(title = "综合评估", businessType = BusinessType.GENERATE_REPORT)
     @PostMapping("/generate/report")
-    public BaseResponse<Text> generateReportByAi(Productbudget productbudget) {
+    public BaseResponse<String> generateReportByAi(@RequestBody Productbudget productbudget) {
         String json = productbudgetService.getJson(productbudget);
-        Text text = new Text();
+        StringBuilder output = new StringBuilder();
         ApplicationParam param = ApplicationParam.builder()
                 // 若没有配置环境变量，可用百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
                 .apiKey("sk-050b42af20b4467e97b1510365a4eb0c")
@@ -135,13 +136,15 @@ public class ProductbudgetController extends BaseController
         try{
             Flowable<ApplicationResult> result = application.streamCall(param);
             result.blockingForEach(data -> {
-                text.setText(data.getOutput().getText());
+                output.append(data.getOutput().getText());
 
             });
         }catch (ApiException | NoApiKeyException | InputRequiredException e){
             log.error(e.getMessage());
         }
-        return ResultUtils.success(text);
+
+
+        return ResultUtils.success(output.toString());
 
 
     }

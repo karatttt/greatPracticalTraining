@@ -1,6 +1,7 @@
 package com.softcostEstimator.web.controller.monitor;
 
 import java.util.List;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,10 +30,10 @@ import com.softcostEstimator.system.service.ISysLogininforService;
 @RequestMapping("/monitor/logininfor")
 public class SysLogininforController extends BaseController
 {
-    @Autowired
+    @Resource
     private ISysLogininforService logininforService;
 
-    @Autowired
+    @Resource
     private SysPasswordService passwordService;
 
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:list')")

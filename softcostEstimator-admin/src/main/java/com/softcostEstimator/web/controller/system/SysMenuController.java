@@ -21,6 +21,8 @@ import com.softcostEstimator.common.enums.BusinessType;
 import com.softcostEstimator.common.utils.StringUtils;
 import com.softcostEstimator.system.service.ISysMenuService;
 
+import javax.annotation.Resource;
+
 /**
  * 菜单信息
  * 
@@ -30,7 +32,7 @@ import com.softcostEstimator.system.service.ISysMenuService;
 @RequestMapping("/system/menu")
 public class SysMenuController extends BaseController
 {
-    @Autowired
+    @Resource
     private ISysMenuService menuService;
 
     /**

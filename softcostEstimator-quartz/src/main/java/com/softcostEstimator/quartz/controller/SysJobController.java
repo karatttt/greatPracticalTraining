@@ -1,6 +1,7 @@
 package com.softcostEstimator.quartz.controller;
 
 import java.util.List;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ import com.softcostEstimator.quartz.util.ScheduleUtils;
 @RequestMapping("/monitor/job")
 public class SysJobController extends BaseController
 {
-    @Autowired
+    @Resource
     private ISysJobService jobService;
 
     /**

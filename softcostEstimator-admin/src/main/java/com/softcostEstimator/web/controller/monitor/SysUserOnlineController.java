@@ -23,6 +23,8 @@ import com.softcostEstimator.common.utils.StringUtils;
 import com.softcostEstimator.system.domain.SysUserOnline;
 import com.softcostEstimator.system.service.ISysUserOnlineService;
 
+import javax.annotation.Resource;
+
 /**
  * 在线用户监控
  * 
@@ -32,10 +34,10 @@ import com.softcostEstimator.system.service.ISysUserOnlineService;
 @RequestMapping("/monitor/online")
 public class SysUserOnlineController extends BaseController
 {
-    @Autowired
+    @Resource
     private ISysUserOnlineService userOnlineService;
 
-    @Autowired
+    @Resource
     private RedisCache redisCache;
 
     @PreAuthorize("@ss.hasPermi('monitor:online:list')")

@@ -19,6 +19,8 @@ import com.softcostEstimator.common.exception.ServiceException;
 import com.softcostEstimator.common.utils.StringUtils;
 import com.softcostEstimator.common.utils.ip.IpUtils;
 
+import javax.annotation.Resource;
+
 /**
  * 限流处理
  *
@@ -34,13 +36,13 @@ public class RateLimiterAspect
 
     private RedisScript<Long> limitScript;
 
-    @Autowired
+    @Resource
     public void setRedisTemplate1(RedisTemplate<Object, Object> redisTemplate)
     {
         this.redisTemplate = redisTemplate;
     }
 
-    @Autowired
+    @Resource
     public void setLimitScript(RedisScript<Long> limitScript)
     {
         this.limitScript = limitScript;

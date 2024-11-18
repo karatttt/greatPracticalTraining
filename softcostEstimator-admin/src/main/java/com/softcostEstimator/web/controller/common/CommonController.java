@@ -2,6 +2,7 @@ package com.softcostEstimator.web.controller.common;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ public class CommonController
 {
     private static final Logger log = LoggerFactory.getLogger(CommonController.class);
 
-    @Autowired
+    @Resource
     private ServerConfig serverConfig;
 
     private static final String FILE_DELIMETER = ",";

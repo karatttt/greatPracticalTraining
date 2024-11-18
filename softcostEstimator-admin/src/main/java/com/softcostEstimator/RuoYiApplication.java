@@ -12,7 +12,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  * @author ruoyi
  */
 @SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
-@MapperScan("com.softcostEstimator.mapper")
 public class RuoYiApplication
 {
     public static void main(String[] args)

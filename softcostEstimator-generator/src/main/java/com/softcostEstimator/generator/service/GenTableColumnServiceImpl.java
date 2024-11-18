@@ -7,6 +7,8 @@ import com.softcostEstimator.common.core.text.Convert;
 import com.softcostEstimator.generator.domain.GenTableColumn;
 import com.softcostEstimator.generator.mapper.GenTableColumnMapper;
 
+import javax.annotation.Resource;
+
 /**
  * 业务字段 服务层实现
  * 
@@ -15,7 +17,7 @@ import com.softcostEstimator.generator.mapper.GenTableColumnMapper;
 @Service
 public class GenTableColumnServiceImpl implements IGenTableColumnService 
 {
-	@Autowired
+	@Resource
 	private GenTableColumnMapper genTableColumnMapper;
 
 	/**

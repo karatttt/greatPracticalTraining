@@ -18,6 +18,8 @@ import com.softcostEstimator.framework.manager.factory.AsyncFactory;
 import com.softcostEstimator.system.service.ISysConfigService;
 import com.softcostEstimator.system.service.ISysUserService;
 
+import javax.annotation.Resource;
+
 /**
  * 注册校验方法
  * 
@@ -26,13 +28,13 @@ import com.softcostEstimator.system.service.ISysUserService;
 @Component
 public class SysRegisterService
 {
-    @Autowired
+    @Resource
     private ISysUserService userService;
 
-    @Autowired
+    @Resource
     private ISysConfigService configService;
 
-    @Autowired
+    @Resource
     private RedisCache redisCache;
 
     /**

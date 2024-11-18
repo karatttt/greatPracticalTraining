@@ -1,6 +1,7 @@
 package com.softcostEstimator.evaluate.controller;
 
 import java.util.List;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ import com.softcostEstimator.common.core.page.TableDataInfo;
 @RequestMapping("/evaluate/analysis")
 public class FunctionPointAnalysisController extends BaseController
 {
-    @Autowired
+    @Resource
     private IFunctionPointAnalysisService functionPointAnalysisService;
 
     /**

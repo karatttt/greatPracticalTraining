@@ -8,6 +8,8 @@ import com.softcostEstimator.common.utils.DictUtils;
 import com.softcostEstimator.system.mapper.SysDictDataMapper;
 import com.softcostEstimator.system.service.ISysDictDataService;
 
+import javax.annotation.Resource;
+
 /**
  * 字典 业务层处理
  * 
@@ -16,7 +18,7 @@ import com.softcostEstimator.system.service.ISysDictDataService;
 @Service
 public class SysDictDataServiceImpl implements ISysDictDataService
 {
-    @Autowired
+    @Resource
     private SysDictDataMapper dictDataMapper;
 
     /**

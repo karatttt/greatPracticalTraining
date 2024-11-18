@@ -56,4 +56,8 @@ public enum BusinessType
      * 清空数据
      */
     CLEAN,
+    /**
+     * 生成报告
+     */
+    GENERATE_REPORT
 }

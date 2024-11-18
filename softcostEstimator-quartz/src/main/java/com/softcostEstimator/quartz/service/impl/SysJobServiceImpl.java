@@ -2,6 +2,8 @@ package com.softcostEstimator.quartz.service.impl;
 
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+
 import org.quartz.JobDataMap;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
@@ -25,10 +27,10 @@ import com.softcostEstimator.quartz.util.ScheduleUtils;
 @Service
 public class SysJobServiceImpl implements ISysJobService
 {
-    @Autowired
+    @Resource
     private Scheduler scheduler;
 
-    @Autowired
+    @Resource
     private SysJobMapper jobMapper;
 
     /**

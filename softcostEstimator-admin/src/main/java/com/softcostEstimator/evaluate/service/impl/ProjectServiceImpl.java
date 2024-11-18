@@ -9,6 +9,8 @@ import com.softcostEstimator.evaluate.mapper.ProjectMapper;
 import com.softcostEstimator.evaluate.domain.Project;
 import com.softcostEstimator.evaluate.service.IProjectService;
 
+import javax.annotation.Resource;
+
 /**
  * 项目信息Service业务层处理
  * 
@@ -18,7 +20,7 @@ import com.softcostEstimator.evaluate.service.IProjectService;
 @Service
 public class ProjectServiceImpl implements IProjectService 
 {
-    @Autowired
+    @Resource
     private ProjectMapper projectMapper;
 
     /**

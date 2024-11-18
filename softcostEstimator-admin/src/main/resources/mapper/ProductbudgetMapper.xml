@@ -1,30 +1,113 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="generator.mapper.ProductbudgetMapper">
-
-    <resultMap id="BaseResultMap" type="generator.domain.Productbudget">
-            <id property="productID" column="productID" jdbcType="BIGINT"/>
-            <result property="PDR" column="PDR" jdbcType="FLOAT"/>
-            <result property="SF" column="SF" jdbcType="FLOAT"/>
-            <result property="BD" column="BD" jdbcType="FLOAT"/>
-            <result property="AT" column="AT" jdbcType="FLOAT"/>
-            <result property="QR" column="QR" jdbcType="FLOAT"/>
-            <result property="SL" column="SL" jdbcType="FLOAT"/>
-            <result property="DT" column="DT" jdbcType="FLOAT"/>
-            <result property="RSK" column="RSK" jdbcType="FLOAT"/>
-            <result property="f" column="F" jdbcType="FLOAT"/>
-            <result property="DNC" column="DNC" jdbcType="FLOAT"/>
-            <result property="SDC" column="SDC" jdbcType="FLOAT"/>
-            <result property="ESDC" column="ESDC" jdbcType="FLOAT"/>
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.softcostEstimator.evaluate.mapper.ProductbudgetMapper">
+    
+    <resultMap type="Productbudget" id="ProductbudgetResult">
+        <result property="productID"    column="productID"    />
+        <result property="PDR"    column="PDR"    />
+        <result property="SF"    column="SF"    />
+        <result property="BD"    column="BD"    />
+        <result property="AT"    column="AT"    />
+        <result property="QR"    column="QR"    />
+        <result property="SL"    column="SL"    />
+        <result property="DT"    column="DT"    />
+        <result property="RSK"    column="RSK"    />
+        <result property="F"    column="F"    />
+        <result property="DNC"    column="DNC"    />
+        <result property="SDC"    column="SDC"    />
+        <result property="ESDC"    column="ESDC"    />
     </resultMap>
 
-    <sql id="Base_Column_List">
-        productID,PDR,SF,
-        BD,AT,QR,
-        SL,DT,RSK,
-        F,DNC,SDC,
-        ESDC
+    <sql id="selectProductbudgetVo">
+        select productID, PDR, SF, BD, AT, QR, SL, DT, RSK, F, DNC, SDC, ESDC from productbudget
     </sql>
+
+    <select id="selectProductbudgetList" parameterType="Productbudget" resultMap="ProductbudgetResult">
+        <include refid="selectProductbudgetVo"/>
+        <where>  
+            <if test="PDR != null "> and PDR = #{PDR}</if>
+            <if test="SF != null "> and SF = #{SF}</if>
+            <if test="BD != null "> and BD = #{BD}</if>
+            <if test="AT != null "> and AT = #{AT}</if>
+            <if test="QR != null "> and QR = #{QR}</if>
+            <if test="SL != null "> and SL = #{SL}</if>
+            <if test="DT != null "> and DT = #{DT}</if>
+            <if test="RSK != null "> and RSK = #{RSK}</if>
+            <if test="F != null "> and F = #{F}</if>
+            <if test="DNC != null "> and DNC = #{DNC}</if>
+            <if test="SDC != null "> and SDC = #{SDC}</if>
+            <if test="ESDC != null "> and ESDC = #{ESDC}</if>
+        </where>
+    </select>
+    
+    <select id="selectProductbudgetByProductID" parameterType="Long" resultMap="ProductbudgetResult">
+        <include refid="selectProductbudgetVo"/>
+        where productID = #{productID}
+    </select>
+
+    <insert id="insertProductbudget" parameterType="Productbudget">
+        insert into productbudget
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productID != null">productID,</if>
+            <if test="PDR != null">PDR,</if>
+            <if test="SF != null">SF,</if>
+            <if test="BD != null">BD,</if>
+            <if test="AT != null">AT,</if>
+            <if test="QR != null">QR,</if>
+            <if test="SL != null">SL,</if>
+            <if test="DT != null">DT,</if>
+            <if test="RSK != null">RSK,</if>
+            <if test="F != null">F,</if>
+            <if test="DNC != null">DNC,</if>
+            <if test="SDC != null">SDC,</if>
+            <if test="ESDC != null">ESDC,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productID != null">#{productID},</if>
+            <if test="PDR != null">#{PDR},</if>
+            <if test="SF != null">#{SF},</if>
+            <if test="BD != null">#{BD},</if>
+            <if test="AT != null">#{AT},</if>
+            <if test="QR != null">#{QR},</if>
+            <if test="SL != null">#{SL},</if>
+            <if test="DT != null">#{DT},</if>
+            <if test="RSK != null">#{RSK},</if>
+            <if test="F != null">#{F},</if>
+            <if test="DNC != null">#{DNC},</if>
+            <if test="SDC != null">#{SDC},</if>
+            <if test="ESDC != null">#{ESDC},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProductbudget" parameterType="Productbudget">
+        update productbudget
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="PDR != null">PDR = #{PDR},</if>
+            <if test="SF != null">SF = #{SF},</if>
+            <if test="BD != null">BD = #{BD},</if>
+            <if test="AT != null">AT = #{AT},</if>
+            <if test="QR != null">QR = #{QR},</if>
+            <if test="SL != null">SL = #{SL},</if>
+            <if test="DT != null">DT = #{DT},</if>
+            <if test="RSK != null">RSK = #{RSK},</if>
+            <if test="F != null">F = #{F},</if>
+            <if test="DNC != null">DNC = #{DNC},</if>
+            <if test="SDC != null">SDC = #{SDC},</if>
+            <if test="ESDC != null">ESDC = #{ESDC},</if>
+        </trim>
+        where productID = #{productID}
+    </update>
+
+    <delete id="deleteProductbudgetByProductID" parameterType="Long">
+        delete from productbudget where productID = #{productID}
+    </delete>
+
+    <delete id="deleteProductbudgetByProductIDs" parameterType="String">
+        delete from productbudget where productID in 
+        <foreach item="productID" collection="array" open="(" separator="," close=")">
+            #{productID}
+        </foreach>
+    </delete>
 </mapper>

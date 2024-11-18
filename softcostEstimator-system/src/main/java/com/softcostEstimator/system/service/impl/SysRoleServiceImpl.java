@@ -25,6 +25,8 @@ import com.softcostEstimator.system.mapper.SysRoleMenuMapper;
 import com.softcostEstimator.system.mapper.SysUserRoleMapper;
 import com.softcostEstimator.system.service.ISysRoleService;
 
+import javax.annotation.Resource;
+
 /**
  * 角色 业务层处理
  * 
@@ -33,16 +35,16 @@ import com.softcostEstimator.system.service.ISysRoleService;
 @Service
 public class SysRoleServiceImpl implements ISysRoleService
 {
-    @Autowired
+    @Resource
     private SysRoleMapper roleMapper;
 
-    @Autowired
+    @Resource
     private SysRoleMenuMapper roleMenuMapper;
 
-    @Autowired
+    @Resource
     private SysUserRoleMapper userRoleMapper;
 
-    @Autowired
+    @Resource
     private SysRoleDeptMapper roleDeptMapper;
 
     /**

@@ -1,6 +1,7 @@
 package com.softcostEstimator.framework.security.handle;
 
 import java.io.IOException;
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +28,7 @@ import com.softcostEstimator.framework.web.service.TokenService;
 @Configuration
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler
 {
-    @Autowired
+    @Resource
     private TokenService tokenService;
 
     /**
