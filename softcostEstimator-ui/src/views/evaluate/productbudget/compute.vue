@@ -24,7 +24,7 @@
         <el-row :gutter="20">
           <el-col :span="8">
             <el-form-item label="SF(规模调整因子)" prop="sf">
-              <el-input v-model.number="form.sf" placeholder="请输入SF" clearable />
+              <el-input v-model="form.sf" placeholder="请输入SF" clearable />
             </el-form-item>
           </el-col>
         </el-row>
@@ -43,7 +43,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="" prop="bd">
-              <el-input v-model.number="form.bd" placeholder="手动输入BD" clearable />
+              <el-input v-model="form.bd" placeholder="手动输入BD" clearable />
             </el-form-item>
           </el-col>
         </el-row>
@@ -66,7 +66,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="" prop="at">
-              <el-input v-model.number="form.at" placeholder="手动输入AT" clearable />
+              <el-input v-model="form.at" placeholder="手动输入AT" clearable />
             </el-form-item>
           </el-col>
         </el-row>
@@ -107,14 +107,14 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="" prop="qr">
-              <el-input v-model.number="form.qr" placeholder="手动输入QR" clearable />
+              <el-input v-model="form.qr" placeholder="手动输入QR" clearable />
             </el-form-item>
           </el-col>
         </el-row>
 
         <!-- SWF 中间变量展示 -->
         <el-form-item label="SWF(软件因素调整因子)" :prop="null">
-          <el-input :value="form.swf" placeholder="SWF" disabled />
+          <el-input :value="form.swf" placeholder="SWF" disabled style="width: 220px;"/>
         </el-form-item>
 
         <!-- SL -->
@@ -130,7 +130,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="" prop="sl">
-              <el-input v-model.number="form.sl" placeholder="手动输入SL" clearable />
+              <el-input v-model="form.sl" placeholder="手动输入SL" clearable />
             </el-form-item>
           </el-col>
         </el-row>
@@ -148,19 +148,19 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="" prop="dt">
-              <el-input v-model.number="form.dt" placeholder="手动输入DT" clearable />
+              <el-input v-model="form.dt" placeholder="手动输入DT" clearable />
             </el-form-item>
           </el-col>
         </el-row>
 
         <!-- RDF 中间变量展示 -->
         <el-form-item label="RDF(开发因素调整因子)" :prop="null">
-          <el-input :value="form.rdf" placeholder="RDF" disabled />
+          <el-input :value="form.rdf" placeholder="RDF" disabled style="width: 220px;"/>
         </el-form-item>
 
         <!-- AE 计算 -->
         <el-form-item label="AE(估算工作量)" :prop="null">
-          <el-input :value="form.ae" placeholder="AE" disabled />
+          <el-input :value="form.ae" placeholder="AE" disabled style="width: 220px;"/>
         </el-form-item>
       </div>
 
@@ -180,7 +180,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="" prop="f">
-              <el-input v-model.number="form.f" placeholder="手动输入F" clearable />
+              <el-input v-model="form.f" placeholder="手动输入F" clearable />
             </el-form-item>
           </el-col>
         </el-row>
@@ -189,55 +189,57 @@
         <el-row :gutter="20">
           <el-col>
             <el-form-item label="DNC(直接非人力成本)" prop="dnc">
-              <el-input v-model="form.dnc" disabled />
+              <el-input v-model="form.dnc" disabled style="width: 220px;"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="办公费" prop="officeExpense">
-              <el-input v-model.number="form.officeExpense" placeholder="请输入办公费" clearable @change="calculateDNC"/>
+              <el-input v-model="form.officeExpense" placeholder="请输入办公费" clearable @change="calculateDNC"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="差旅费" prop="travelExpense">
-              <el-input v-model.number="form.travelExpense" placeholder="请输入差旅费" clearable @change="calculateDNC"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="培训费" prop="trainingExpense">
-              <el-input v-model.number="form.trainingExpense" placeholder="请输入培训费" clearable @change="calculateDNC"/>
+              <el-input v-model="form.travelExpense" placeholder="请输入差旅费" clearable @change="calculateDNC"/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="8">
-            <el-form-item label="业务费" prop="businessExpense">
-              <el-input v-model.number="form.businessExpense" placeholder="请输入业务费" clearable @change="calculateDNC"/>
+            <el-form-item label="培训费" prop="trainingExpense">
+              <el-input v-model="form.trainingExpense" placeholder="请输入培训费" clearable @change="calculateDNC"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
+            <el-form-item label="业务费" prop="businessExpense">
+              <el-input v-model="form.businessExpense" placeholder="请输入业务费" clearable @change="calculateDNC"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="8">
             <el-form-item label="采购费" prop="purchaseExpense">
-              <el-input v-model.number="form.purchaseExpense" placeholder="请输入采购费" clearable @change="calculateDNC"/>
+              <el-input v-model="form.purchaseExpense" placeholder="请输入采购费" clearable @change="calculateDNC"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="其他" prop="otherExpense">
-              <el-input v-model.number="form.otherExpense" placeholder="请输入其他费用" clearable @change="calculateDNC"/>
+              <el-input v-model="form.otherExpense" placeholder="请输入其他费用" clearable @change="calculateDNC"/>
             </el-form-item>
           </el-col>
         </el-row>
 
         <!-- 计算出的SDC -->
         <el-form-item label="SDC(软件开发成本)" :prop="null">
-          <el-input :value="form.sdc" placeholder="SDC" disabled />
+          <el-input :value="form.sdc" placeholder="SDC" disabled style="width: 220px;"/>
         </el-form-item>
 
         <el-form-item label="RSK(风险等级因子)" prop="rsk">
-          <el-input v-model="form.rsk" placeholder="请输入RSK" clearable />
+          <el-input v-model="form.rsk" placeholder="请输入RSK" clearable style="width: 220px;"/>
         </el-form-item>
 
         <!-- ESDC计算 -->
         <el-form-item label="ESDC(调整后软件开发成本)" :prop="null">
-          <el-input :value="form.esdc" placeholder="ESDC" disabled />
+          <el-input :value="form.esdc" placeholder="ESDC" disabled style="width: 220px;"/>
         </el-form-item>
       </div>
     </el-form>
@@ -264,7 +266,8 @@ export default {
       form: {
         projectID:null,
         pdr: null,
-        sfOption: null, // SF 情况
+        s:null,
+        sfOption: null, // SF 情况,根据s，即功能点得到
         sf: null, // SF 数值
         bdOption: null, // BD 情况
         bd: null, // BD 数值
