@@ -204,31 +204,31 @@
       <el-row>
         <el-col :span="12">
           <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-            <el-form-item label="ILF复杂度">
+            <el-form-item label="ILF复杂度" prop="valueILF">
               <el-rate
                 v-model="valueILF"
                 show-text>
               </el-rate>
             </el-form-item>
-            <el-form-item label="EIF复杂度">
+            <el-form-item label="EIF复杂度" prop="valueEIF">
               <el-rate
                 v-model="valueEIF"
                 show-text>
               </el-rate>
             </el-form-item>
-            <el-form-item label="EI复杂度">
+            <el-form-item label="EI复杂度" prop="valueEI">
               <el-rate
                 v-model="valueEI"
                 show-text>
               </el-rate>
             </el-form-item>
-            <el-form-item label="EO复杂度">
+            <el-form-item label="EO复杂度" prop="valueEO">
               <el-rate
                 v-model="valueEO"
                 show-text>
               </el-rate>
             </el-form-item>
-            <el-form-item label="EQ复杂度">
+            <el-form-item label="EQ复杂度" prop="valueEQ">
               <el-rate
                 v-model="valueEQ"
                 show-text>
@@ -449,6 +449,12 @@ export default {
       //图片地址
       UFP_imageUrl:require('@/assets/images/UFP.png'),
       GSC_imageUrl:require('@/assets/images/GSC.png'),
+      //计算中间值
+      valueILFTemp: null,
+      valueEIFTemp: null,
+      valueEITemp: null,
+      valueEOTemp: null,
+      valueEQTemp: null,
 
     };
   },
@@ -524,47 +530,132 @@ export default {
         this.title = "修改功能点分析";
       });
     },
+
+    /**计算UFP*/
+    calculateUFP(){
+      //ILF分支
+      if(this.valueILF == 1){
+        this.valueILFTemp=7;
+      }else if(this.valueILF == 2||this.valueILF == 3){
+        this.valueILFTemp=10;
+      }else if(this.valueILF == 4||this.valueILF == 5){
+        this.valueILFTemp=15;
+      }
+      else{
+        this.valueILFTemp=0;
+      }
+      //EIF分支
+      if(this.valueEIF == 1){
+        this.valueEIFTemp=5;
+      }else if(this.valueEIF == 2||this.valueEIF == 3){
+        this.valueEIFTemp=7;
+      }else if(this.valueEIF == 4||this.valueEIF == 5){
+        this.valueEIFTemp=10;
+      }
+      else{
+        this.valueEIFTemp=0;
+      }
+      //EI分支
+      if(this.valueEI == 1){
+        this.valueEITemp=3;
+      }else if(this.valueEI == 2||this.valueEI == 3){
+        this.valueEITemp=4;
+      }else if(this.valueEI == 4||this.valueEI == 5){
+        this.valueEITemp=6;
+      }else{
+        this.valueEITemp=0;
+      }
+
+      //EO分支
+      if(this.valueEO == 1){
+        this.valueEOTemp=4;
+      }else if(this.valueEO == 2||this.valueEO == 3){
+        this.valueEOTemp=5;
+      }else if(this.valueEO == 4||this.valueEO == 5){
+        this.valueEOTemp=7;
+      }else{
+        this.valueEOTemp=0;
+      }
+      //EQ分支
+      if(this.valueEQ == 1){
+        this.valueEQTemp=3;
+      }else if(this.valueEQ == 2||this.valueEQ == 3){
+        this.valueEQTemp=4;
+      }else if(this.valueEQ == 4||this.valueEQ == 5){
+        this.valueEQTemp=6;
+      }else{
+        this.valueEQTemp=0;
+      }
+
+      this.form.ufp=this.valueILFTemp*this.form.ilf+
+        this.valueEIFTemp*this.form.eif+this.valueEITemp*this.form.ei+
+        this.valueEOTemp*this.form.eo+this.valueEQTemp*this.form.eq;
+    },
+
+    //计算GSC
+    calculateGSC() {
+      this.form.gsc =
+        (this.valueGSC1 || 0) +
+        (this.valueGSC2 || 0) +
+        (this.valueGSC3 || 0) +
+        (this.valueGSC4 || 0) +
+        (this.valueGSC5 || 0) +
+        (this.valueGSC6 || 0) +
+        (this.valueGSC7 || 0) +
+        (this.valueGSC8 || 0) +
+        (this.valueGSC9 || 0) +
+        (this.valueGSCA || 0) +
+        (this.valueGSCB || 0) +
+        (this.valueGSCC || 0) +
+        (this.valueGSCD || 0) +
+        (this.valueGSCE || 0);
+    },
+
+    //计算TCF
+    calculateTCF(){
+      this.form.tcf=0.65+0.01*this.form.gsc;
+    },
+
+    //计算AFP
+    calculateAFP(){
+      this.form.afp=this.form.ufp*this.form.tcf;
+    },
+
     /** 提交按钮 */
     submitForm() {
-      // this.$refs["form"].validate(valid => {
-      //   if (valid) {
-      //     if (this.form.projectId != null) {
-      //       updateAnalysis(this.form).then(response => {
-      //         this.$modal.msgSuccess("修改成功");
-      //         this.open = false;
-      //         this.getList();
-      //       });
-      //     } else {
-      //       addAnalysis(this.form).then(response => {
-      //         this.$modal.msgSuccess("新增成功");
-      //         this.open = false;
-      //         this.getList();
-      //       });
-      //     }
-      //   }
-      // });
-      if(this.open == true){
         this.$refs.form.validate((valid)=> {
             if (valid) {
               if (this.form.projectId != null) {
+                if(this.open == true){
                 updateAnalysis(this.form).then(response => {
                   this.$modal.msgSuccess("修改成功");
                   this.open = false;
                   this.getList();
+                  this.open2 = true;
                 });
+                }else if(this.open2 == true){
+                  this.calculateUFP();
+                  updateAnalysis(this.form).then(response => {
+                    this.$modal.msgSuccess("修改成功");
+                    this.open2 = false;
+                    this.getList();
+                    this.open3 = true;
+                  });
+                }else if(this.open3 == true){
+                  this.calculateGSC();
+                  this.calculateTCF();
+                  this.calculateAFP();
+                  updateAnalysis(this.form).then(response => {
+                    this.$modal.msgSuccess("修改成功");
+                    this.open3 = false;
+                    this.getList();
+                  });
+                }
               }
             }
           }
         );
-        this.open2=true;
-      }else if(this.open2 == true){
-        this.open2=false;
-        this.open3=true;
-      }else if(this.open3 == true){
-        this.open3=false;
-      }
-
-    },
+      },
     /** 删除按钮操作 */
     handleDelete(row) {
       const projectIds = row.projectId || this.ids;
