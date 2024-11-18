@@ -8,15 +8,60 @@
 
     <el-form ref="form" :model="form" :rules="rules" label-width="200px">
       <!-- 步骤1：确定PDR -->
+
       <div v-if="activeStep === 0">
+        <!-- PDR 选择表格 -->
         <el-row :gutter="20">
+          <el-col :span="24">
+            <el-table :data="pdrOptions" border style="width: 100%">
+              <el-table-column prop="label" label="百分位" width="100" />
+              <el-table-column prop="value" label="PDR (人时/功能点)" width="150" />
+              <el-table-column label="适用场景">
+                <template #default="scope">
+                  <el-tooltip effect="dark" :content="scope.row.description" placement="top">
+                    <span>{{ scope.row.description }}</span>
+                  </el-tooltip>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-col>
+        </el-row>
+
+        <!-- PDR 选择 -->
+        <el-row :gutter="20" class="mt20">
           <el-col :span="8">
-            <el-form-item label="PDR" prop="pdr">
-              <el-input v-model="form.pdr" placeholder="请输入PDR" clearable />
+            <el-form-item label="PDR百分位选择" prop="pdrPercentile">
+              <el-select v-model="form.pdrPercentile" placeholder="请选择PDR百分位" @change="updatePDRValue">
+                <el-option label="P10 (1.79) - 乐观估计，适合高效团队和低风险项目" :value="1.79" />
+                <el-option label="P25 (3.58) - 偏乐观估计，适合较成熟的开发环境" :value="3.58" />
+                <el-option label="P50 (7.17) - 最可能值，适用于常规项目" :value="7.17" />
+                <el-option label="P75 (12.99) - 偏悲观估计，适合高复杂度或较高风险项目" :value="12.99" />
+                <el-option label="P90 (17.81) - 悲观估计，适合高风险和严苛质量要求" :value="17.81" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="PDR (人时/功能点)" prop="pdr">
+              <el-input v-model="form.pdr" placeholder="请输入或通过选择自动填充" clearable />
             </el-form-item>
           </el-col>
         </el-row>
+
+        <!-- 提示信息 -->
+        <el-row class="mt20">
+          <el-col :span="24">
+            <el-alert
+              title="提示：如何选择合适的PDR？"
+              type="info"
+              description="P10 是乐观估计，适用于高效团队或低风险项目；P50 是中性估计，适合常规项目；P90 是悲观估计，适用于高复杂度或高风险项目。请根据实际情况选择合适的值。"
+              show-icon
+              effect="dark"
+            />
+          </el-col>
+        </el-row>
       </div>
+
+
 
       <!-- 步骤2：计算工作量AE -->
       <div v-if="activeStep === 1">
@@ -289,6 +334,7 @@ export default {
       form: {
         projectID:null,
         pdr: null,
+        pdrPercentile: null, // PDR 百分位选择
         s:null,
         sfOption: null, // SF 情况,根据s，即功能点得到
         sf: null, // SF 数值
@@ -328,6 +374,13 @@ export default {
         rsk: null,
         esdc: null,
       },
+      pdrOptions: [
+        { label: "P10", value: 1.79, description: "乐观估计，适用于高效团队或低风险项目" },
+        { label: "P25", value: 3.58, description: "偏乐观估计，适用于成熟团队或低中风险项目" },
+        { label: "P50", value: 7.17, description: "中性估计，适用于常规开发项目" },
+        { label: "P75", value: 12.99, description: "偏悲观估计，适用于复杂或高风险项目" },
+        { label: "P90", value: 17.81, description: "悲观估计，适用于高复杂度或严苛质量要求项目" },
+      ],
       rules: {
         pdrOption: [{required: true, message: "请输入PDR", trigger: "blur"}],
         sfOption: [{required: true, message: "请输入SF", trigger: "blur"}],
@@ -382,6 +435,10 @@ export default {
       console.log(this.form.distributedProcessing+this.form.performance+this.form.reliability+this.form.multiSite)
       this.form.qr = this.formatDecimal(qr);  // 格式化为四位小数
       this.calculateAE(); // 更新 AE
+    },
+    // 更新 PDR 值
+    updatePDRValue(newValue) {
+      this.form.pdr = newValue; // 自动填充 PDR 值
     },
     // 计算 SWF
     calculateSWF() {
@@ -614,7 +671,9 @@ export default {
   margin-top: 20px;
   text-align: center;
 }
-
+.mt20 {
+  margin-top: 20px;
+}
 .el-steps {
   margin-bottom: 20px;
 }
