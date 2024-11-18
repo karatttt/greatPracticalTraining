@@ -105,7 +105,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="9">
             <el-form-item label="" prop="qr">
               <el-input v-model="form.qr" placeholder="手动输入QR" clearable />
             </el-form-item>
@@ -233,8 +233,31 @@
           <el-input :value="form.sdc" placeholder="SDC" disabled style="width: 220px;"/>
         </el-form-item>
 
+        <!-- 风险类型列表 -->
+        <el-row gutter="0" class="risk-row">
+          <el-col :span="9" class="risk-col" v-for="(risk, index) in risks" :key="index">
+            <el-form-item :label="risk.name" :prop="'risk' + index">
+              <el-select
+                v-model="risk.value"
+                placeholder="请选择风险取值"
+                class="risk-select"
+                @change="updateOverallRisk"
+                style="width: 220px;"
+              >
+                <el-option v-for="item in riskOptions" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <!-- 综合风险等级 -->
+        <el-form-item label="整体风险等级" prop="overallRiskLevel">
+          <el-input v-model="form.overallRiskLevel" placeholder="自动计算" disabled style="width: 220px;" />
+        </el-form-item>
+
+        <!-- RSK 自动计算 -->
         <el-form-item label="RSK(风险等级因子)" prop="rsk">
-          <el-input v-model="form.rsk" placeholder="请输入RSK" clearable style="width: 220px;"/>
+          <el-input v-model="form.rsk" placeholder="自动计算" disabled style="width: 220px;" />
         </el-form-item>
 
         <!-- ESDC计算 -->
@@ -301,6 +324,7 @@ export default {
         dncOption: null, // DNC 情况
         dnc: null, // DNC 数值
         sdc: null,
+        overallRiskLevel: '', // 综合风险等级（低、中、高）
         rsk: null,
         esdc: null,
       },
@@ -316,6 +340,21 @@ export default {
         dncOption: [{required: true, message: "请输入DNC", trigger: "blur"}],
         rskOption: [{required: true, message: "请输入RSK", trigger: "blur"}],
       },
+      // 风险类型
+      risks: [
+        { name: '进度风险', value: null },
+        { name: '成本风险', value: null },
+        { name: '质量风险', value: null },
+        { name: '技术风险', value: null }
+      ],
+      // 风险取值选项
+      riskOptions: [
+        { value: 5, label: '5' },
+        { value: 4, label: '4' },
+        { value: 3, label: '3' },
+        { value: 2, label: '2' },
+        { value: 1, label: '1' }
+      ]
     };
   },
   watch: {
@@ -377,6 +416,52 @@ export default {
       const sdc = (this.form.at || 0) * (this.form.f || 0) + (this.form.dnc || 0);
       this.form.sdc = this.formatDecimal(sdc);  // 格式化为四位小数
     },
+
+    // 更新综合风险等级
+    updateOverallRisk() {
+      const riskValues = this.risks.map((risk) => risk.value);
+
+      // 确保所有风险值有效
+      if (riskValues.some((value) => value == null)) {
+        this.form.overallRiskLevel = '';
+        this.form.rsk = '';
+        return;
+      }
+
+      // 计算综合风险等级（示例：取最大值）
+      const maxRiskValue = Math.max(...riskValues);
+
+      let overallRiskLevel = '';
+      if (maxRiskValue === 5 || maxRiskValue === 4) {
+        overallRiskLevel = '高';
+      } else if (maxRiskValue === 3) {
+        overallRiskLevel = '中';
+      } else if (maxRiskValue === 2 || maxRiskValue === 1) {
+        overallRiskLevel = '低';
+      }
+      this.form.overallRiskLevel = overallRiskLevel;
+
+      // 根据综合风险等级计算 RSK
+      this.updateRSK(overallRiskLevel);
+    },
+    // 根据综合风险等级计算 RSK
+    updateRSK(overallRiskLevel) {
+      // 定义综合风险等级对应的 RSK 因子范围
+      const riskLevelFactors = {
+        高: [1.3, 1.4],
+        中: [1.1, 1.2],
+        低: [1.0, 1.0]
+      };
+
+      const factorRange = riskLevelFactors[overallRiskLevel];
+      if (factorRange) {
+        // 简单逻辑：取范围的中间值作为 RSK
+        this.form.rsk = ((factorRange[0] + factorRange[1]) / 2).toFixed(1);
+      } else {
+        this.form.rsk = '';
+      }
+    },
+
     // 计算 ESDC
     calculateESDC() {
       const esdc = (this.form.sdc || 0) * (this.form.rsk || 0);
