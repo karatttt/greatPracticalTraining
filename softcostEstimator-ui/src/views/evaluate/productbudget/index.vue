@@ -1,9 +1,23 @@
 <template>
   <div class="app-container">
     <!-- 表格部分 -->
-    <el-table v-loading="loading" :data="productbudgetList" @selection-change="handleSelectionChange">
+    <!-- 表格部分 -->
+    <el-table
+      v-loading="loading"
+      :data="productbudgetList"
+      @selection-change="handleSelectionChange"
+      style="width: 100%"
+    >
       <!--      <el-table-column type="selection" width="55" align="center" />-->
       <el-table-column label="项目ID" align="center" prop="projectID" />
+
+      <!-- 项目名称列 -->
+      <el-table-column label="项目名称" align="center">
+        <template #default="scope">
+          {{ getProjectName(scope.row.projectID) }}
+        </template>
+      </el-table-column>
+
 
       <el-table-column label="评估工作量" align="center" prop="ae">
         <template slot-scope="scope">
@@ -83,6 +97,7 @@
 
 <script>
 import { listProductbudget, getProductbudget, delProductbudget } from "@/api/evaluate/productbudget";
+import { listProject } from "@/api/evaluate/project"; // 引入 listProject API
 
 export default {
   name: "Productbudget",
@@ -94,6 +109,7 @@ export default {
       multiple: true,
       total: 0,
       productbudgetList: [],
+      projectMap: {}, // 存储 projectID 到 项目名称 的映射
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -101,9 +117,33 @@ export default {
     };
   },
   created() {
-    this.getList();
+    this.initializeData();
   },
   methods: {
+     /** 初始化数据：获取项目列表和评估列表 */
+     async initializeData() {
+      await this.fetchProjects();
+      this.getList();
+    },
+
+    /** 获取项目列表并构建 projectMap */
+    async fetchProjects() {
+      try {
+        // 如果项目数量较大，您可以考虑分页获取或增加查询参数
+        const response = await listProject({ pageNum: 1, pageSize: 1000 }); // 假设最多1000个项目
+        const projects = response.rows;
+        projects.forEach((project) => {
+          this.$set(this.projectMap, project.projectID, project.name);
+        });
+      } catch (error) {
+        console.error("获取项目列表失败:", error);
+      }
+    },
+
+    /** 根据 projectID 获取项目名称 */
+    getProjectName(projectID) {
+      return this.projectMap[projectID] || "未知项目";
+    },
     /** 查询综合评估列表 */
     getList() {
       this.loading = true;
