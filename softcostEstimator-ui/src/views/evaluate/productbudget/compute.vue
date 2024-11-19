@@ -165,34 +165,44 @@
         <el-row :gutter="20">
           <el-col :span="8">
             <el-form-item label="QR(质量特性调整因子)" >
-              <el-select v-model="form.distributedProcessing" placeholder="请选择分布式处理调整因子" @change="calculateQR">
-                <el-option label="没有明示对分布式处理的需求事项" :value="-1" />
-                <el-option label="通过网络进行客户端/服务器及网络基础应用分布处理和传输" :value="0" />
-                <el-option label="在多个服务器及处理器上同时相互执行应用中的处理功能" :value="1" />
-              </el-select>
+              <el-tooltip class="item" effect="dark" content="指应用能够在各组成要素之间传输数据" placement="top">
+                <el-select v-model="form.distributedProcessing" placeholder="请选择分布式处理调整因子" @change="calculateQR">
+                  <el-option label="没有明示对分布式处理的需求事项" :value="-1" />
+                  <el-option label="通过网络进行客户端/服务器及网络基础应用分布处理和传输" :value="0" />
+                  <el-option label="在多个服务器及处理器上同时相互执行应用中的处理功能" :value="1" />
+                </el-select>
+              </el-tooltip>
 
-              <el-select v-model="form.performance" placeholder="请选择性能调整因子" @change="calculateQR">
-                <el-option label="没有明示对性能的特别需求事项或活动，因此提供基本性能" :value="-1" />
-                <el-option label="应答时间或处理率对高峰时间或所有业务时间来说都很重要，存在对连动系统结束处理时间的限制" :value="0" />
-                <el-option label="为满足性能需求事项，要求设计阶段开始进行性能分析，或在设计、开发阶段使用分析工具" :value="1" />
-              </el-select>
+              <el-tooltip class="item" effect="dark" content="指用户对应答时间或处理率的需求水平" placement="top">
+                <el-select v-model="form.performance" placeholder="请选择性能调整因子" @change="calculateQR">
+                  <el-option label="没有明示对性能的特别需求事项或活动，因此提供基本性能" :value="-1" />
+                  <el-option label="应答时间或处理率对高峰时间或所有业务时间来说都很重要，存在对连动系统结束处理时间的限制" :value="0" />
+                  <el-option label="为满足性能需求事项，要求设计阶段开始进行性能分析，或在设计、开发阶段使用分析工具" :value="1" />
+                </el-select>
+              </el-tooltip>
+
 
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
             <el-form-item>
-              <el-select v-model="form.reliability" placeholder="请选择可靠性调整因子" @change="calculateQR">
-                <el-option label="没有明示对分布式处理的需求事项" :value="-1" />
-                <el-option label="通过网络进行客户端/服务器及网络基础应用分布处理和传输" :value="0" />
-                <el-option label="在多个服务器及处理器上同时相互执行应用中的处理功能" :value="1" />
-              </el-select>
+              <el-tooltip class="item" effect="dark" content="指发生故障的影响程度" placement="top">
+                <el-select v-model="form.reliability" placeholder="请选择可靠性调整因子" @change="calculateQR">
+                  <el-option label="没有明示对分布式处理的需求事项" :value="-1" />
+                  <el-option label="通过网络进行客户端/服务器及网络基础应用分布处理和传输" :value="0" />
+                  <el-option label="在多个服务器及处理器上同时相互执行应用中的处理功能" :value="1" />
+                </el-select>
+              </el-tooltip>
 
-              <el-select v-model="form.multiSite" placeholder="请选择多重站点调整因子" @change="calculateQR">
-                <el-option label="没有明示对分布式处理的需求事项" :value="-1" />
-                <el-option label="通过网络进行客户端/服务器及网络基础应用分布处理和传输" :value="0" />
-                <el-option label="在多个服务器及处理器上同时相互执行应用中的处理功能" :value="1" />
-              </el-select>
+              <el-tooltip class="item" effect="dark" content="指开发能够支持不同硬件和软件环境的软件" placement="top">
+                <el-select v-model="form.multiSite" placeholder="请选择多重站点调整因子" @change="calculateQR">
+                  <el-option label="没有明示对分布式处理的需求事项" :value="-1" />
+                  <el-option label="通过网络进行客户端/服务器及网络基础应用分布处理和传输" :value="0" />
+                  <el-option label="在多个服务器及处理器上同时相互执行应用中的处理功能" :value="1" />
+                </el-select>
+              </el-tooltip>
+
             </el-form-item>
           </el-col>
           <el-col :span="9">
@@ -289,7 +299,7 @@
         <!-- DNC -->
         <el-row :gutter="20">
           <el-col>
-            <el-form-item label="DNC(直接非人力成本)" prop="dnc">
+            <el-form-item label="DNC(直接非人力成本，万元)" prop="dnc">
               <el-input v-model="form.dnc" disabled style="width: 220px;"/>
             </el-form-item>
           </el-col>
