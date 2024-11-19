@@ -524,16 +524,26 @@ export default {
         this.$message.error("无法获取项目ID，请检查URL参数！");
         return;
       }
+
       // 请求获取项目需求
-      listProject({ projectID: projectid }).then((response) => {
+      listProject().then((response) => {
         if (response.rows && response.rows.length > 0) {
-          const project = response.rows[0];
-          // 清理项目需求内容，去掉冗余的HTML标签
-          this.projectRequirement = this.stripHtml(project.requireContent);
+          // 找到与 projectID 对应的项目
+          const project = response.rows.find(row => row.projectID === parseInt(projectid, 10));
+          if (project) {
+            // 清理项目需求内容，去掉冗余的HTML标签
+            this.projectRequirement = this.stripHtml(project.requireContent);
+          } else {
+            this.$message.warning("未找到该项目的需求内容！");
+            this.projectRequirement = "暂无项目需求内容";
+          }
         } else {
-          this.$message.warning("未找到该项目的需求内容！");
+          this.$message.warning("未找到任何项目的需求内容！");
           this.projectRequirement = "暂无项目需求内容";
         }
+      }).catch(error => {
+        console.error("请求项目需求失败:", error);
+        this.$message.error("请求项目需求失败，请稍后再试！");
       });
     },
     // 获取项目列表
