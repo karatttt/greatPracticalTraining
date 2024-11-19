@@ -42,6 +42,20 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/evaluate',
+    component: Layout, // 如果该页面属于 Layout 布局
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'question/index', // 完整路径为 /evaluate/question/index
+        component: () => import('@/views/evaluate/question/index.vue'),
+        name: 'QuestionIndex',
+        meta: { title: '问题评估', icon: 'edit' } // 可根据需求设置 meta 信息
+      }
+    ]
+  },
+
+  {
     path: '/login',
     component: () => import('@/views/login'),
     hidden: true
@@ -162,6 +176,7 @@ export const dynamicRoutes = [
       }
     ]
   }
+
 ]
 
 // 防止连续点击多次路由报错

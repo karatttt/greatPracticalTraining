@@ -18,7 +18,11 @@ public class Productbudget extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** $column.columnComment */
-    private Long productID;
+    private Long projectID;
+
+    public void setProjectID(Long projectID) {
+        this.projectID = projectID;
+    }
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
@@ -72,14 +76,14 @@ public class Productbudget extends BaseEntity
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long tenantryID;
 
-    public void setProductID(Long productID)
+    public void setprojectID(Long projectID)
     {
-        this.productID = productID;
+        this.projectID = projectID;
     }
 
-    public Long getProductID()
+    public Long getprojectID()
     {
-        return productID;
+        return projectID;
     }
     public void setPDR(Double PDR)
     {
@@ -99,6 +103,7 @@ public class Productbudget extends BaseEntity
     {
         return SF;
     }
+
     public void setBD(Double BD)
     {
         this.BD = BD;
@@ -202,7 +207,7 @@ public class Productbudget extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-                .append("productID", getProductID())
+                .append("projectID", getprojectID())
                 .append("PDR", getPDR())
                 .append("SF", getSF())
                 .append("BD", getBD())

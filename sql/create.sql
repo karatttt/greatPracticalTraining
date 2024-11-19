@@ -48,7 +48,7 @@ create table if not exists `productbudget`
     `SDC` float null comment 'SDC',
     `ESDC` float null comment 'ESDC'
 ) comment '`productbudget`';
-insert into `productbudget` (`productID`, `PDR`, `SF`, `BD`, `AT`, `QR`, `SL`, `DT`, `RSK`, `F`, `DNC`, `SDC`, `ESDC`) values (3176008, 31668.145, 40849.336, 30928.283, 64710.133, 38716.297, 49567.12, 62231.516, 79914.76, 52953.117, 92306.91, 72090.875, 15053.803);
+insert into `productbudget` (`productID`, `PDR`, `SF`, `BD`, `AT`, `QR`, `SL`, `DT`, `RSK`, `F`, `DNC`, `SDC`, `ESDC`) values (1, 31668.145, 40849.336, 30928.283, 64710.133, 38716.297, 49567.12, 62231.516, 79914.76, 52953.117, 92306.91, 72090.875, 15053.803);
 insert into `productbudget` (`productID`, `PDR`, `SF`, `BD`, `AT`, `QR`, `SL`, `DT`, `RSK`, `F`, `DNC`, `SDC`, `ESDC`) values (9097273157, 55076.105, 17740.799, 77747.67, 9291.44, 75440.07, 81614.016, 4642.3496, 87425.69, 86989.734, 77092.055, 35548.938, 91077.56);
 insert into `productbudget` (`productID`, `PDR`, `SF`, `BD`, `AT`, `QR`, `SL`, `DT`, `RSK`, `F`, `DNC`, `SDC`, `ESDC`) values (291, 33305.914, 53303.445, 56357.527, 51340.746, 65192.055, 58887.266, 55788.344, 12074.244, 73116.23, 14445.704, 61372.797, 17349.137);
 insert into `productbudget` (`productID`, `PDR`, `SF`, `BD`, `AT`, `QR`, `SL`, `DT`, `RSK`, `F`, `DNC`, `SDC`, `ESDC`) values (99938, 93466.48, 58361.645, 630.4205, 67297.94, 96555.18, 22910.887, 71813.41, 1594.7043, 87405.22, 44249.363, 54298.2, 97347.08);

@@ -29,6 +29,24 @@ public class LongPollingController{
         return message;  // 返回消息
     }
 
+    @PostMapping("/sendMsg2")
+    public void receiveMes2(@RequestBody MsgReq msgReq) throws NoApiKeyException, InputRequiredException {
+        MessageUtil.streamCall3(msgReq.content);
+    }
+
+    // 监听长轮询请求，直到队列中有消息
+    @GetMapping("/chat2")
+    public Response handleLongPolling2() throws InterruptedException, NoApiKeyException, InputRequiredException {
+
+        // 设置超时时间，例如5分钟
+        Response message = MessageUtil.getQueue3().poll();  // 如果有消息，直接返回；如果没有，则阻塞直到有消息
+        if (message == null) {
+            // 如果没有消息，阻塞5分钟，模拟超时机制
+            message = MessageUtil.getQueue3().take();  // 这里会阻塞直到有消息或超时
+        }
+        return message;  // 返回消息
+    }
+
     // 供其他地方发送消息给客户端（例如在数据库变动时触发）
 //    public static void sendMessage(String message) {
 //        messageResponseQueue.offer(message);  // 将消息放入队列，等待客户端接收
