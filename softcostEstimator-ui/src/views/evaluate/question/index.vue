@@ -4,12 +4,23 @@
     <div class="report-container">
       <h3>报告内容</h3>
       <div class="report-content">
-        <!-- 判断 reportContent 是否为空，如果为空则显示 "生成中..." -->
-        <pre v-if="!reportContent">生成中...</pre>
-        <pre v-else>{{ reportContent }}</pre>
+        <!-- 可编辑文本区域 -->
+        <textarea
+          v-model="reportContent"
+          class="editable-report"
+          placeholder="AI软件造价通报告生成专家正在生成中，请耐心等待..."
+        ></textarea>
+
+        <!-- 生成报告按钮 -->
+        <el-button
+          type="primary"
+          class="generate-report-btn"
+          @click="generateReport"
+        >
+          生成报告
+        </el-button>
       </div>
     </div>
-
 
     <!-- 右侧聊天界面 -->
     <div class="chat-container">
@@ -40,17 +51,20 @@
   </div>
 </template>
 
+
 <script>
-import { longPolling, send, createReport } from "@/api/evaluate/project";
+import { longPolling, send, createReport ,pollReport} from "@/api/evaluate/project";
 
 export default {
   name: "Project",
   data() {
     return {
       messages: [], // 消息记录
-      userInput: "", // 用户输入
+      userInput: "你好", // 用户输入
       pollingActive: false, // 是否正在长轮询
+      pollingActive2: false, // 是否正在长轮询
       isEnd: false, // 标记是否结束轮询
+      isEnd2: false, // 标记是否结束轮询
       currentAiMessageId: null, // 当前正在回复的 AI 消息的 ID
       userMsgData: {}, // 用户消息数据
       reportContent: "", // 存储报告内容
@@ -63,10 +77,16 @@ export default {
       this.projectID = projectID;
 
       // 获取报告内容并赋值
-      try {
-        createReport(projectID).then(response => {
-          this.reportContent = response.content; // 假设返回的内容在 res.content 中
-        });
+        try {
+          this.sendMessage();
+
+          createReport(projectID);
+          if (this.isEnd2 || !this.pollingActive2) {
+            this.isEnd2 = false;
+            this.pollingActive2 = true;
+            this.polling2();
+          }
+
         // const res = await createReport(projectID);
         // this.reportContent = res.content; // 假设返回的内容在 res.content 中
       } catch (error) {
@@ -136,6 +156,26 @@ export default {
         }
       }
     },
+    async polling2() {
+      try {
+        const response = await pollReport();
+
+        // 将数据追加到 reportContent
+        this.reportContent += response.content; // 假设 response.data 是字符串
+
+        if (response.end) {
+          this.isEnd2 = true;
+          this.pollingActive2 = false;
+        } else if (this.pollingActive2) {
+          this.polling2();
+        }
+      } catch (error) {
+        console.error("长轮询失败:", error);
+        if (this.pollingActive2) {
+          setTimeout(this.polling, 5000);
+        }
+      }
+    }
   },
 };
 </script>
@@ -228,4 +268,32 @@ export default {
 .send-button {
   flex-shrink: 0;
 }
+
+/* 可编辑文本区域 */
+.editable-report {
+  width: 100%;
+  height: 300px;
+  font-size: 14px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  resize: none; /* 禁止调整大小 */
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+/* 可编辑文本区域 */
+.editable-report {
+  width: 100%; /* 宽度设置为容器的 100% */
+  height: calc(100vh - 150px); /* 高度根据页面高度动态调整 */
+  font-size: 16px; /* 字体调大，方便阅读 */
+  padding: 20px; /* 内边距更宽敞 */
+  border: 1px solid #ddd; /* 边框样式 */
+  border-radius: 8px; /* 圆角边框 */
+  resize: none; /* 禁止调整大小 */
+  box-sizing: border-box; /* 包含内边距和边框 */
+  margin-bottom: 20px; /* 底部留空间 */
+  overflow-y: auto; /* 如果内容超出，显示滚动条 */
+}
+
 </style>
