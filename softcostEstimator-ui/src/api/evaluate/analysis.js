@@ -42,3 +42,21 @@ export function delAnalysis(projectId) {
     method: 'delete'
   })
 }
+
+
+// 修改AI功能点分析
+export function updateAnalysisAI(data) {
+  return request({
+    url: '/evaluate/analysis/api/edit',
+    method: 'post',
+    data: data
+  })
+}
+//前端显示AI
+export function viewAnalysisAI(params) {
+  return request({
+    url: '/evaluate/analysis/api/new',
+    method: 'get',
+    params: params
+  })
+}

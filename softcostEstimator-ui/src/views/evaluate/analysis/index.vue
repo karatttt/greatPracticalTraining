@@ -158,6 +158,13 @@
                   @click="handleDelete(scope.row)"
                   v-hasPermi="['evaluate:analysis:remove']"
                 >删除</el-button>
+                <el-button
+                  size="mini"
+                  type="text"
+                  icon="el-icon-edit"
+                  @click="handleAIUpdate(scope.row)"
+                  v-hasPermi="['evaluate:analysis:edit']"
+                >AI生成</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -173,6 +180,8 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+
+    <div id="myChart" style="width: 700px; height: 500px;"></div>
 
     <!-- 添加或修改功能点分析对话框1 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -344,21 +353,79 @@
         </el-col>
       </el-row>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">下一页</el-button>
+        <el-button type="primary" @click="submitForm">完成</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+
+    <!-- AI -->
+    <el-dialog :title="title" :visible.sync="openAI" width="500px" append-to-body>
+      <el-form ref="formAI" :model="formAI" :rules="rules" label-width="100px">
+        <el-input
+          type="textarea"
+          :rows="2"
+          placeholder="请输入内容"
+          v-model="textarea">
+        </el-input>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFormAI">提交</el-button>
+        <el-button @click="cancelAI">取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog :title="title" :visible.sync="openAI2" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+        <el-form-item label="ILF" prop="ilf">
+          <el-input v-model="form.ilf" placeholder="请输入ILF" />
+        </el-form-item>
+        <el-form-item label="EIF" prop="eif">
+          <el-input v-model="form.eif" placeholder="请输入EIF" />
+        </el-form-item>
+        <el-form-item label="EI" prop="ei">
+          <el-input v-model="form.ei" placeholder="请输入EI" />
+        </el-form-item>
+        <el-form-item label="EO" prop="eo">
+          <el-input v-model="form.eo" placeholder="请输入EO" />
+        </el-form-item>
+        <el-form-item label="EQ" prop="eq">
+          <el-input v-model="form.eq" placeholder="请输入EQ" />
+        </el-form-item>
+        <el-form-item label="UFP" prop="ufp">
+          <el-input v-model="form.ufp" placeholder="请输入UFP" />
+        </el-form-item>
+        <el-form-item label="GSC" prop="gsc">
+          <el-input v-model="form.gsc" placeholder="请输入GSC" />
+        </el-form-item>
+        <el-form-item label="TCF" prop="tcf">
+          <el-input v-model="form.tcf" placeholder="请输入TCF" />
+        </el-form-item>
+        <el-form-item label="AFP" prop="afp">
+          <el-input v-model="form.afp" placeholder="请输入AFP" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFormAI2">确定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import { listAnalysis, getAnalysis, delAnalysis, addAnalysis, updateAnalysis } from "@/api/evaluate/analysis";
+import { listAnalysis, getAnalysis, delAnalysis, addAnalysis, updateAnalysis,updateAnalysisAI,viewAnalysisAI } from "@/api/evaluate/analysis";
 import * as echarts from 'echarts';
+import { listProject, getProject, delProject, addProject, updateProject } from "@/api/evaluate/project";
 
 export default {
   name: "Analysis",
   data() {
     return {
+      //AI
+      textarea: "图书管理系统",
+      doubleArray: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -379,6 +446,8 @@ export default {
       open: false,
       open2: false,
       open3:false,
+      openAI:false,
+      openAI2:false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -393,7 +462,16 @@ export default {
         tcf: null,
         afp: null
       },
+      queryParamsAI:{
+        pageNum: 1,
+        pageSize: 10,
+        textarea:"图书管理系统"
+      },
       // 表单参数
+      formAI:{
+        textarea:"图书管理系统",
+        projectId:null,
+      },
       form: {
         projectId: null,
         ilf: null,
@@ -456,16 +534,53 @@ export default {
       valueEOTemp: null,
       valueEQTemp: null,
 
+      //复选框
+      formInline: {
+        user: '',
+        region: ''
+      },
+      //表格
+      chartInstance: null, // 用于存储ECharts实例
+      selectedRows: [],// 用于存储选中的行数据
+
     };
+  },
+
+  // 初始化图表
+  mounted() {
+    this.chartInstance = echarts.init(document.getElementById('myChart'));
+    this.updateChart(); // 初始化图表
   },
   created() {
     this.getList();
   },
-  mounted() {
-    this.initChart();
-    this.generateData(); // 生成随机数据
-  },
   methods: {
+    //初始化表格
+    updateChart(seriesData) {
+      // 定义颜色数组
+      const colors = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074'];
+
+      // 准备图表系列数据
+      const series = seriesData.map((data, index) => ({
+        data: data,
+        type: 'bar',
+        itemStyle: {
+          color: colors[index % colors.length] // 循环使用颜色
+        }
+      }));
+
+      // 更新图表实例的选项
+      this.chartInstance.setOption({
+        xAxis: {
+          type: 'category',
+          data: ['ILF', 'EIF', 'EI', 'EO', 'EQ', 'UFP', 'GSC', 'TCF', 'AFP']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: series // 更新系列数据
+      });
+    },
     /** 查询功能点分析列表 */
     getList() {
       this.loading = true;
@@ -475,12 +590,24 @@ export default {
         this.loading = false;
       });
     },
+    getListAI(){
+      this.loading = true;
+      listAnalysis(this.queryParamsAI).then(response => {
+        this.analysisList = response.rows;
+        this.total = response.total;
+        this.loading = false;
+      });
+    },
+
     // 取消按钮
     cancel() {
       this.open = false;
       this.open2 = false;
       this.open3 = false;
       this.reset();
+    },
+    cancelAI() {
+      this.openAI = false;
     },
     // 表单重置
     reset() {
@@ -510,10 +637,57 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.projectId)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
+      this.ids = selection.map(item => item.projectId);
+      this.single = selection.length !== 1;
+      this.multiple = !selection.length;
+      this.selectedRows = selection; // 更新选中的行数据
+
+      // 准备图表数据
+      const seriesData = this.selectedRows.map(row => [
+        row.ilf,
+        row.eif,
+        row.ei,
+        row.eo,
+        row.eq,
+        row.ufp,
+        row.gsc,
+        row.tcf,
+        row.afp
+      ]);
+
+      // 设置图表选项
+      this.updateChart(seriesData);
     },
+    updateChartData(rowData) {
+      const chartData = [
+        rowData.ilf,
+        rowData.eif,
+        rowData.ei,
+        rowData.eo,
+        rowData.eq,
+        rowData.ufp,
+        rowData.gsc,
+        rowData.tcf,
+        rowData.afp
+      ];
+
+      // 定义颜色数组
+      const colors = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074'];
+
+      this.chartInstance.setOption({
+        series: [{
+          data: chartData,
+          type: 'bar',
+          itemStyle: {
+            color: function(params) {
+              // 根据数据索引返回颜色
+              return colors[params.dataIndex];
+            }
+          }
+        }]
+      });
+    },
+
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
@@ -528,6 +702,15 @@ export default {
         this.form = response.data;
         this.open = true;
         this.title = "修改功能点分析";
+      });
+    },
+    handleAIUpdate(row){
+      this.reset();
+      const projectId = row.projectId || this.ids
+      getAnalysis(projectId).then(response => {
+        this.form=response.data;
+        this.openAI = true;
+        this.title = "AI生成报告";
       });
     },
 
@@ -621,19 +804,47 @@ export default {
       this.form.afp=this.form.ufp*this.form.tcf;
     },
 
+    /** 提交AI按钮 */
+    submitFormAI() {
+      if (this.openAI == true) {
+        this.$refs.formAI.validate((valid => {
+              if (valid) {
+                updateAnalysisAI(this.formAI.textarea).then(response => {
+                  this.$modal.msgSuccess("修改成功");
+                  this.openAI = false;
+                  this.getListAI();
+                  viewAnalysisAI()
+                    .then((response) => {
+                      console.log("完整响应内容：", response);
+                      this.doubleArray = response;
+                      console.log(this.doubleArray);
+                      this.form.ilf = this.doubleArray[0];
+                      this.form.eif = this.doubleArray[1];
+                      this.form.ei = this.doubleArray[2];
+                      this.form.eo = this.doubleArray[3];
+                      this.form.eq = this.doubleArray[4];
+                      this.form.ufp = this.doubleArray[5];
+                      this.form.gsc = this.doubleArray[6];
+                      this.form.tcf = this.doubleArray[7];
+                      this.form.afp = this.doubleArray[8];
+                      this.openAI2 = true;
+                    });
+                });
+        }
+    }));}},
     /** 提交按钮 */
     submitForm() {
-        this.$refs.form.validate((valid)=> {
+        this.$refs.form.validate((valid) => {
             if (valid) {
               if (this.form.projectId != null) {
-                if(this.open == true){
-                updateAnalysis(this.form).then(response => {
-                  this.$modal.msgSuccess("修改成功");
-                  this.open = false;
-                  this.getList();
-                  this.open2 = true;
-                });
-                }else if(this.open2 == true){
+                if (this.open == true) {
+                  updateAnalysis(this.form).then(response => {
+                    this.$modal.msgSuccess("修改成功");
+                    this.open = false;
+                    this.getList();
+                    this.open2 = true;
+                  });
+                } else if (this.open2 == true) {
                   this.calculateUFP();
                   updateAnalysis(this.form).then(response => {
                     this.$modal.msgSuccess("修改成功");
@@ -641,7 +852,7 @@ export default {
                     this.getList();
                     this.open3 = true;
                   });
-                }else if(this.open3 == true){
+                } else if (this.open3 == true) {
                   this.calculateGSC();
                   this.calculateTCF();
                   this.calculateAFP();
@@ -656,6 +867,23 @@ export default {
           }
         );
       },
+    submitFormAI2(){
+      this.$refs.form.validate((valid)=>{
+
+        if(valid){
+          if(this.form.projectId!=null){
+            this.openAI2=false;
+            updateAnalysis(this.form).then(response => {
+              this.$modal.msgSuccess("修改成功");
+              this.openAI2 = false;
+              this.getList();
+            });
+          }
+        }else{
+          console.log("sorry");
+        }
+      });
+    },
     /** 删除按钮操作 */
     handleDelete(row) {
       const projectIds = row.projectId || this.ids;

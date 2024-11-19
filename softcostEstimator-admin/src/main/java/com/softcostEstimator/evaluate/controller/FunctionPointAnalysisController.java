@@ -21,6 +21,7 @@ import com.softcostEstimator.evaluate.service.IFunctionPointAnalysisService;
 import com.softcostEstimator.common.utils.poi.ExcelUtil;
 import com.softcostEstimator.common.core.page.TableDataInfo;
 
+
 /**
  * 功能点分析Controller
  * 
@@ -101,4 +102,5 @@ public class FunctionPointAnalysisController extends BaseController
     {
         return toAjax(functionPointAnalysisService.deleteFunctionPointAnalysisByProjectIds(projectIds));
     }
+
 }
