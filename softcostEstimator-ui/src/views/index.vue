@@ -246,6 +246,9 @@ export default {
       reportContent: "", // 存储报告内容
     };
   },
+  async mounted() {
+    this.sendMessage();
+  },
   methods: {
     sendMessage() {
       if (!this.userInput.trim()) return;

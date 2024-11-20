@@ -312,7 +312,7 @@ export default {
 /* 可编辑文本区域 */
 .editable-report {
   width: 100%; /* 宽度设置为容器的 100% */
-  height: calc(100vh - 150px); /* 高度根据页面高度动态调整 */
+  height: calc(100vh - 205px); /* 高度根据页面高度动态调整 */
   font-size: 16px; /* 字体调大，方便阅读 */
   padding: 20px; /* 内边距更宽敞 */
   border: 1px solid #ddd; /* 边框样式 */
