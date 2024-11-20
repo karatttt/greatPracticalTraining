@@ -364,7 +364,7 @@
         <!-- 显示推荐系数及解释 -->
         <div v-else>
           <div v-if="recommendations">
-            <h3>推荐的造价评估系数</h3>
+            <h3>根据您项目需求推荐的造价评估系数</h3>
             <ul>
               <li>PDR: {{ recommendations.PDR }} <span class="explanation">{{ explanations.PDR }}</span></li>
               <li>SF: {{ recommendations.SF }} <span class="explanation">{{ explanations.SF }}</span></li>
