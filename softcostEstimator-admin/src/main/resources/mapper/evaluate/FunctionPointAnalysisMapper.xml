@@ -44,6 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertFunctionPointAnalysis" parameterType="FunctionPointAnalysis" useGeneratedKeys="true" keyProperty="projectId">
         insert into function_point_analysis
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId!= null">project_id,</if>
             <if test="ILF != null">ILF,</if>
             <if test="EIF != null">EIF,</if>
             <if test="EI != null">EI,</if>
@@ -55,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="AFP != null">AFP,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
             <if test="ILF != null">#{ILF},</if>
             <if test="EIF != null">#{EIF},</if>
             <if test="EI != null">#{EI},</if>

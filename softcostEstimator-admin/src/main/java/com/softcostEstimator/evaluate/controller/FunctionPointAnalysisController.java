@@ -78,6 +78,7 @@ public class FunctionPointAnalysisController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody FunctionPointAnalysis functionPointAnalysis)
     {
+        System.out.println(functionPointAnalysis);
         return toAjax(functionPointAnalysisService.insertFunctionPointAnalysis(functionPointAnalysis));
     }
 

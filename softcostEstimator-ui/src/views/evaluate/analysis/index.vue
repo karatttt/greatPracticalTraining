@@ -181,11 +181,21 @@
       @pagination="getList"
     />
 
-    <div id="myChart" style="width: 700px; height: 500px;"></div>
+    <div id="myChart" style="width: 100%; height: 600%;"></div>
 
     <!-- 添加或修改功能点分析对话框1 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+        <el-form-item label="项目ID" prop="projectId">
+          <el-select v-model="form.projectId"  :disabled="!isEditable">
+            <el-option
+              v-for="item in projects"
+              :key="item"
+              :label="item"
+              :value="item"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="ILF" prop="ilf">
           <el-input v-model="form.ilf" placeholder="请输入ILF" />
         </el-form-item>
@@ -411,6 +421,40 @@
       </div>
     </el-dialog>
 
+    <el-dialog :title="title" :visible.sync="openAdd1" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+        <el-form-item label="项目ID" prop="projectId">
+          <el-select v-model="form.projectId"  :disabled="!isEditable">
+            <el-option
+              v-for="item in projects"
+              :key="item"
+              :label="item"
+              :value="item"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="ILF" prop="ilf">
+          <el-input v-model="form.ilf" placeholder="请输入ILF" />
+        </el-form-item>
+        <el-form-item label="EIF" prop="eif">
+          <el-input v-model="form.eif" placeholder="请输入EIF" />
+        </el-form-item>
+        <el-form-item label="EI" prop="ei">
+          <el-input v-model="form.ei" placeholder="请输入EI" />
+        </el-form-item>
+        <el-form-item label="EO" prop="eo">
+          <el-input v-model="form.eo" placeholder="请输入EO" />
+        </el-form-item>
+        <el-form-item label="EQ" prop="eq">
+          <el-input v-model="form.eq" placeholder="请输入EQ" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFormAdd">下一页</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -418,11 +462,17 @@
 import { listAnalysis, getAnalysis, delAnalysis, addAnalysis, updateAnalysis,updateAnalysisAI,viewAnalysisAI } from "@/api/evaluate/analysis";
 import * as echarts from 'echarts';
 import { listProject, getProject, delProject, addProject, updateProject } from "@/api/evaluate/project";
+import project from "@/views/evaluate/project/index.vue";
 
 export default {
   name: "Analysis",
   data() {
     return {
+      //下拉框内容
+      projects: [
+      ],
+      //控制是否可以修改
+      isEditable:true,
       //AI
       textarea: "图书管理系统",
       doubleArray: [],
@@ -448,6 +498,8 @@ export default {
       open3:false,
       openAI:false,
       openAI2:false,
+      openAdd1:false,
+
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -658,40 +710,16 @@ export default {
       // 设置图表选项
       this.updateChart(seriesData);
     },
-    updateChartData(rowData) {
-      const chartData = [
-        rowData.ilf,
-        rowData.eif,
-        rowData.ei,
-        rowData.eo,
-        rowData.eq,
-        rowData.ufp,
-        rowData.gsc,
-        rowData.tcf,
-        rowData.afp
-      ];
-
-      // 定义颜色数组
-      const colors = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074'];
-
-      this.chartInstance.setOption({
-        series: [{
-          data: chartData,
-          type: 'bar',
-          itemStyle: {
-            color: function(params) {
-              // 根据数据索引返回颜色
-              return colors[params.dataIndex];
-            }
-          }
-        }]
-      });
-    },
 
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      this.open = true;
+      listProject().then((response)=>{
+        this.projects=response.rows.map(row => row.projectID);
+        console.log(this.projects);
+        }
+      );
+      this.openAdd1 = true;
       this.title = "添加功能点分析";
     },
     /** 修改按钮操作 */
@@ -835,10 +863,10 @@ export default {
     /** 提交按钮 */
     submitForm() {
         this.$refs.form.validate((valid) => {
-            if (valid) {
-              if (this.form.projectId != null) {
+          if (valid) {
+            // if (this.form.projectId != null) {
                 if (this.open == true) {
-                  updateAnalysis(this.form).then(response => {
+                  addAnalysis(this.form).then(response => {
                     this.$modal.msgSuccess("修改成功");
                     this.open = false;
                     this.getList();
@@ -861,12 +889,47 @@ export default {
                     this.open3 = false;
                     this.getList();
                   });
-                }
+                // }
               }
             }
           }
         );
       },
+    submitFormAdd(){
+      this.$refs.form.validate((valid) => {
+          if (valid) {
+            // if (this.form.projectId != null) {
+            if (this.openAdd1 == true) {
+              console.log(this.form);
+              addAnalysis(this.form).then(response => {
+                this.$modal.msgSuccess("修改成功");
+                this.openAdd1 = false;
+                this.getList();
+                this.open2 = true;
+              });
+            } else if (this.open2 == true) {
+              this.calculateUFP();
+              updateAnalysis(this.form).then(response => {
+                this.$modal.msgSuccess("修改成功");
+                this.open2 = false;
+                this.getList();
+                this.open3 = true;
+              });
+            } else if (this.open3 == true) {
+              this.calculateGSC();
+              this.calculateTCF();
+              this.calculateAFP();
+              updateAnalysis(this.form).then(response => {
+                this.$modal.msgSuccess("修改成功");
+                this.open3 = false;
+                this.getList();
+              });
+              // }
+            }
+          }
+        }
+      );
+    },
     submitFormAI2(){
       this.$refs.form.validate((valid)=>{
 
