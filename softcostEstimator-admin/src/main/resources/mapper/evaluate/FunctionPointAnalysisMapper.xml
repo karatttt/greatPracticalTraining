@@ -64,34 +64,47 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectFunctionPointAnalysisVo"/>
         where project_id = #{projectId}
     </select>
+    <select id="loadFunctionPointAnalysis" parameterType="FunctionPointAnalysis" resultType="java.util.Map">
+        SELECT
+            p.projectID AS project_id,
+            p.name
+        FROM
+            project p
+        WHERE
+            NOT EXISTS (
+                SELECT 1
+                FROM function_point_analysis f
+                WHERE f.project_id = p.projectID
+            )
+    </select>
 
-    <insert id="insertFunctionPointAnalysis" parameterType="FunctionPointAnalysis" useGeneratedKeys="true" keyProperty="projectId">
-        insert into function_point_analysis
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="projectId!= null">project_id,</if>
-            <if test="ILF != null">ILF,</if>
-            <if test="EIF != null">EIF,</if>
-            <if test="EI != null">EI,</if>
-            <if test="EO != null">EO,</if>
-            <if test="EQ != null">EQ,</if>
-            <if test="UFP != null">UFP,</if>
-            <if test="GSC != null">GSC,</if>
-            <if test="TCF != null">TCF,</if>
-            <if test="AFP != null">AFP,</if>
-         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="projectId != null">#{projectId},</if>
-            <if test="ILF != null">#{ILF},</if>
-            <if test="EIF != null">#{EIF},</if>
-            <if test="EI != null">#{EI},</if>
-            <if test="EO != null">#{EO},</if>
-            <if test="EQ != null">#{EQ},</if>
-            <if test="UFP != null">#{UFP},</if>
-            <if test="GSC != null">#{GSC},</if>
-            <if test="TCF != null">#{TCF},</if>
-            <if test="AFP != null">#{AFP},</if>
-         </trim>
-    </insert>
+        <insert id="insertFunctionPointAnalysis" parameterType="FunctionPointAnalysis" useGeneratedKeys="true" keyProperty="projectId">
+            insert into function_point_analysis
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="projectId!= null">project_id,</if>
+                <if test="ILF != null">ILF,</if>
+                <if test="EIF != null">EIF,</if>
+                <if test="EI != null">EI,</if>
+                <if test="EO != null">EO,</if>
+                <if test="EQ != null">EQ,</if>
+                <if test="UFP != null">UFP,</if>
+                <if test="GSC != null">GSC,</if>
+                <if test="TCF != null">TCF,</if>
+                <if test="AFP != null">AFP,</if>
+             </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="projectId != null">#{projectId},</if>
+                <if test="ILF != null">#{ILF},</if>
+                <if test="EIF != null">#{EIF},</if>
+                <if test="EI != null">#{EI},</if>
+                <if test="EO != null">#{EO},</if>
+                <if test="EQ != null">#{EQ},</if>
+                <if test="UFP != null">#{UFP},</if>
+                <if test="GSC != null">#{GSC},</if>
+                <if test="TCF != null">#{TCF},</if>
+                <if test="AFP != null">#{AFP},</if>
+             </trim>
+        </insert>
 
     <update id="updateFunctionPointAnalysis" parameterType="FunctionPointAnalysis">
         update function_point_analysis

@@ -1,6 +1,8 @@
 package com.softcostEstimator.evaluate.service;
 
 import java.util.List;
+import java.util.Map;
+
 import com.softcostEstimator.evaluate.domain.FunctionPointAnalysis;
 
 /**
@@ -57,7 +59,13 @@ public interface IFunctionPointAnalysisService
      * @return 结果
      */
     public int deleteFunctionPointAnalysisByProjectIds(Long[] projectIds);
-
+    /**
+     *
+     *
+     *
+     * @return 结果
+     */
+    public List<Map<String, Object>> loadFunctionPointAnalysis(FunctionPointAnalysis functionPointAnalysis);
     /**
      * 删除功能点分析信息
      * 

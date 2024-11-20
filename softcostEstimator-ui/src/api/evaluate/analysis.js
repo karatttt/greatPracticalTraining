@@ -16,7 +16,13 @@ export function getAnalysis(projectId) {
     method: 'get'
   })
 }
-
+export function load(query) {
+  return request({
+    url: '/evaluate/analysis/load',
+    method: 'get',
+    params: query
+  })
+}
 // 新增功能点分析
 export function addAnalysis(data) {
   return request({

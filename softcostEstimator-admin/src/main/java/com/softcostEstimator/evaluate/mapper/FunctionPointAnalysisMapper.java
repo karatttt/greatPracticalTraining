@@ -1,6 +1,8 @@
 package com.softcostEstimator.evaluate.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import com.softcostEstimator.evaluate.domain.FunctionPointAnalysis;
 
 /**
@@ -26,7 +28,7 @@ public interface FunctionPointAnalysisMapper
      * @return 功能点分析集合
      */
     public List<FunctionPointAnalysis> selectFunctionPointAnalysisList(FunctionPointAnalysis functionPointAnalysis);
-
+    public  List<Map<String, Object>> loadFunctionPointAnalysis(FunctionPointAnalysis functionPointAnalysis);
     /**
      * 新增功能点分析
      * 

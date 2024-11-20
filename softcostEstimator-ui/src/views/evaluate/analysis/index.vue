@@ -124,19 +124,30 @@
     </div>
     <div id="myChart" style="width: 100%; height: 600%;"></div>
 
+    <el-dialog :title="title" :visible.sync="open0" width="500px" append-to-body>
+      <el-select
+        v-model="value"
+        placeholder="请选择未定评估项目"
+        size="large"
+        style="width: 240px"
+      >
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitAdd">添加</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
     <!-- 添加或修改功能点分析对话框1 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="项目ID" prop="projectId">
-          <el-select v-model="form.projectId"  :disabled="!isEditable">
-            <el-option
-              v-for="item in projects"
-              :key="item"
-              :label="item"
-              :value="item"
-            />
-          </el-select>
-        </el-form-item>
+
         <el-form-item label="ILF" prop="ilf">
           <el-input v-model="form.ilf" placeholder="请输入ILF" />
         </el-form-item>
@@ -400,10 +411,11 @@
 </template>
 
 <script>
-import { listAnalysis, getAnalysis, delAnalysis, addAnalysis, updateAnalysis,updateAnalysisAI,viewAnalysisAI,searchAnalysis } from "@/api/evaluate/analysis";
+import { listAnalysis, getAnalysis,load, delAnalysis, addAnalysis, updateAnalysis,updateAnalysisAI,viewAnalysisAI,searchAnalysis } from "@/api/evaluate/analysis";
 import * as echarts from 'echarts';
 import { listProject, getProject, delProject, addProject, updateProject } from "@/api/evaluate/project";
 import project from "@/views/evaluate/project/index.vue";
+import {update} from "script-ext-html-webpack-plugin/lib/elements";
 
 export default {
   name: "Analysis",
@@ -434,6 +446,7 @@ export default {
       // 弹出层标题
       title: "",
       // 是否显示弹出层
+      open0:false,
       open: false,
       open2: false,
       open3:false,
@@ -519,7 +532,9 @@ export default {
       valueEITemp: null,
       valueEOTemp: null,
       valueEQTemp: null,
-
+      options: [],
+      // 当前选中的值
+      value: null,
       //复选框
       formInline: {
         user: '',
@@ -582,7 +597,7 @@ export default {
       this.loading = true;
       searchAnalysis(this.queryParams)
         .then((response) => {
-          const { rows, total } = response;
+          const {rows, total} = response;
           this.analysisList = rows;
           this.total = total;
           this.loading = false;
@@ -592,7 +607,7 @@ export default {
           this.$message.error("获取数据失败，请稍后重试！");
         });
     },
-    getListAI(){
+    getListAI() {
       this.loading = true;
       listAnalysis(this.queryParamsAI).then(response => {
         this.analysisList = response.rows;
@@ -600,9 +615,21 @@ export default {
         this.loading = false;
       });
     },
-
-    // 取消按钮
+    loadOptions() {
+      load(this.queryParams)
+        .then((response) => {
+          console.log(response);  // 检查返回的响应
+          this.options = response.map(item => ({
+            value: item.project_id,
+            label: item.name
+          }));
+        })
+        .catch(() => {
+          this.$message.error("加载未定评估项目失败");
+        });
+    },
     cancel() {
+      this.open0 = false;
       this.open = false;
       this.open2 = false;
       this.open3 = false;
@@ -620,10 +647,10 @@ export default {
         ei: null,
         eo: null,
         eq: null,
-        ufp:null,
-        gsc:null,
-        tcf:null,
-        afp:null,
+        ufp: null,
+        gsc: null,
+        tcf: null,
+        afp: null,
       };
       this.resetForm("form");
     },
@@ -634,7 +661,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.queryParams.projectName="";
+      this.queryParams.projectName = "";
       this.getSearch();
       this.resetForm("queryForm");
       this.handleQuery();
@@ -666,12 +693,8 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      listProject().then((response)=>{
-        this.projects=response.rows.map(row => row.projectID);
-        console.log(this.projects);
-        }
-      );
-      this.openAdd1 = true;
+      this.open0 = true;
+      this.loadOptions();
       this.title = "添加功能点分析";
     },
     /** 修改按钮操作 */
@@ -684,77 +707,90 @@ export default {
         this.title = "修改功能点分析";
       });
     },
-    handleAIUpdate(row){
+    handleAIUpdate(row) {
       this.reset();
       const projectId = row.projectId || this.ids
       getAnalysis(projectId).then(response => {
-        this.form=response.data;
+        this.form = response.data;
         this.openAI = true;
         this.title = "AI生成报告";
       });
     },
 
     /**计算UFP*/
-    calculateUFP(){
+    calculateUFP() {
       //ILF分支
-      if(this.valueILF == 1){
-        this.valueILFTemp=7;
-      }else if(this.valueILF == 2||this.valueILF == 3){
-        this.valueILFTemp=10;
-      }else if(this.valueILF == 4||this.valueILF == 5){
-        this.valueILFTemp=15;
-      }
-      else{
-        this.valueILFTemp=0;
+      if (this.valueILF == 1) {
+        this.valueILFTemp = 7;
+      } else if (this.valueILF == 2 || this.valueILF == 3) {
+        this.valueILFTemp = 10;
+      } else if (this.valueILF == 4 || this.valueILF == 5) {
+        this.valueILFTemp = 15;
+      } else {
+        this.valueILFTemp = 0;
       }
       //EIF分支
-      if(this.valueEIF == 1){
-        this.valueEIFTemp=5;
-      }else if(this.valueEIF == 2||this.valueEIF == 3){
-        this.valueEIFTemp=7;
-      }else if(this.valueEIF == 4||this.valueEIF == 5){
-        this.valueEIFTemp=10;
-      }
-      else{
-        this.valueEIFTemp=0;
+      if (this.valueEIF == 1) {
+        this.valueEIFTemp = 5;
+      } else if (this.valueEIF == 2 || this.valueEIF == 3) {
+        this.valueEIFTemp = 7;
+      } else if (this.valueEIF == 4 || this.valueEIF == 5) {
+        this.valueEIFTemp = 10;
+      } else {
+        this.valueEIFTemp = 0;
       }
       //EI分支
-      if(this.valueEI == 1){
-        this.valueEITemp=3;
-      }else if(this.valueEI == 2||this.valueEI == 3){
-        this.valueEITemp=4;
-      }else if(this.valueEI == 4||this.valueEI == 5){
-        this.valueEITemp=6;
-      }else{
-        this.valueEITemp=0;
+      if (this.valueEI == 1) {
+        this.valueEITemp = 3;
+      } else if (this.valueEI == 2 || this.valueEI == 3) {
+        this.valueEITemp = 4;
+      } else if (this.valueEI == 4 || this.valueEI == 5) {
+        this.valueEITemp = 6;
+      } else {
+        this.valueEITemp = 0;
       }
 
       //EO分支
-      if(this.valueEO == 1){
-        this.valueEOTemp=4;
-      }else if(this.valueEO == 2||this.valueEO == 3){
-        this.valueEOTemp=5;
-      }else if(this.valueEO == 4||this.valueEO == 5){
-        this.valueEOTemp=7;
-      }else{
-        this.valueEOTemp=0;
+      if (this.valueEO == 1) {
+        this.valueEOTemp = 4;
+      } else if (this.valueEO == 2 || this.valueEO == 3) {
+        this.valueEOTemp = 5;
+      } else if (this.valueEO == 4 || this.valueEO == 5) {
+        this.valueEOTemp = 7;
+      } else {
+        this.valueEOTemp = 0;
       }
       //EQ分支
-      if(this.valueEQ == 1){
-        this.valueEQTemp=3;
-      }else if(this.valueEQ == 2||this.valueEQ == 3){
-        this.valueEQTemp=4;
-      }else if(this.valueEQ == 4||this.valueEQ == 5){
-        this.valueEQTemp=6;
-      }else{
-        this.valueEQTemp=0;
+      if (this.valueEQ == 1) {
+        this.valueEQTemp = 3;
+      } else if (this.valueEQ == 2 || this.valueEQ == 3) {
+        this.valueEQTemp = 4;
+      } else if (this.valueEQ == 4 || this.valueEQ == 5) {
+        this.valueEQTemp = 6;
+      } else {
+        this.valueEQTemp = 0;
       }
 
-      this.form.ufp=this.valueILFTemp*this.form.ilf+
-        this.valueEIFTemp*this.form.eif+this.valueEITemp*this.form.ei+
-        this.valueEOTemp*this.form.eo+this.valueEQTemp*this.form.eq;
+      this.form.ufp = this.valueILFTemp * this.form.ilf +
+        this.valueEIFTemp * this.form.eif + this.valueEITemp * this.form.ei +
+        this.valueEOTemp * this.form.eo + this.valueEQTemp * this.form.eq;
     },
+    submitAdd() {
+      if (!this.value) {
+        this.$message.warning("请先选择一个项目");
+        return;
+      }
+      this.$message.success(`已选择项目：${this.value}`);
 
+      this.form.projectId = this.value;
+      console.log(this.form.projectId);
+      addAnalysis(this.form).then(response => {
+        this.$modal.msgSuccess("修改成功");
+        this.getList();
+        this.open0 = false;
+      });
+      // 这里可以继续触发跳转或其他业务逻辑
+    },
     //计算GSC
     calculateGSC() {
       this.form.gsc =
@@ -775,87 +811,54 @@ export default {
     },
 
     //计算TCF
-    calculateTCF(){
-      this.form.tcf=0.65+0.01*this.form.gsc;
+    calculateTCF() {
+      this.form.tcf = 0.65 + 0.01 * this.form.gsc;
     },
 
     //计算AFP
-    calculateAFP(){
-      this.form.afp=this.form.ufp*this.form.tcf;
+    calculateAFP() {
+      this.form.afp = this.form.ufp * this.form.tcf;
     },
 
     /** 提交AI按钮 */
     submitFormAI() {
       if (this.openAI == true) {
         this.$refs.formAI.validate((valid => {
-              if (valid) {
-                updateAnalysisAI(this.formAI.textarea).then(response => {
-                  this.$modal.msgSuccess("修改成功");
-                  this.openAI = false;
-                  this.getListAI();
-                  viewAnalysisAI()
-                    .then((response) => {
-                      console.log("完整响应内容：", response);
-                      this.doubleArray = response;
-                      console.log(this.doubleArray);
-                      this.form.ilf = this.doubleArray[0];
-                      this.form.eif = this.doubleArray[1];
-                      this.form.ei = this.doubleArray[2];
-                      this.form.eo = this.doubleArray[3];
-                      this.form.eq = this.doubleArray[4];
-                      this.form.ufp = this.doubleArray[5];
-                      this.form.gsc = this.doubleArray[6];
-                      this.form.tcf = this.doubleArray[7];
-                      this.form.afp = this.doubleArray[8];
-                      this.openAI2 = true;
-                    });
+          if (valid) {
+            updateAnalysisAI(this.formAI.textarea).then(response => {
+              this.$modal.msgSuccess("修改成功");
+              this.openAI = false;
+              this.getListAI();
+              viewAnalysisAI()
+                .then((response) => {
+                  console.log("完整响应内容：", response);
+                  this.doubleArray = response;
+                  console.log(this.doubleArray);
+                  this.form.ilf = this.doubleArray[0];
+                  this.form.eif = this.doubleArray[1];
+                  this.form.ei = this.doubleArray[2];
+                  this.form.eo = this.doubleArray[3];
+                  this.form.eq = this.doubleArray[4];
+                  this.form.ufp = this.doubleArray[5];
+                  this.form.gsc = this.doubleArray[6];
+                  this.form.tcf = this.doubleArray[7];
+                  this.form.afp = this.doubleArray[8];
+                  this.openAI2 = true;
                 });
-        }
-    }));}},
+            });
+          }
+        }));
+      }
+    },
     /** 提交按钮 */
     submitForm() {
-        this.$refs.form.validate((valid) => {
-          if (valid) {
-            // if (this.form.projectId != null) {
-                if (this.open == true) {
-                  addAnalysis(this.form).then(response => {
-                    this.$modal.msgSuccess("修改成功");
-                    this.open = false;
-                    this.getList();
-                    this.open2 = true;
-                  });
-                } else if (this.open2 == true) {
-                  this.calculateUFP();
-                  updateAnalysis(this.form).then(response => {
-                    this.$modal.msgSuccess("修改成功");
-                    this.open2 = false;
-                    this.getList();
-                    this.open3 = true;
-                  });
-                } else if (this.open3 == true) {
-                  this.calculateGSC();
-                  this.calculateTCF();
-                  this.calculateAFP();
-                  updateAnalysis(this.form).then(response => {
-                    this.$modal.msgSuccess("修改成功");
-                    this.open3 = false;
-                    this.getList();
-                  });
-                // }
-              }
-            }
-          }
-        );
-      },
-    submitFormAdd(){
       this.$refs.form.validate((valid) => {
           if (valid) {
             // if (this.form.projectId != null) {
-            if (this.openAdd1 == true) {
-              console.log(this.form);
-              addAnalysis(this.form).then(response => {
+            if (this.open == true) {
+              updateAnalysis(this.form).then(response => {
                 this.$modal.msgSuccess("修改成功");
-                this.openAdd1 = false;
+                this.open = false;
                 this.getList();
                 this.open2 = true;
               });
@@ -882,19 +885,19 @@ export default {
         }
       );
     },
-    submitFormAI2(){
-      this.$refs.form.validate((valid)=>{
+    submitFormAI2() {
+      this.$refs.form.validate((valid) => {
 
-        if(valid){
-          if(this.form.projectId!=null){
-            this.openAI2=false;
+        if (valid) {
+          if (this.form.projectId != null) {
+            this.openAI2 = false;
             updateAnalysis(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.openAI2 = false;
               this.getList();
             });
           }
-        }else{
+        } else {
           console.log("sorry");
         }
       });
@@ -902,12 +905,13 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const projectIds = row.projectId || this.ids;
-      this.$modal.confirm('是否确认删除功能点分析编号为"' + projectIds + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除功能点分析编号为"' + projectIds + '"的数据项？').then(function () {
         return delAnalysis(projectIds);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      }).catch(() => {});
+      }).catch(() => {
+      });
     },
     /** 导出按钮操作 */
     handleExport() {

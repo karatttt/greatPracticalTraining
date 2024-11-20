@@ -1,7 +1,10 @@
 package com.softcostEstimator.evaluate.controller;
 
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +48,12 @@ public class FunctionPointAnalysisController extends BaseController
         startPage();
         List<FunctionPointAnalysis> list = functionPointAnalysisService.selectFunctionPointAnalysisList(functionPointAnalysis);
         return getDataTable(list);
+    }
+    @PreAuthorize("@ss.hasPermi('evaluate:analysis:load')")
+    @GetMapping("/load")
+    public ResponseEntity<List<Map<String, Object>>> loadFunctionPointAnalysis(FunctionPointAnalysis functionPointAnalysis) {
+        List<Map<String, Object>> data = functionPointAnalysisService.loadFunctionPointAnalysis(functionPointAnalysis);
+        return ResponseEntity.ok(data);
     }
     @PreAuthorize("@ss.hasPermi('evaluate:analysis:search')")
     @GetMapping("/search")
