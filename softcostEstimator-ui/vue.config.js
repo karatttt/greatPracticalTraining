@@ -43,7 +43,7 @@ module.exports = {
         }
       },    
       '/qwen-api': {
-        target: 'https://dashscope.aliyuncs.com', // 通义千问的接口地址
+        target: 'https://api2.aigcbest.top', // 通义千问的接口地址
         changeOrigin: true, // 允许跨域
         pathRewrite: {
           '^/qwen-api': '' // 将 /qwen-api 替换为空

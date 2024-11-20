@@ -1,7 +1,7 @@
 // bgtAI.js
 
 // 定义 API Key
-const API_KEY = 'sk-c08705943d6446b1a8181d65c012fb46'; // 请将此处替换为您的实际 API 密钥
+const API_KEY = 'sk-H0wkeoBSEXMj8xmSH9JwRDNy6CIj8mFkY5Yi27LVDyzUKPc0'; // 请将此处替换为您的实际 API 密钥
 
 /**
  * bgtAI - 封装通义千问 API 调用，并在请求失败时进行重试
@@ -11,7 +11,7 @@ const API_KEY = 'sk-c08705943d6446b1a8181d65c012fb46'; // 请将此处替换为�
  * @param {Number} retryDelay - 重试延迟时间（毫秒） (默认 1000ms)
  * @returns {Promise<String>} - 返回包含 AI 回复内容的 Promise
  */
-async function bgtAI(messages, model = 'qwen-plus', maxRetries = 3, retryDelay = 1000) {
+async function bgtAI(messages, model = 'gpt-4o-mini', maxRetries = 3, retryDelay = 1000) {
   // 确保消息格式正确
   if (!Array.isArray(messages) || messages.length === 0) {
     throw new Error('messages 参数必须是非空数组。');
@@ -21,7 +21,7 @@ async function bgtAI(messages, model = 'qwen-plus', maxRetries = 3, retryDelay =
 
   while (attempt <= maxRetries) {
     try {
-      const response = await fetch('/qwen-api/compatible-mode/v1/chat/completions', {
+      const response = await fetch('/qwen-api/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
