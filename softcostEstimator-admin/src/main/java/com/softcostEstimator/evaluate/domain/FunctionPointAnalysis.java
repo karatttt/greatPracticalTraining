@@ -17,7 +17,7 @@ public class FunctionPointAnalysis extends BaseEntity
 
     /** 项目ID */
     private Long projectId;
-
+    private String projectName;
     /** ILF */
     @Excel(name = "ILF")
     private Long ILF;
@@ -144,7 +144,13 @@ public class FunctionPointAnalysis extends BaseEntity
     {
         return AFP;
     }
+    public String getProjectName() {
+        return projectName;
+    }
 
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

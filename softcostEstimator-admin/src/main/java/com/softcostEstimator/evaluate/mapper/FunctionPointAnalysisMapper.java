@@ -58,4 +58,6 @@ public interface FunctionPointAnalysisMapper
      * @return 结果
      */
     public int deleteFunctionPointAnalysisByProjectIds(Long[] projectIds);
+    List<FunctionPointAnalysis> searchFunctionPointAnalysisList(FunctionPointAnalysis functionPointAnalysis);
+
 }

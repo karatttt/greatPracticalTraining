@@ -41,6 +41,13 @@ public interface IFunctionPointAnalysisService
      * @param functionPointAnalysis 功能点分析
      * @return 结果
      */
+    /**
+     * 根据条件查询功能点分析列表
+     *
+     * @param functionPointAnalysis 包含查询条件的对象
+     * @return 功能点分析列表
+     */
+    List<FunctionPointAnalysis> searchFunctionPointAnalysisList(FunctionPointAnalysis functionPointAnalysis);
     public int updateFunctionPointAnalysis(FunctionPointAnalysis functionPointAnalysis);
 
     /**

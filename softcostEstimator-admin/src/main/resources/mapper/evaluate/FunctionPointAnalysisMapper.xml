@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.softcostEstimator.evaluate.mapper.FunctionPointAnalysisMapper">
-    
+
     <resultMap type="FunctionPointAnalysis" id="FunctionPointAnalysisResult">
         <result property="projectId"    column="project_id"    />
         <result property="ILF"    column="ILF"    />
@@ -15,12 +15,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="GSC"    column="GSC"    />
         <result property="TCF"    column="TCF"    />
         <result property="AFP"    column="AFP"    />
+        <!-- 新增项目名称 -->
+        <result property="projectName" column="projectName" />
     </resultMap>
-
     <sql id="selectFunctionPointAnalysisVo">
-        select project_id, ILF, EIF, EI, EO, EQ, UFP, GSC, TCF, AFP from function_point_analysis
+        select
+        f.project_id,
+        f.ILF,
+        f.EIF,
+        f.EI,
+        f.EO,
+        f.EQ,
+        f.UFP,
+        f.GSC,
+        f.TCF,
+        f.AFP,
+        p.name as projectName  <!-- 通过连接获取 project 表中的 name 属性 -->
+        from
+        function_point_analysis f
+        left join
+        project p on f.project_id = p.projectID <!-- 连接条件，使用 project_id -->
     </sql>
+    <select id="searchFunctionPointAnalysisList" parameterType="FunctionPointAnalysis"  resultMap="FunctionPointAnalysisResult">
+        <include refid="selectFunctionPointAnalysisVo"/>
+        <where>
+            <if test="projectName != null and projectName != ''">
+                p.name LIKE CONCAT('%', #{projectName}, '%')
+            </if>
+        </where>
 
+    </select>
     <select id="selectFunctionPointAnalysisList" parameterType="FunctionPointAnalysis" resultMap="FunctionPointAnalysisResult">
         <include refid="selectFunctionPointAnalysisVo"/>
         <where>  

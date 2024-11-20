@@ -43,7 +43,14 @@ export function delAnalysis(projectId) {
   })
 }
 
-
+export function searchAnalysis(query) {
+  console.log('请求发送:', query);  // 在这里检查是否发出了请求
+  return request({
+    url: '/evaluate/analysis/search',
+    method: 'get',
+    params: query
+  });
+}
 // 修改AI功能点分析
 export function updateAnalysisAI(data) {
   return request({

@@ -1,74 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="ILF" prop="ILF">
+      <el-form-item label="搜索" prop="searchQuery">
         <el-input
-          v-model="queryParams.ILF"
-          placeholder="请输入ILF"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="EIF" prop="EIF">
-        <el-input
-          v-model="queryParams.EIF"
-          placeholder="请输入EIF"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="EI" prop="EI">
-        <el-input
-          v-model="queryParams.EI"
-          placeholder="请输入EI"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="EO" prop="EO">
-        <el-input
-          v-model="queryParams.EO"
-          placeholder="请输入EO"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="EQ" prop="EQ">
-        <el-input
-          v-model="queryParams.EQ"
-          placeholder="请输入EQ"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="UFP" prop="UFP">
-        <el-input
-          v-model="queryParams.UFP"
-          placeholder="请输入UFP"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="GSC" prop="GSC">
-        <el-input
-          v-model="queryParams.GSC"
-          placeholder="请输入GSC"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="TCF" prop="TCF">
-        <el-input
-          v-model="queryParams.TCF"
-          placeholder="请输入TCF"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="AFP" prop="AFP">
-        <el-input
-          v-model="queryParams.AFP"
-          placeholder="请输入AFP"
+          v-model="queryParams.projectName"
+          placeholder="请输入项目名称"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -78,6 +14,7 @@
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
+
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
@@ -133,6 +70,7 @@
           <el-table v-loading="loading" :data="analysisList" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column label="项目ID" align="center" prop="projectId" />
+            <el-table-column label="项目名称" align="center" prop="projectName" />
             <el-table-column label="ILF" align="center" prop="ilf" />
             <el-table-column label="EIF" align="center" prop="eif" />
             <el-table-column label="EI" align="center" prop="ei" />
@@ -180,7 +118,10 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-
+    <div>
+      <!-- 用于显示 ECharts 的 div -->
+      <div id="histogram" style="width: 100%; height: 600%;"></div>
+    </div>
     <div id="myChart" style="width: 100%; height: 600%;"></div>
 
     <!-- 添加或修改功能点分析对话框1 -->
@@ -459,7 +400,7 @@
 </template>
 
 <script>
-import { listAnalysis, getAnalysis, delAnalysis, addAnalysis, updateAnalysis,updateAnalysisAI,viewAnalysisAI } from "@/api/evaluate/analysis";
+import { listAnalysis, getAnalysis, delAnalysis, addAnalysis, updateAnalysis,updateAnalysisAI,viewAnalysisAI,searchAnalysis } from "@/api/evaluate/analysis";
 import * as echarts from 'echarts';
 import { listProject, getProject, delProject, addProject, updateProject } from "@/api/evaluate/project";
 import project from "@/views/evaluate/project/index.vue";
@@ -504,15 +445,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        ilf: null,
-        eif: null,
-        ei: null,
-        eo: null,
-        eq: null,
-        ufp: null,
-        gsc: null,
-        tcf: null,
-        afp: null
+        projectName: ''
       },
       queryParamsAI:{
         pageNum: 1,
@@ -526,6 +459,7 @@ export default {
       },
       form: {
         projectId: null,
+        projectName:null,
         ilf: null,
         eif: null,
         ei: null,
@@ -601,6 +535,7 @@ export default {
   // 初始化图表
   mounted() {
     this.chartInstance = echarts.init(document.getElementById('myChart'));
+    this.initChart();
     this.updateChart(); // 初始化图表
   },
   created() {
@@ -640,7 +575,22 @@ export default {
         this.analysisList = response.rows;
         this.total = response.total;
         this.loading = false;
+        this.updatechart();
       });
+    },
+    getSearch() {
+      this.loading = true;
+      searchAnalysis(this.queryParams)
+        .then((response) => {
+          const { rows, total } = response;
+          this.analysisList = rows;
+          this.total = total;
+          this.loading = false;
+        })
+        .catch(() => {
+          this.loading = false;
+          this.$message.error("获取数据失败，请稍后重试！");
+        });
     },
     getListAI(){
       this.loading = true;
@@ -680,10 +630,12 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
-      this.getList();
+      this.getSearch();
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.queryParams.projectName="";
+      this.getSearch();
       this.resetForm("queryForm");
       this.handleQuery();
     },
@@ -964,6 +916,94 @@ export default {
       }, `analysis_${new Date().getTime()}.xlsx`)
     },
 
+    // 动态生成项目名称
+    generateProjectNames() {
+      return this.analysisList.map((_, index) => `项目${index + 1}`);
+    },
+// 初始化 ECharts 图表
+    initChart() {
+      const histogramElement = document.getElementById("histogram");
+      this.chart = echarts.init(histogramElement);
+    },
+// 更新 ECharts 图表
+    updatechart() {
+      // 动态生成项目名称
+      const projectNames = this.generateProjectNames();
+
+      // 根据每个项目计算不同类型功能点的数量
+      const ilfData = this.analysisList.map((item) => item.ilf || 0);
+      const eifData = this.analysisList.map((item) => item.eif || 0);
+      const eiData = this.analysisList.map((item) => item.ei || 0);
+      const eoData = this.analysisList.map((item) => item.eo || 0);
+      const eqData = this.analysisList.map((item) => item.eq || 0);
+      const afpData = this.analysisList.map((item) => item.afp || 0); // 新增 AFP 数据
+
+      // 配置柱状图
+      const option = {
+        title: {
+          text: "功能点分析直方图",
+        },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow",
+          },
+        },
+        legend: {
+          data: ["ILF", "EIF", "EI", "EO", "EQ", "AFP"], // 增加 AFP 图例
+          bottom: "5%",
+        },
+        xAxis: {
+          type: "category",
+          data: projectNames, // 使用动态生成的项目名称
+        },
+        yAxis: {
+          type: "value",
+          name: "数量",
+        },
+        series: [
+          {
+            name: "ILF",
+            type: "bar",
+            data: ilfData,
+            color: "#1f77b4",
+          },
+          {
+            name: "EIF",
+            type: "bar",
+            data: eifData,
+            color: "#ff7f0e",
+          },
+          {
+            name: "EI",
+            type: "bar",
+            data: eiData,
+            color: "#2ca02c",
+          },
+          {
+            name: "EO",
+            type: "bar",
+            data: eoData,
+            color: "#d62728",
+          },
+          {
+            name: "EQ",
+            type: "bar",
+            data: eqData,
+            color: "#9467bd",
+          },
+          {
+            name: "AFP", // 新增 AFP 数据配置
+            type: "bar",
+            data: afpData,
+            color: "#8c564b",
+          },
+        ],
+      };
+
+      // 更新图表
+      this.chart.setOption(option);
+    },
   }
 };
 </script>

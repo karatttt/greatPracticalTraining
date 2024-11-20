@@ -46,7 +46,14 @@ public class FunctionPointAnalysisController extends BaseController
         List<FunctionPointAnalysis> list = functionPointAnalysisService.selectFunctionPointAnalysisList(functionPointAnalysis);
         return getDataTable(list);
     }
-
+    @PreAuthorize("@ss.hasPermi('evaluate:analysis:search')")
+    @GetMapping("/search")
+    public TableDataInfo search(FunctionPointAnalysis functionPointAnalysis)
+    {
+        startPage();
+        List<FunctionPointAnalysis> search = functionPointAnalysisService.searchFunctionPointAnalysisList(functionPointAnalysis);
+        return getDataTable(search);
+    }
     /**
      * 导出功能点分析列表
      */
