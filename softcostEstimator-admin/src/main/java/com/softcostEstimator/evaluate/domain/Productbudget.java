@@ -1,5 +1,6 @@
 package com.softcostEstimator.evaluate.domain;
 
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.softcostEstimator.common.annotation.Excel;
@@ -11,6 +12,7 @@ import com.softcostEstimator.common.core.domain.BaseEntity;
  * @author ruoyi
  * @date 2024-11-15
  */
+@Data
 public class Productbudget extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -105,7 +107,6 @@ public class Productbudget extends BaseEntity
     {
         return SF;
     }
-
     public void setBD(Double BD)
     {
         this.BD = BD;
@@ -145,7 +146,6 @@ public class Productbudget extends BaseEntity
     {
         return SL;
     }
-
     public void setDT(Double DT)
     {
         this.DT = DT;
@@ -155,7 +155,6 @@ public class Productbudget extends BaseEntity
     {
         return DT;
     }
-
     public void setRSK(Double RSK)
     {
         this.RSK = RSK;
@@ -165,7 +164,6 @@ public class Productbudget extends BaseEntity
     {
         return RSK;
     }
-
     public void setF(Double F)
     {
         this.F = F;

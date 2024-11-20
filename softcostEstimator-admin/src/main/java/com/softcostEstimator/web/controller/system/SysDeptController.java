@@ -22,6 +22,8 @@ import com.softcostEstimator.common.enums.BusinessType;
 import com.softcostEstimator.common.utils.StringUtils;
 import com.softcostEstimator.system.service.ISysDeptService;
 
+import javax.annotation.Resource;
+
 /**
  * 部门信息
  * 
@@ -31,7 +33,7 @@ import com.softcostEstimator.system.service.ISysDeptService;
 @RequestMapping("/system/dept")
 public class SysDeptController extends BaseController
 {
-    @Autowired
+    @Resource
     private ISysDeptService deptService;
 
     /**

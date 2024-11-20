@@ -13,6 +13,8 @@ import com.softcostEstimator.common.utils.StringUtils;
 import com.softcostEstimator.system.service.ISysMenuService;
 import com.softcostEstimator.system.service.ISysRoleService;
 
+import javax.annotation.Resource;
+
 /**
  * 用户权限处理
  * 
@@ -21,10 +23,10 @@ import com.softcostEstimator.system.service.ISysRoleService;
 @Component
 public class SysPermissionService
 {
-    @Autowired
+    @Resource
     private ISysRoleService roleService;
 
-    @Autowired
+    @Resource
     private ISysMenuService menuService;
 
     /**

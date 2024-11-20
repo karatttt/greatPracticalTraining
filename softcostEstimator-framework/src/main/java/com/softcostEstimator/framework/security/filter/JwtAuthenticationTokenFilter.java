@@ -1,6 +1,7 @@
 package com.softcostEstimator.framework.security.filter;
 
 import java.io.IOException;
+import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +25,7 @@ import com.softcostEstimator.framework.web.service.TokenService;
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter
 {
-    @Autowired
+    @Resource
     private TokenService tokenService;
 
     @Override

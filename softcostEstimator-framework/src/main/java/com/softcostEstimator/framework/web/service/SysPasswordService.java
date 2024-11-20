@@ -13,6 +13,8 @@ import com.softcostEstimator.common.exception.user.UserPasswordRetryLimitExceedE
 import com.softcostEstimator.common.utils.SecurityUtils;
 import com.softcostEstimator.framework.security.context.AuthenticationContextHolder;
 
+import javax.annotation.Resource;
+
 /**
  * 登录密码方法
  * 
@@ -21,7 +23,7 @@ import com.softcostEstimator.framework.security.context.AuthenticationContextHol
 @Component
 public class SysPasswordService
 {
-    @Autowired
+    @Resource
     private RedisCache redisCache;
 
     @Value(value = "${user.password.maxRetryCount}")

@@ -7,6 +7,8 @@ import com.softcostEstimator.system.domain.SysOperLog;
 import com.softcostEstimator.system.mapper.SysOperLogMapper;
 import com.softcostEstimator.system.service.ISysOperLogService;
 
+import javax.annotation.Resource;
+
 /**
  * 操作日志 服务层处理
  * 
@@ -15,7 +17,7 @@ import com.softcostEstimator.system.service.ISysOperLogService;
 @Service
 public class SysOperLogServiceImpl implements ISysOperLogService
 {
-    @Autowired
+    @Resource
     private SysOperLogMapper operLogMapper;
 
     /**

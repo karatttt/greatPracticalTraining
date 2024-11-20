@@ -7,6 +7,8 @@ import com.softcostEstimator.quartz.domain.SysJobLog;
 import com.softcostEstimator.quartz.mapper.SysJobLogMapper;
 import com.softcostEstimator.quartz.service.ISysJobLogService;
 
+import javax.annotation.Resource;
+
 /**
  * 定时任务调度日志信息 服务层
  * 
@@ -15,7 +17,7 @@ import com.softcostEstimator.quartz.service.ISysJobLogService;
 @Service
 public class SysJobLogServiceImpl implements ISysJobLogService
 {
-    @Autowired
+    @Resource
     private SysJobLogMapper jobLogMapper;
 
     /**

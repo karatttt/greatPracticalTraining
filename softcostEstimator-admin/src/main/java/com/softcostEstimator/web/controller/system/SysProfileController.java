@@ -23,6 +23,8 @@ import com.softcostEstimator.common.utils.file.MimeTypeUtils;
 import com.softcostEstimator.framework.web.service.TokenService;
 import com.softcostEstimator.system.service.ISysUserService;
 
+import javax.annotation.Resource;
+
 /**
  * 个人信息 业务处理
  * 
@@ -32,10 +34,10 @@ import com.softcostEstimator.system.service.ISysUserService;
 @RequestMapping("/system/user/profile")
 public class SysProfileController extends BaseController
 {
-    @Autowired
+    @Resource
     private ISysUserService userService;
 
-    @Autowired
+    @Resource
     private TokenService tokenService;
 
     /**

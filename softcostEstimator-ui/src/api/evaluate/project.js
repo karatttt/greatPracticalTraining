@@ -1,5 +1,43 @@
 import request from '@/utils/request'
-
+export function pollReport() {
+  return request({
+    url: '/evaluate/productbudget/pollReport',
+    method: 'get'
+  })
+}
+export function createReport(id) {
+  return request({
+    url: '/evaluate/productbudget/generate/report',
+    method: 'get',
+    params: { id }
+  })
+}
+export function longPolling() {
+  return request({
+    url: '/chat', // 请求的接口路径（基于你的后端）
+    method: 'get'
+  });
+}
+export function send(data) {
+  return request({
+    url: '/sendMsg', // 请求的接口路径（基于你的后端）
+    method: 'post',
+    data : data
+  });
+}
+export function longPolling2() {
+  return request({
+    url: '/chat2', // 请求的接口路径（基于你的后端）
+    method: 'get'
+  });
+}
+export function send2(data) {
+  return request({
+    url: '/sendMsg2', // 请求的接口路径（基于你的后端）
+    method: 'post',
+    data : data
+  });
+}
 // 查询项目信息列表
 export function listProject(query) {
   return request({

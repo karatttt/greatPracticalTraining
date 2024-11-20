@@ -7,6 +7,8 @@ import com.softcostEstimator.system.domain.SysNotice;
 import com.softcostEstimator.system.mapper.SysNoticeMapper;
 import com.softcostEstimator.system.service.ISysNoticeService;
 
+import javax.annotation.Resource;
+
 /**
  * 公告 服务层实现
  * 
@@ -15,7 +17,7 @@ import com.softcostEstimator.system.service.ISysNoticeService;
 @Service
 public class SysNoticeServiceImpl implements ISysNoticeService
 {
-    @Autowired
+    @Resource
     private SysNoticeMapper noticeMapper;
 
     /**

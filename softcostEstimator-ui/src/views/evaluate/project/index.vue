@@ -136,10 +136,17 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['evaluate:project:remove']"
           >删除</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            @click="handleCreateReport(scope.row)"
+            v-hasPermi="['evaluate:project:createReport']"
+          >生成报告</el-button>
+
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -188,6 +195,7 @@
 
 <script>
 import { listProject, getProject, delProject, addProject, updateProject } from "@/api/evaluate/project";
+import router from "../../../router";
 
 export default {
   name: "Project",
@@ -332,6 +340,13 @@ export default {
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     },
+    handleCreateReport(row) {
+      const projectID = row.projectID;
+      localStorage.setItem('projectID', projectID);
+
+      // 跳转到目标页面
+      router.push("/evaluate/question/index");
+    },
     /** 导出按钮操作 */
     handleExport() {
       this.download('evaluate/project/export', {
@@ -341,3 +356,6 @@ export default {
   }
 };
 </script>
+
+
+

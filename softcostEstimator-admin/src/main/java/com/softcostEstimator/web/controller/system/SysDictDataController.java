@@ -2,6 +2,7 @@ package com.softcostEstimator.web.controller.system;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,10 +35,10 @@ import com.softcostEstimator.system.service.ISysDictTypeService;
 @RequestMapping("/system/dict/data")
 public class SysDictDataController extends BaseController
 {
-    @Autowired
+    @Resource
     private ISysDictDataService dictDataService;
 
-    @Autowired
+    @Resource
     private ISysDictTypeService dictTypeService;
 
     @PreAuthorize("@ss.hasPermi('system:dict:list')")

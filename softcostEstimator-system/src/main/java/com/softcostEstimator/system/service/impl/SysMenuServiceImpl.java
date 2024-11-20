@@ -25,6 +25,8 @@ import com.softcostEstimator.system.mapper.SysRoleMapper;
 import com.softcostEstimator.system.mapper.SysRoleMenuMapper;
 import com.softcostEstimator.system.service.ISysMenuService;
 
+import javax.annotation.Resource;
+
 /**
  * 菜单 业务层处理
  * 
@@ -35,13 +37,13 @@ public class SysMenuServiceImpl implements ISysMenuService
 {
     public static final String PREMISSION_STRING = "perms[\"{0}\"]";
 
-    @Autowired
+    @Resource
     private SysMenuMapper menuMapper;
 
-    @Autowired
+    @Resource
     private SysRoleMapper roleMapper;
 
-    @Autowired
+    @Resource
     private SysRoleMenuMapper roleMenuMapper;
 
     /**

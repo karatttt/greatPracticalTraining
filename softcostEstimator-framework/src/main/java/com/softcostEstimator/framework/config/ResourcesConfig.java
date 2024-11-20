@@ -15,6 +15,8 @@ import com.softcostEstimator.common.config.RuoYiConfig;
 import com.softcostEstimator.common.constant.Constants;
 import com.softcostEstimator.framework.interceptor.RepeatSubmitInterceptor;
 
+import javax.annotation.Resource;
+
 /**
  * 通用配置
  * 
@@ -23,7 +25,7 @@ import com.softcostEstimator.framework.interceptor.RepeatSubmitInterceptor;
 @Configuration
 public class ResourcesConfig implements WebMvcConfigurer
 {
-    @Autowired
+    @Resource
     private RepeatSubmitInterceptor repeatSubmitInterceptor;
 
     @Override

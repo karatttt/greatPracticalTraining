@@ -20,6 +20,8 @@ import com.softcostEstimator.common.enums.BusinessType;
 import com.softcostEstimator.system.domain.SysNotice;
 import com.softcostEstimator.system.service.ISysNoticeService;
 
+import javax.annotation.Resource;
+
 /**
  * 公告 信息操作处理
  * 
@@ -29,7 +31,7 @@ import com.softcostEstimator.system.service.ISysNoticeService;
 @RequestMapping("/system/notice")
 public class SysNoticeController extends BaseController
 {
-    @Autowired
+    @Resource
     private ISysNoticeService noticeService;
 
     /**

@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.softcostEstimator.common.config.RuoYiConfig;
 import com.softcostEstimator.common.utils.StringUtils;
 
+import javax.annotation.Resource;
+
 /**
  * 首页
  *
@@ -15,7 +17,7 @@ import com.softcostEstimator.common.utils.StringUtils;
 public class SysIndexController
 {
     /** 系统基础配置 */
-    @Autowired
+    @Resource
     private RuoYiConfig ruoyiConfig;
 
     /**

@@ -11,6 +11,8 @@ import com.softcostEstimator.system.mapper.SysPostMapper;
 import com.softcostEstimator.system.mapper.SysUserPostMapper;
 import com.softcostEstimator.system.service.ISysPostService;
 
+import javax.annotation.Resource;
+
 /**
  * 岗位信息 服务层处理
  * 
@@ -19,10 +21,10 @@ import com.softcostEstimator.system.service.ISysPostService;
 @Service
 public class SysPostServiceImpl implements ISysPostService
 {
-    @Autowired
+    @Resource
     private SysPostMapper postMapper;
 
-    @Autowired
+    @Resource
     private SysUserPostMapper userPostMapper;
 
     /**

@@ -22,6 +22,8 @@ import com.softcostEstimator.common.core.domain.AjaxResult;
 import com.softcostEstimator.common.utils.StringUtils;
 import com.softcostEstimator.system.domain.SysCache;
 
+import javax.annotation.Resource;
+
 /**
  * 缓存监控
  * 
@@ -31,7 +33,7 @@ import com.softcostEstimator.system.domain.SysCache;
 @RequestMapping("/monitor/cache")
 public class CacheController
 {
-    @Autowired
+    @Resource
     private RedisTemplate<String, String> redisTemplate;
 
     private final static List<SysCache> caches = new ArrayList<SysCache>();

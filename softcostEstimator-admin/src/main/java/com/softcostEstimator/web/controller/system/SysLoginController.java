@@ -19,6 +19,8 @@ import com.softcostEstimator.framework.web.service.SysPermissionService;
 import com.softcostEstimator.framework.web.service.TokenService;
 import com.softcostEstimator.system.service.ISysMenuService;
 
+import javax.annotation.Resource;
+
 /**
  * 登录验证
  * 
@@ -27,16 +29,16 @@ import com.softcostEstimator.system.service.ISysMenuService;
 @RestController
 public class SysLoginController
 {
-    @Autowired
+    @Resource
     private SysLoginService loginService;
 
-    @Autowired
+    @Resource
     private ISysMenuService menuService;
 
-    @Autowired
+    @Resource
     private SysPermissionService permissionService;
 
-    @Autowired
+    @Resource
     private TokenService tokenService;
 
     /**

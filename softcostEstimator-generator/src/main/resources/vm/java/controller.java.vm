@@ -34,7 +34,7 @@ import com.softcostEstimator.common.core.page.TableDataInfo;
 @RequestMapping("/${moduleName}/${businessName}")
 public class ${ClassName}Controller extends BaseController
 {
-    @Autowired
+    @Resource
     private I${ClassName}Service ${className}Service;
 
     /**

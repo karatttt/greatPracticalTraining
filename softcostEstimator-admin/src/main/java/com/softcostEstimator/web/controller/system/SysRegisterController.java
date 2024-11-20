@@ -11,6 +11,8 @@ import com.softcostEstimator.common.utils.StringUtils;
 import com.softcostEstimator.framework.web.service.SysRegisterService;
 import com.softcostEstimator.system.service.ISysConfigService;
 
+import javax.annotation.Resource;
+
 /**
  * 注册验证
  * 
@@ -19,10 +21,10 @@ import com.softcostEstimator.system.service.ISysConfigService;
 @RestController
 public class SysRegisterController extends BaseController
 {
-    @Autowired
+    @Resource
     private SysRegisterService registerService;
 
-    @Autowired
+    @Resource
     private ISysConfigService configService;
 
     @PostMapping("/register")

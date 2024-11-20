@@ -1,11 +1,16 @@
 package com.softcostEstimator.evaluate.service.impl;
 
 import java.util.List;
+
+import cn.hutool.json.JSONUtil;
+import com.softcostEstimator.evaluate.domain.Productbudget;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.softcostEstimator.evaluate.mapper.FunctionPointAnalysisMapper;
 import com.softcostEstimator.evaluate.domain.FunctionPointAnalysis;
 import com.softcostEstimator.evaluate.service.IFunctionPointAnalysisService;
+
+import javax.annotation.Resource;
 
 /**
  * 功能点分析Service业务层处理
@@ -16,7 +21,7 @@ import com.softcostEstimator.evaluate.service.IFunctionPointAnalysisService;
 @Service
 public class FunctionPointAnalysisServiceImpl implements IFunctionPointAnalysisService 
 {
-    @Autowired
+    @Resource
     private FunctionPointAnalysisMapper functionPointAnalysisMapper;
 
     /**
@@ -89,5 +94,11 @@ public class FunctionPointAnalysisServiceImpl implements IFunctionPointAnalysisS
     public int deleteFunctionPointAnalysisByProjectId(Long projectId)
     {
         return functionPointAnalysisMapper.deleteFunctionPointAnalysisByProjectId(projectId);
+    }
+    @Override
+    public String getJson(FunctionPointAnalysis functionPointAnalysis) {
+
+        String json = JSONUtil.toJsonStr(functionPointAnalysis);
+        return json;
     }
 }

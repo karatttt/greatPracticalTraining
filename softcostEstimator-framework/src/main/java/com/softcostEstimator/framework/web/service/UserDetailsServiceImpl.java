@@ -15,6 +15,8 @@ import com.softcostEstimator.common.utils.MessageUtils;
 import com.softcostEstimator.common.utils.StringUtils;
 import com.softcostEstimator.system.service.ISysUserService;
 
+import javax.annotation.Resource;
+
 /**
  * 用户验证处理
  *
@@ -25,13 +27,13 @@ public class UserDetailsServiceImpl implements UserDetailsService
 {
     private static final Logger log = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
-    @Autowired
+    @Resource
     private ISysUserService userService;
     
-    @Autowired
+    @Resource
     private SysPasswordService passwordService;
 
-    @Autowired
+    @Resource
     private SysPermissionService permissionService;
 
     @Override
