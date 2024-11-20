@@ -13,6 +13,7 @@
 
         <!-- 生成报告按钮 -->
         <el-button
+          v-model="reportContent"
           type="primary"
           class="generate-report-btn"
           @click="generateReport"
@@ -97,6 +98,31 @@ export default {
     }
   },
   methods: {
+    generateReport() {
+      //console.error(reportContent);
+      // this.download('evaluate/project/export', {
+      //   ...this.reportContent
+      // }, `report_${new Date().getTime()}.md`)
+      if (!this.reportContent) {
+        console.error("报告内容为空，无法生成文件！");
+        return;
+      }
+
+      // 将 reportContent 内容转为 Blob 对象
+      const blob = new Blob([this.reportContent], { type: "text/markdown;charset=utf-8" });
+
+      // 创建文件名，格式为 report_<时间戳>.md
+      const fileName = `report_${new Date().getTime()}.md`;
+
+      // 创建一个下载链接并触发下载
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName;
+      document.body.appendChild(link); // 必须将链接添加到 DOM 中才能触发点击
+      link.click();
+      document.body.removeChild(link); // 下载完成后移除链接
+      URL.revokeObjectURL(link.href); // 释放 Blob 对象的 URL
+    },
     sendMessage() {
       if (!this.userInput.trim()) return;
 
