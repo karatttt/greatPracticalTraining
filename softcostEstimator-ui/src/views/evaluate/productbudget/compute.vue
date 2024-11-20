@@ -262,12 +262,14 @@
         </el-row>
 
         <!-- DNC -->
-        <el-row :gutter="20">
+        <el-row>
           <el-col :span="8">
             <el-form-item label="DNC(直接非人力成本)" prop="dnc">
               <el-input v-model="form.dnc" disabled style="width: 220px;" />
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row :gutter="20">
           <el-col :span="8">
             <el-form-item label="办公费" prop="officeExpense">
               <el-input v-model="form.officeExpense" placeholder="请输入办公费" clearable @change="calculateDNC" />
@@ -498,13 +500,13 @@ export default {
         { label: "P90", value: 17.81, description: "悲观估计，适用于高复杂度或严苛质量要求项目" },
       ],
       rules: {
-        pdrPercentile: [{ required: true, message: "请选择PDR百分位", trigger: "change" }],
+        pdr: [{ required: true, message: "请选择PDR百分位", trigger: "change" }],
         sf: [{ required: true, message: "请输入SF", trigger: "blur" }],
-        bdOption: [{ required: true, message: "请选择BD", trigger: "change" }],
-        atOption: [{ required: true, message: "请选择AT", trigger: "change" }],
-        qrOption: [{ required: true, message: "请选择QR", trigger: "change" }],
-        slOption: [{ required: true, message: "请选择SL", trigger: "change" }],
-        dtOption: [{ required: true, message: "请选择DT", trigger: "change" }],
+        bd: [{ required: true, message: "请选择BD", trigger: "change" }],
+        at: [{ required: true, message: "请选择AT", trigger: "change" }],
+        qr: [{ required: true, message: "请选择QR", trigger: "change" }],
+        sl: [{ required: true, message: "请选择SL", trigger: "change" }],
+        dt: [{ required: true, message: "请选择DT", trigger: "change" }],
         f: [{ required: true, message: "请输入F", trigger: "blur" }],
         dnc: [{ required: true, message: "请输入DNC", trigger: "blur" }],
         rsk: [{ required: true, message: "请输入RSK", trigger: "blur" }],
