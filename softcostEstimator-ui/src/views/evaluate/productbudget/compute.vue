@@ -28,13 +28,10 @@
           <el-col :span="8">
             <el-form-item label="选择项目名称" prop="selectedProjectName">
               <el-select v-model="selectedProjectName" placeholder="请选择项目名称" @change="fetchPDRByProjectName">
-                <el-option v-for="project in projectList" :key="project.id" :label="project.name"
-                  :value="project.name" />
+                <el-option v-for="project in projectList" :key="project.id" :label="project.name" :value="project.name" />
               </el-select>
             </el-form-item>
-
           </el-col>
-
         </el-row>
 
         <!-- PDR 选择表格 -->
@@ -83,8 +80,6 @@
           </el-col>
         </el-row>
       </div>
-
-
 
       <!-- 步骤2：计算工作量AE -->
       <div v-if="activeStep === 1">
@@ -192,7 +187,7 @@
         </el-row>
 
         <!-- SWF 中间变量展示 -->
-        <el-form-item label="SWF(软件因素调整因子)" :prop="null">
+        <el-form-item label="SWF(软件因素调整因子)">
           <el-input :value="form.swf" placeholder="SWF" disabled style="width: 220px;" />
         </el-form-item>
 
@@ -233,12 +228,12 @@
         </el-row>
 
         <!-- RDF 中间变量展示 -->
-        <el-form-item label="RDF(开发因素调整因子)" :prop="null">
+        <el-form-item label="RDF(开发因素调整因子)">
           <el-input :value="form.rdf" placeholder="RDF" disabled style="width: 220px;" />
         </el-form-item>
 
         <!-- AE 计算 -->
-        <el-form-item label="AE(估算工作量)" :prop="null">
+        <el-form-item label="AE(估算工作量)">
           <el-input :value="form.ae" placeholder="AE" disabled style="width: 220px;" />
         </el-form-item>
       </div>
@@ -268,7 +263,7 @@
 
         <!-- DNC -->
         <el-row :gutter="20">
-          <el-col>
+          <el-col :span="8">
             <el-form-item label="DNC(直接非人力成本)" prop="dnc">
               <el-input v-model="form.dnc" disabled style="width: 220px;" />
             </el-form-item>
@@ -310,7 +305,7 @@
         </el-row>
 
         <!-- 计算出的SDC -->
-        <el-form-item label="SDC(软件开发成本)" :prop="null">
+        <el-form-item label="SDC(软件开发成本)">
           <el-input :value="form.sdc" placeholder="SDC" disabled style="width: 220px;" />
         </el-form-item>
 
@@ -337,7 +332,7 @@
         </el-form-item>
 
         <!-- ESDC计算 -->
-        <el-form-item label="ESDC(调整后软件开发成本)" :prop="null">
+        <el-form-item label="ESDC(调整后软件开发成本)">
           <el-input :value="form.esdc" placeholder="ESDC" disabled style="width: 220px;" />
         </el-form-item>
       </div>
@@ -356,26 +351,45 @@
     </el-button>
 
     <!-- AI助手边栏 -->
-    <el-drawer title="AI助手" :visible.sync="isAIAssistantVisible" direction="rtl" size="400px">
-      <div class="ai-assistant" v-loading="aiLoading" element-loading-text="获取推荐系数中...">
-        <!-- 显示推荐系数 -->
-        <div v-if="recommendations">
-          <h3>推荐的造价评估系数</h3>
-          <ul>
-            <li>PDR: {{ recommendations.PDR }}</li>
-            <li>SF: {{ recommendations.SF }}</li>
-            <li>BD: {{ recommendations.BD }}</li>
-            <li>AT: {{ recommendations.AT }}</li>
-            <li>QR: {{ recommendations.QR }}</li>
-            <li>SL: {{ recommendations.SL }}</li>
-            <li>DT: {{ recommendations.DT }}</li>
-          </ul>
+    <el-drawer title="AI助手" :visible.sync="isAIAssistantVisible" direction="rtl" size="400px" class="ai-drawer">
+      <div class="ai-assistant">
+        <!-- 加载指示器 -->
+        <div v-if="aiLoading" class="loading-container">
+          <el-spinner type="circle"></el-spinner>
+          <span>获取推荐系数中...</span>
         </div>
+
+        <!-- 显示推荐系数及解释 -->
+        <div v-else>
+          <div v-if="recommendations">
+            <h3>推荐的造价评估系数</h3>
+            <ul>
+              <li>PDR: {{ recommendations.PDR }} <span class="explanation">{{ explanations.PDR }}</span></li>
+              <li>SF: {{ recommendations.SF }} <span class="explanation">{{ explanations.SF }}</span></li>
+              <li>BD: {{ recommendations.BD }} <span class="explanation">{{ explanations.BD }}</span></li>
+              <li>AT: {{ recommendations.AT }} <span class="explanation">{{ explanations.AT }}</span></li>
+              <li>QR: {{ recommendations.QR }} <span class="explanation">{{ explanations.QR }}</span></li>
+              <li>SL: {{ recommendations.SL }} <span class="explanation">{{ explanations.SL }}</span></li>
+              <li>DT: {{ recommendations.DT }} <span class="explanation">{{ explanations.DT }}</span></li>
+            </ul>
+            <!-- 一键填充按钮 -->
+            <el-button type="primary" @click="fillRecommendedCoefficients">一键填充推荐系数</el-button>
+          </div>
+          <div v-else>
+            <p>暂无推荐系数。</p>
+          </div>
+        </div>
+
         <!-- 聊天界面 -->
         <div class="chat-container">
           <div class="messages" style="height: 300px; overflow-y: auto; margin-bottom: 10px;">
             <div v-for="(msg, index) in messages" :key="index" :class="msg.type">
               <span>{{ msg.content }}</span>
+            </div>
+            <!-- 加载指示器 -->
+            <div v-if="chatLoading" class="ai-loading">
+              <el-spinner type="circle" style="margin-right: 8px;"></el-spinner>
+              <span>AI 正在回复...</span>
             </div>
           </div>
           <el-row>
@@ -388,8 +402,8 @@
             </el-col>
           </el-row>
         </div>
-      </div>
 
+      </div>
     </el-drawer>
 
   </div>
@@ -484,16 +498,16 @@ export default {
         { label: "P90", value: 17.81, description: "悲观估计，适用于高复杂度或严苛质量要求项目" },
       ],
       rules: {
-        pdrOption: [{ required: true, message: "请输入PDR", trigger: "blur" }],
-        sfOption: [{ required: true, message: "请输入SF", trigger: "blur" }],
-        bdOption: [{ required: true, message: "请输入BD", trigger: "blur" }],
-        atOption: [{ required: true, message: "请输入AT", trigger: "blur" }],
-        qrOption: [{ required: true, message: "请输入QR", trigger: "blur" }],
-        slOption: [{ required: true, message: "请输入SL", trigger: "blur" }],
-        dtOption: [{ required: true, message: "请输入DT", trigger: "blur" }],
-        fOption: [{ required: true, message: "请输入F", trigger: "blur" }],
-        dncOption: [{ required: true, message: "请输入DNC", trigger: "blur" }],
-        rskOption: [{ required: true, message: "请输入RSK", trigger: "blur" }],
+        pdrPercentile: [{ required: true, message: "请选择PDR百分位", trigger: "change" }],
+        sf: [{ required: true, message: "请输入SF", trigger: "blur" }],
+        bdOption: [{ required: true, message: "请选择BD", trigger: "change" }],
+        atOption: [{ required: true, message: "请选择AT", trigger: "change" }],
+        qrOption: [{ required: true, message: "请选择QR", trigger: "change" }],
+        slOption: [{ required: true, message: "请选择SL", trigger: "change" }],
+        dtOption: [{ required: true, message: "请选择DT", trigger: "change" }],
+        f: [{ required: true, message: "请输入F", trigger: "blur" }],
+        dnc: [{ required: true, message: "请输入DNC", trigger: "blur" }],
+        rsk: [{ required: true, message: "请输入RSK", trigger: "blur" }],
       },
       // 风险类型
       risks: [
@@ -516,10 +530,12 @@ export default {
       // 新增数据属性
       isAIAssistantVisible: false, // 控制AI助手边栏显示
       recommendations: null, // 存储AI推荐的系数
+      explanations: null, // 存储AI推荐的原因
       messages: [], // 聊天消息
       userInput: '', // 用户输入
       loading: false, // 控制加载状态
       aiLoading: false, // 控制AI推荐加载状态
+      chatLoading: false, // 新增，用于控制聊天中的加载状态
     };
   },
   watch: {
@@ -583,6 +599,10 @@ export default {
       listProject(this.queryParams).then((response) => {
         this.projectList = response.rows; // 获取到的项目列表
         this.loading = false;
+      }).catch(error => {
+        console.error("获取项目列表失败:", error);
+        this.$message.error("获取项目列表失败，请稍后再试！");
+        this.loading = false;
       });
     },
     // 根据项目名称查询对应的 PDR
@@ -602,6 +622,9 @@ export default {
           } else {
             this.$message.warning("未找到对应的PDR数据！");
           }
+        }).catch(error => {
+          console.error("获取PDR数据失败:", error);
+          this.$message.error("获取PDR数据失败，请稍后再试！");
         });
       } else {
         this.$message.warning("未找到对应的项目！");
@@ -704,7 +727,7 @@ export default {
                   item.rate.toString().includes(query)
               )
               .map((item) => ({
-                label: `${item.city} - ${item.rate}`,
+                label: ${item.city} - ${item.rate},
                 value: item.rate
               }));
               */
@@ -782,7 +805,8 @@ export default {
         // 初始化筛选数据
         this.filteredOptions = this.fOptions.map((item) => ({
           label: `${item.city} - ${item.rate}`,
-          value: item.rate
+          value: item.rate,
+          key: item.id
         }));
       } catch (error) {
         console.error('加载F选项失败:', error);
@@ -869,10 +893,13 @@ export default {
           // 提交逻辑
           if (projectid != null) {
             updateProductbudget(submitData).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              window.location.href = `http://localhost/evaluate/productbudget`;
+              this.$message.success("修改成功");
+              this.isAIAssistantVisible = false;
+              window.location.href = 'http://localhost/evaluate/productbudget';
               //这里可以继续增加跳转
+            }).catch(error => {
+              console.error("提交表单失败:", error);
+              this.$message.error("提交表单失败，请稍后再试！");
             });
           }
           console.log(submitData);
@@ -890,12 +917,19 @@ export default {
       }
 
       this.aiLoading = true;
+      this.recommendations = null; // 重置推荐系数
+      this.explanations = null; // 重置解释
 
-      try {
-        const messages = [
-          {
-            role: 'system',
-            content: `你是一名资深的软件造价评估分析师。软件造价评估使用以下关键系数来衡量项目成本：
+      const MAX_RETRIES = 3; // 最大重试次数
+      const RETRY_DELAY = 1000; // 重试间隔时间（毫秒）
+      let attempt = 0;
+
+      while (attempt < MAX_RETRIES) {
+        try {
+          const messages = [
+            {
+              role: 'system',
+              content: `你是一名资深的软件造价评估分析师。软件造价评估使用以下关键系数来衡量项目成本：
 
 PDR（生产率，Productivity Rate）
 
@@ -925,45 +959,100 @@ DT（开发团队背景调整因子，Development Team）
 
 含义：反映团队经验对生产率的影响。
 推荐范围：经验丰富0.8-1.0，经验中等1.0-1.2，经验不足1.2-1.5。
-请根据以下项目需求，分析并推荐合理的造价评估系数（PDR、SF、BD、AT、QR、SL、DT）。确保仅以以下纯 JSON格式返回结果，且不要包含任何额外的说明或文字：
+
+请根据以下项目需求，分析并推荐合理的造价评估系数（PDR、SF、BD、AT、QR、SL、DT）。并说明推荐原因。
+
+确保你的回复为以下*纯* *JSON格式*返回结果，且不要包含任何额外的说明或文字：
 {
-  "PDR": value,
-  "SF": value,
-  "BD": value,
-  "AT": value,
-  "QR": value,
-  "SL": value,
-  "DT": value
-}
+  "PDR": {
+    "value": value,
+    "reason": "原因描述"
+  },
+  "SF": {
+    "value": value,
+    "reason": "原因描述"
+  },
+  "BD": {
+    "value": value,
+    "reason": "原因描述"
+  },
+  "AT": {
+    "value": value,
+    "reason": "原因描述"
+  },
+  "QR": {
+    "value": value,
+    "reason": "原因描述"
+  },
+  "SL": {
+    "value": value,
+    "reason": "原因描述"
+  },
+  "DT": {
+    "value": value,
+    "reason": "原因描述"
+  }
+}`
+            },
+            { role: 'user', content: this.projectRequirement }
+          ];
 
-`
-          },
-          { role: 'user', content: this.projectRequirement }
-        ];
+          const aiResponse = await bgtAI(messages);
 
+          // 尝试解析AI返回的JSON内容
+          const recommendationsWithReasons = JSON.parse(aiResponse);
 
-        const aiResponse = await bgtAI(messages);
+          // 验证解析后的对象是否包含所有必要的键
+          const requiredKeys = ['PDR', 'SF', 'BD', 'AT', 'QR', 'SL', 'DT'];
+          const hasAllKeys = requiredKeys.every(key =>
+            recommendationsWithReasons.hasOwnProperty(key) &&
+            recommendationsWithReasons[key].hasOwnProperty('value') &&
+            recommendationsWithReasons[key].hasOwnProperty('reason')
+          );
 
-        // 解析AI返回的JSON内容
-        const recommendations = JSON.parse(aiResponse);
+          if (!hasAllKeys) {
+            throw new Error("返回的JSON格式不完整或缺少必要字段");
+          }
 
-        this.recommendations = recommendations;
+          // 提取推荐系数和值得解释
+          this.recommendations = {
+            PDR: recommendationsWithReasons.PDR.value,
+            SF: recommendationsWithReasons.SF.value,
+            BD: recommendationsWithReasons.BD.value,
+            AT: recommendationsWithReasons.AT.value,
+            QR: recommendationsWithReasons.QR.value,
+            SL: recommendationsWithReasons.SL.value,
+            DT: recommendationsWithReasons.DT.value
+          };
 
-        // 自动填充表单中的推荐值（可选）
-        // this.form.pdr = recommendations.PDR;
-        // this.form.sf = recommendations.SF;
-        // this.form.bd = recommendations.BD;
-        // this.form.at = recommendations.AT;
-        // this.form.qr = recommendations.QR;
-        // this.form.sl = recommendations.SL;
-        // this.form.dt = recommendations.DT;
+          this.explanations = {
+            PDR: recommendationsWithReasons.PDR.reason,
+            SF: recommendationsWithReasons.SF.reason,
+            BD: recommendationsWithReasons.BD.reason,
+            AT: recommendationsWithReasons.AT.reason,
+            QR: recommendationsWithReasons.QR.reason,
+            SL: recommendationsWithReasons.SL.reason,
+            DT: recommendationsWithReasons.DT.reason
+          };
 
-      } catch (error) {
-        console.error("获取AI推荐系数失败:", error);
-        this.$message.error("获取AI推荐系数失败，请稍后再试！");
-      } finally {
-        this.aiLoading = false;
+          // 成功获取并解析响应，退出重试循环
+          break;
+
+        } catch (error) {
+          attempt++;
+          console.error(`获取AI推荐系数失败，尝试第 ${attempt} 次:`, error);
+
+          if (attempt >= MAX_RETRIES) {
+            this.$message.error("获取AI推荐系数失败，请稍后再试！");
+          } else {
+            this.$message.warning(`获取AI推荐系数失败，正在重试 (${attempt}/${MAX_RETRIES})...`);
+            // 等待一段时间后重试
+            await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+          }
+        }
       }
+
+      this.aiLoading = false;
     },
 
 
@@ -982,6 +1071,9 @@ DT（开发团队背景调整因子，Development Team）
       // 添加用户消息到聊天记录
       this.messages.push({ type: 'user', content: input });
       this.userInput = '';
+
+      // 设置加载状态为 true
+      this.chatLoading = true;
 
       try {
         // 构建消息列表，包括系统消息和对话历史
@@ -1025,8 +1117,7 @@ DT（开发团队背景调整因子，Development Team）
 含义：反映团队经验对生产率的影响。
 推荐范围：经验丰富0.8-1.0，经验中等1.0-1.2，经验不足1.2-1.5。
 
-请继续以软件造价评估分析师的身份，回答用户的问题。
-`
+请继续以软件造价评估分析师的身份，回答用户的问题。`
           },
           // 添加对话历史
           ...this.messages.map(msg => ({
@@ -1044,18 +1135,36 @@ DT（开发团队背景调整因子，Development Team）
       } catch (error) {
         console.error("发送消息到 AI 失败:", error);
         this.$message.error("发送消息到 AI 失败，请稍后再试！");
+      } finally {
+        // 重置加载状态
+        this.chatLoading = false;
       }
     },
-
-
-
-
-
 
     // 获取当前页面的 projectID
     getProjectID() {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get('projectID');
+    },
+
+    // 一键填充推荐系数
+    fillRecommendedCoefficients() {
+      if (this.recommendations) {
+        this.form.pdr = this.recommendations.PDR;
+        this.form.sf = this.recommendations.SF;
+        this.form.bd = this.recommendations.BD;
+        this.form.at = this.recommendations.AT;
+        this.form.qr = this.recommendations.QR;
+        this.form.sl = this.recommendations.SL;
+        this.form.dt = this.recommendations.DT;
+        this.$message.success("已填充推荐的系数！");
+        // 可以在此处触发相关计算
+        this.calculateSWF();
+        this.calculateRDF();
+        this.calculateAE();
+      } else {
+        this.$message.warning("没有推荐的系数可填充！");
+      }
     }
   },
 };
@@ -1071,8 +1180,12 @@ DT（开发团队背景调整因子，Development Team）
   display: flex;
   flex-direction: column;
   height: 100%;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
 }
 
+/* 增强聊天界面样式 */
 .chat-container {
   flex: 1;
   display: flex;
@@ -1111,6 +1224,53 @@ DT（开发团队背景调整因子，Development Team）
   display: inline-block;
 }
 
+/* 美化AI助手边栏 */
+.ai-drawer .el-drawer__header {
+  background-color: #409EFF;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.ai-drawer .el-drawer__body {
+  padding: 0;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.loading-container .el-spinner {
+  margin-bottom: 10px;
+}
+
+.recommendations ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.recommendations li {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.explanation {
+  display: block;
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+}
+
+/* 一键填充按钮样式 */
+.ai-assistant .el-button {
+  margin-top: 20px;
+}
+
+/* 步骤按钮 */
 .step-footer {
   margin-top: 20px;
   text-align: center;
