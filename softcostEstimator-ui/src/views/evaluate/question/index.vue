@@ -210,7 +210,7 @@ export default {
 /* 总容器：左右布局 */
 .app-container {
   display: flex;
-  height: 100vh;
+  height: 90vh;
   background-color: #f3f4f6;
   font-family: "Arial", sans-serif;
 }
