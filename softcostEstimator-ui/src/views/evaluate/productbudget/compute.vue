@@ -28,7 +28,8 @@
           <el-col :span="8">
             <el-form-item label="选择项目名称" prop="selectedProjectName">
               <el-select v-model="selectedProjectName" placeholder="请选择项目名称" @change="fetchPDRByProjectName">
-                <el-option v-for="project in projectList" :key="project.id" :label="project.name" :value="project.name" />
+                <el-option v-for="project in projectList" :key="project.id" :label="project.name"
+                  :value="project.name" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -1070,7 +1071,7 @@ DT（开发团队背景调整因子，Development Team）
       const input = this.userInput.trim();
       if (!input) return;
 
-      // 添加用户消息到聊天记录
+      // 添加用户消息到聊天记录（不包含前缀）
       this.messages.push({ type: 'user', content: input });
       this.userInput = '';
 
@@ -1078,58 +1079,45 @@ DT（开发团队背景调整因子，Development Team）
       this.chatLoading = true;
 
       try {
-        // 构建消息列表，包括系统消息和对话历史
-        const messages = [
+        // 构建发送给AI的消息列表，添加前缀到用户消息
+        const aiMessages = [
           {
             role: 'system',
             content: `你是一名资深的软件造价评估分析师。软件造价评估使用以下关键系数来衡量项目成本：
-
-PDR（生产率，Productivity Rate）
-
-含义：每个功能点所需的工作时间（人时/功能点）。
-推荐范围：根据团队能力，通常为5-20人时/功能点。
-
-SF（规模效应调整因子，Scale Factor）
-
-含义：反映项目规模对生产率的影响。
-推荐范围：小规模项目取值1.0-1.1，中型项目1.1-1.3，大型项目1.3-1.5。
-
-BD（业务领域调整因子，Business Domain）
-
-含义：根据业务领域的复杂度进行调整，例如金融行业复杂度较高。
-推荐范围：简单业务领域0.8-1.0，中等复杂度1.0-1.2，高复杂度1.2-1.5。
-
-AT（应用类型调整因子，Application Type）
-
-含义：根据应用类型（如业务处理、科学计算等）调整。
-推荐范围：业务处理类0.9-1.0，实时系统1.0-1.2，科学计算类1.2-1.5。
-
-QR（质量特性调整因子，Quality Requirements）
-
-含义：根据质量要求（如性能、可靠性）进行调整。
-推荐范围：低质量需求0.8-1.0，标准质量1.0-1.2，高质量需求1.2-1.5。
-
-SL（开发语言调整因子，Software Language）
-
-含义：根据开发语言的效率进行调整。
-推荐范围：高效语言（如C/C++）0.8-1.0，通用语言（如Java）1.0，低效语言（如Python）1.1-1.3。
-
-DT（开发团队背景调整因子，Development Team）
-
-含义：反映团队经验对生产率的影响。
-推荐范围：经验丰富0.8-1.0，经验中等1.0-1.2，经验不足1.2-1.5。
-
-请继续以软件造价评估分析师的身份，回答用户的问题。`
+        
+        PDR（生产率，Productivity Rate）
+        含义：每个功能点所需的工作时间（人时/功能点）。
+        推荐范围：根据团队能力，通常为5-20人时/功能点。
+        SF（规模效应调整因子，Scale Factor）
+        含义：反映项目规模对生产率的影响。
+        推荐范围：小规模项目取值1.0-1.1，中型项目1.1-1.3，大型项目1.3-1.5。
+        BD（业务领域调整因子，Business Domain）
+        含义：根据业务领域的复杂度进行调整，例如金融行业复杂度较高。
+        推荐范围：简单业务领域0.8-1.0，中等复杂度1.0-1.2，高复杂度1.2-1.5。
+        AT（应用类型调整因子，Application Type）
+        含义：根据应用类型（如业务处理、科学计算等）调整。
+        推荐范围：业务处理类0.9-1.0，实时系统1.0-1.2，科学计算类1.2-1.5。
+        QR（质量特性调整因子，Quality Requirements）
+        含义：根据质量要求（如性能、可靠性）进行调整。
+        推荐范围：低质量需求0.8-1.0，标准质量1.0-1.2，高质量需求1.2-1.5。
+        SL（开发语言调整因子，Software Language）
+        含义：根据开发语言的效率进行调整。
+        推荐范围：高效语言（如C/C++）0.8-1.0，通用语言（如Java）1.0，低效语言（如Python）1.1-1.3。
+        DT（开发团队背景调整因子，Development Team）
+        含义：反映团队经验对生产率的影响。
+        推荐范围：经验丰富0.8-1.0，经验中等1.0-1.2，经验不足1.2-1.5。
+        
+        请继续以软件造价评估分析师的身份，回答用户的问题。`
           },
-          // 添加对话历史
+          // 添加对话历史，用户消息添加前缀
           ...this.messages.map(msg => ({
             role: msg.type === 'user' ? 'user' : 'assistant',
-            content: msg.content
+            content: msg.type === 'user' ? `在软件造价评估中${msg.content}` : msg.content
           }))
         ];
 
         // 发送消息到 AI API
-        const aiResponse = await bgtAI(messages);
+        const aiResponse = await bgtAI(aiMessages);
 
         // 将 AI 回复添加到聊天记录
         this.messages.push({ type: 'ai', content: aiResponse });
@@ -1142,6 +1130,7 @@ DT（开发团队背景调整因子，Development Team）
         this.chatLoading = false;
       }
     },
+
 
     // 获取当前页面的 projectID
     getProjectID() {
