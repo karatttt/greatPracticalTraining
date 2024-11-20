@@ -107,6 +107,7 @@ export default {
         console.error("报告内容为空，无法生成文件！");
         return;
       }
+      this.reportContent += "\n![图片](https://i.ibb.co/G0J0gD4/2024-11-15-15-08-34.png)"
 
       // 将 reportContent 内容转为 Blob 对象
       const blob = new Blob([this.reportContent], { type: "text/markdown;charset=utf-8" });
