@@ -8,16 +8,12 @@
 
     <el-button type="primary" @click="showRequirementDialog = true">查看项目需求</el-button>
 
-    <el-dialog
-      title="项目需求"
-      :visible.sync="showRequirementDialog"
-      width="50%"
-    >
+    <el-dialog title="项目需求" :visible.sync="showRequirementDialog" width="50%">
       <p v-if="projectRequirement">{{ projectRequirement }}</p>
       <p v-else>加载中...</p>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="showRequirementDialog = false">关闭</el-button>
-  </span>
+        <el-button @click="showRequirementDialog = false">关闭</el-button>
+      </span>
     </el-dialog>
 
     <el-form ref="form" :model="form" :rules="rules" label-width="200px">
@@ -27,27 +23,13 @@
         <!-- 项目名称选择 -->
         <el-row :gutter="20" class="mt20">
           <el-col :span="24">
-            <el-alert
-              title="提示：基于历史项目选择PDR？"
-              type="info"
-              description="请选择历史评估过的项目，以确定PDR取值"
-              show-icon
-              effect="dark"
-            />
+            <el-alert title="提示：基于历史项目选择PDR？" type="info" description="请选择历史评估过的项目，以确定PDR取值" show-icon effect="dark" />
           </el-col>
           <el-col :span="8">
             <el-form-item label="选择项目名称" prop="selectedProjectName">
-              <el-select
-                v-model="selectedProjectName"
-                placeholder="请选择项目名称"
-                @change="fetchPDRByProjectName"
-              >
-                <el-option
-                  v-for="project in projectList"
-                  :key="project.id"
-                  :label="project.name"
-                  :value="project.name"
-                />
+              <el-select v-model="selectedProjectName" placeholder="请选择项目名称" @change="fetchPDRByProjectName">
+                <el-option v-for="project in projectList" :key="project.id" :label="project.name"
+                  :value="project.name" />
               </el-select>
             </el-form-item>
 
@@ -95,13 +77,9 @@
         <!-- 提示信息 -->
         <el-row class="mt20">
           <el-col :span="24">
-            <el-alert
-              title="提示：如何选择合适的PDR？"
-              type="info"
-              description="P10 是乐观估计，适用于高效团队或低风险项目；P50 是中性估计，适合常规项目；P90 是悲观估计，适用于高复杂度或高风险项目。请根据实际情况选择合适的值。"
-              show-icon
-              effect="dark"
-            />
+            <el-alert title="提示：如何选择合适的PDR？" type="info"
+              description="P10 是乐观估计，适用于高效团队或低风险项目；P50 是中性估计，适合常规项目；P90 是悲观估计，适用于高复杂度或高风险项目。请根据实际情况选择合适的值。" show-icon
+              effect="dark" />
           </el-col>
         </el-row>
       </div>
@@ -164,7 +142,7 @@
         <!-- QR -->
         <el-row :gutter="20">
           <el-col :span="8">
-            <el-form-item label="QR(质量特性调整因子)" >
+            <el-form-item label="QR(质量特性调整因子)">
               <el-select v-model="form.distributedProcessing" placeholder="请选择分布式处理调整因子" @change="calculateQR">
                 <el-option label="没有明示对分布式处理的需求事项" :value="-1" />
                 <el-option label="通过网络进行客户端/服务器及网络基础应用分布处理和传输" :value="0" />
@@ -204,7 +182,7 @@
 
         <!-- SWF 中间变量展示 -->
         <el-form-item label="SWF(软件因素调整因子)" :prop="null">
-          <el-input :value="form.swf" placeholder="SWF" disabled style="width: 220px;"/>
+          <el-input :value="form.swf" placeholder="SWF" disabled style="width: 220px;" />
         </el-form-item>
 
         <!-- SL -->
@@ -245,12 +223,12 @@
 
         <!-- RDF 中间变量展示 -->
         <el-form-item label="RDF(开发因素调整因子)" :prop="null">
-          <el-input :value="form.rdf" placeholder="RDF" disabled style="width: 220px;"/>
+          <el-input :value="form.rdf" placeholder="RDF" disabled style="width: 220px;" />
         </el-form-item>
 
         <!-- AE 计算 -->
         <el-form-item label="AE(估算工作量)" :prop="null">
-          <el-input :value="form.ae" placeholder="AE" disabled style="width: 220px;"/>
+          <el-input :value="form.ae" placeholder="AE" disabled style="width: 220px;" />
         </el-form-item>
       </div>
 
@@ -261,19 +239,10 @@
           <!-- F 选择框 -->
           <el-col :span="8">
             <el-form-item label="F(人力成本费率)" prop="fOption">
-              <el-select
-                v-model="form.fOption"
-                placeholder="请选择F"
-                filterable
-                :filter-method="filterFOptions"
-                @change="updateFValue"
-              >
-                <el-option
-                  v-for="option in filteredOptions"
-                  :key="option.key"
-                  :label="option.label"
-                  :value="option.value"
-                ></el-option>
+              <el-select v-model="form.fOption" placeholder="请选择F" filterable :filter-method="filterFOptions"
+                @change="updateFValue">
+                <el-option v-for="option in filteredOptions" :key="option.key" :label="option.label"
+                  :value="option.value"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -290,61 +259,56 @@
         <el-row :gutter="20">
           <el-col>
             <el-form-item label="DNC(直接非人力成本)" prop="dnc">
-              <el-input v-model="form.dnc" disabled style="width: 220px;"/>
+              <el-input v-model="form.dnc" disabled style="width: 220px;" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="办公费" prop="officeExpense">
-              <el-input v-model="form.officeExpense" placeholder="请输入办公费" clearable @change="calculateDNC"/>
+              <el-input v-model="form.officeExpense" placeholder="请输入办公费" clearable @change="calculateDNC" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="差旅费" prop="travelExpense">
-              <el-input v-model="form.travelExpense" placeholder="请输入差旅费" clearable @change="calculateDNC"/>
+              <el-input v-model="form.travelExpense" placeholder="请输入差旅费" clearable @change="calculateDNC" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="8">
             <el-form-item label="培训费" prop="trainingExpense">
-              <el-input v-model="form.trainingExpense" placeholder="请输入培训费" clearable @change="calculateDNC"/>
+              <el-input v-model="form.trainingExpense" placeholder="请输入培训费" clearable @change="calculateDNC" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="业务费" prop="businessExpense">
-              <el-input v-model="form.businessExpense" placeholder="请输入业务费" clearable @change="calculateDNC"/>
+              <el-input v-model="form.businessExpense" placeholder="请输入业务费" clearable @change="calculateDNC" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="8">
             <el-form-item label="采购费" prop="purchaseExpense">
-              <el-input v-model="form.purchaseExpense" placeholder="请输入采购费" clearable @change="calculateDNC"/>
+              <el-input v-model="form.purchaseExpense" placeholder="请输入采购费" clearable @change="calculateDNC" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="其他" prop="otherExpense">
-              <el-input v-model="form.otherExpense" placeholder="请输入其他费用" clearable @change="calculateDNC"/>
+              <el-input v-model="form.otherExpense" placeholder="请输入其他费用" clearable @change="calculateDNC" />
             </el-form-item>
           </el-col>
         </el-row>
 
         <!-- 计算出的SDC -->
         <el-form-item label="SDC(软件开发成本)" :prop="null">
-          <el-input :value="form.sdc" placeholder="SDC" disabled style="width: 220px;"/>
+          <el-input :value="form.sdc" placeholder="SDC" disabled style="width: 220px;" />
         </el-form-item>
 
         <!-- 风险类型列表 -->
         <el-row gutter="0" class="risk-row">
           <el-col :span="9" class="risk-col" v-for="(risk, index) in risks" :key="index">
             <el-form-item :label="risk.name" :prop="'risk' + index">
-              <el-select
-                v-model="risk.value"
-                placeholder="请选择风险取值"
-                class="risk-select"
-                @change="updateOverallRisk"
-                style="width: 220px;"
-              >
+              <el-select v-model="risk.value" placeholder="请选择风险取值" class="risk-select" @change="updateOverallRisk"
+                style="width: 220px;">
                 <el-option v-for="item in riskOptions" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
@@ -363,7 +327,7 @@
 
         <!-- ESDC计算 -->
         <el-form-item label="ESDC(调整后软件开发成本)" :prop="null">
-          <el-input :value="form.esdc" placeholder="ESDC" disabled style="width: 220px;"/>
+          <el-input :value="form.esdc" placeholder="ESDC" disabled style="width: 220px;" />
         </el-form-item>
       </div>
     </el-form>
@@ -374,7 +338,51 @@
       <el-button :disabled="activeStep === 2" type="primary" @click="nextStep">下一步</el-button>
       <el-button v-if="activeStep === 2" type="success" @click="submitForm">提交</el-button>
     </div>
+
+    <el-button type="primary" @click="openAIAssistant"
+      style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+      AI助手
+    </el-button>
+
+    <!-- AI助手边栏 -->
+    <el-drawer title="AI助手" :visible.sync="isAIAssistantVisible" direction="rtl" size="400px">
+      <div class="ai-assistant" v-loading="aiLoading" element-loading-text="获取推荐系数中...">
+        <!-- 显示推荐系数 -->
+        <div v-if="recommendations">
+          <h3>推荐的造价评估系数</h3>
+          <ul>
+            <li>PDR: {{ recommendations.PDR }}</li>
+            <li>SF: {{ recommendations.SF }}</li>
+            <li>BD: {{ recommendations.BD }}</li>
+            <li>AT: {{ recommendations.AT }}</li>
+            <li>QR: {{ recommendations.QR }}</li>
+            <li>SL: {{ recommendations.SL }}</li>
+            <li>DT: {{ recommendations.DT }}</li>
+          </ul>
+        </div>
+        <!-- 聊天界面 -->
+        <div class="chat-container">
+          <div class="messages" style="height: 300px; overflow-y: auto; margin-bottom: 10px;">
+            <div v-for="(msg, index) in messages" :key="index" :class="msg.type">
+              <span>{{ msg.content }}</span>
+            </div>
+          </div>
+          <el-row>
+            <el-col :span="20">
+              <el-input v-model="userInput" placeholder="请输入您的问题" @keyup.enter="sendMessage"
+                suffix-icon="el-icon-chat-line-round"></el-input>
+            </el-col>
+            <el-col :span="4">
+              <el-button type="primary" @click="sendMessage">发送</el-button>
+            </el-col>
+          </el-row>
+        </div>
+      </div>
+
+    </el-drawer>
+
   </div>
+
 </template>
 
 
@@ -382,8 +390,10 @@
 import { listProject } from '@/api/evaluate/project'; // 替换为实际路径
 import { listProductbudget } from '@/api/evaluate/productbudget'; // 替换为实际路径
 
-import {updateAnalysis} from "@/api/evaluate/analysis";
-import {updateProductbudget} from "@/api/evaluate/productbudget";
+import { updateAnalysis } from "@/api/evaluate/analysis";
+import { updateProductbudget } from "@/api/evaluate/productbudget";
+
+import bgtAI from '@/api/evaluate/bgtAI'; // 导入AI交互API
 
 export default {
   name: "CostEvaluation",
@@ -399,10 +409,10 @@ export default {
       projectRequirement: "暂无项目需求内容", // 默认显示内容
       activeStep: 0, // 当前步骤
       form: {
-        projectID:null,
+        projectID: null,
         pdr: null,
         pdrPercentile: null, // PDR 百分位选择
-        s:null,
+        s: null,
         sfOption: null, // SF 情况,根据s，即功能点得到
         sf: null, // SF 数值
         bdOption: null, // BD 情况
@@ -410,10 +420,10 @@ export default {
         atOption: null, // AT 情况
         at: null, // AT 数值
         //各种质量特性调整因子
-        distributedProcessing:null,
-        performance:null,
-        reliability:null,
-        multiSite:null,
+        distributedProcessing: null,
+        performance: null,
+        reliability: null,
+        multiSite: null,
         //
         qrOption: null, // QR 情况
         qr: null, // QR 数值
@@ -463,16 +473,16 @@ export default {
         { label: "P90", value: 17.81, description: "悲观估计，适用于高复杂度或严苛质量要求项目" },
       ],
       rules: {
-        pdrOption: [{required: true, message: "请输入PDR", trigger: "blur"}],
-        sfOption: [{required: true, message: "请输入SF", trigger: "blur"}],
-        bdOption: [{required: true, message: "请输入BD", trigger: "blur"}],
-        atOption: [{required: true, message: "请输入AT", trigger: "blur"}],
-        qrOption: [{required: true, message: "请输入QR", trigger: "blur"}],
-        slOption: [{required: true, message: "请输入SL", trigger: "blur"}],
-        dtOption: [{required: true, message: "请输入DT", trigger: "blur"}],
-        fOption: [{required: true, message: "请输入F", trigger: "blur"}],
-        dncOption: [{required: true, message: "请输入DNC", trigger: "blur"}],
-        rskOption: [{required: true, message: "请输入RSK", trigger: "blur"}],
+        pdrOption: [{ required: true, message: "请输入PDR", trigger: "blur" }],
+        sfOption: [{ required: true, message: "请输入SF", trigger: "blur" }],
+        bdOption: [{ required: true, message: "请输入BD", trigger: "blur" }],
+        atOption: [{ required: true, message: "请输入AT", trigger: "blur" }],
+        qrOption: [{ required: true, message: "请输入QR", trigger: "blur" }],
+        slOption: [{ required: true, message: "请输入SL", trigger: "blur" }],
+        dtOption: [{ required: true, message: "请输入DT", trigger: "blur" }],
+        fOption: [{ required: true, message: "请输入F", trigger: "blur" }],
+        dncOption: [{ required: true, message: "请输入DNC", trigger: "blur" }],
+        rskOption: [{ required: true, message: "请输入RSK", trigger: "blur" }],
       },
       // 风险类型
       risks: [
@@ -490,7 +500,15 @@ export default {
         { value: 1, label: '1' }
       ],
       fOptions: [], // 从 JSON 文件加载的数据
-      filteredOptions: [] // 筛选后的选项
+      filteredOptions: [], // 筛选后的选项
+
+      // 新增数据属性
+      isAIAssistantVisible: false, // 控制AI助手边栏显示
+      recommendations: null, // 存储AI推荐的系数
+      messages: [], // 聊天消息
+      userInput: '', // 用户输入
+      loading: false, // 控制加载状态
+      aiLoading: false, // 控制AI推荐加载状态
     };
   },
   watch: {
@@ -513,8 +531,8 @@ export default {
   },
   methods: {
     stripHtml(html) {
-  return html.replace(/<[^>]+>/g, '').trim();  // 去掉所有HTML标签
-},
+      return html.replace(/<[^>]+>/g, '').trim();  // 去掉所有HTML标签
+    },
     // 获取当前项目的需求内容
     fetchProjectRequirement() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -533,6 +551,8 @@ export default {
           if (project) {
             // 清理项目需求内容，去掉冗余的HTML标签
             this.projectRequirement = this.stripHtml(project.requireContent);
+            // 发送需求内容给AI获取推荐系数
+            this.getAIDependencies();
           } else {
             this.$message.warning("未找到该项目的需求内容！");
             this.projectRequirement = "暂无项目需求内容";
@@ -579,8 +599,8 @@ export default {
 
     // 计算 QR
     calculateQR() {
-      const qr = (this.form.distributedProcessing + this.form.performance + this.form.reliability + this.form.multiSite)*0.025+1;
-      console.log(this.form.distributedProcessing+this.form.performance+this.form.reliability+this.form.multiSite)
+      const qr = (this.form.distributedProcessing + this.form.performance + this.form.reliability + this.form.multiSite) * 0.025 + 1;
+      console.log(this.form.distributedProcessing + this.form.performance + this.form.reliability + this.form.multiSite)
       this.form.qr = this.formatDecimal(qr);  // 格式化为四位小数
       this.calculateAE(); // 更新 AE
     },
@@ -607,13 +627,13 @@ export default {
     },
     //计算DNC
     calculateDNC() {
-        const dnc=this.form.officeExpense +
+      const dnc = this.form.officeExpense +
         this.form.travelExpense +
         this.form.trainingExpense +
         this.form.businessExpense +
         this.form.purchaseExpense +
         this.form.otherExpense;
-        this.form.dnc=this.formatDecimal(dnc)
+      this.form.dnc = this.formatDecimal(dnc)
     },
     // 计算 SDC
     //SDC公式暂时这么写
@@ -665,17 +685,18 @@ export default {
       } else {
         this.form.rsk = '';
       }
-
-      this.filteredOptions = this.fOptions
-        .filter(
-          (item) =>
-            item.city.includes(query) ||
-            item.rate.toString().includes(query)
-        )
-        .map((item) => ({
-          label: `${item.city} - ${item.rate}`,
-          value: item.rate
-        }));
+      /*
+            this.filteredOptions = this.fOptions
+              .filter(
+                (item) =>
+                  item.city.includes(query) ||
+                  item.rate.toString().includes(query)
+              )
+              .map((item) => ({
+                label: `${item.city} - ${item.rate}`,
+                value: item.rate
+              }));
+              */
     },
 
     // 计算 ESDC
@@ -766,6 +787,19 @@ export default {
         }));
         return;
       }
+
+      // 添加筛选逻辑
+      this.filteredOptions = this.fOptions
+        .filter(
+          (item) =>
+            item.city.toLowerCase().includes(query.toLowerCase()) ||
+            item.rate.toString().includes(query)
+        )
+        .map((item) => ({
+          label: `${item.city} - ${item.rate}`,
+          value: item.rate,
+          key: item.id
+        }));
     },
     // 更新输入框值
     updateFValue(value) {
@@ -791,7 +825,7 @@ export default {
 
     // 准备表单数据，只保留需要提交的字段
     prepareFormData() {
-      const {projectID,
+      const { projectID,
         pdr, sf, bd, at, qr,
         swf, sl, dt, rdf, ae, f, dnc,
         sdc, rsk, esdc
@@ -816,9 +850,9 @@ export default {
     // 提交表单
     submitForm() {
       const urlParams = new URLSearchParams(window.location.search);
-      const projectid= urlParams.get('projectID'); // 获取参数 projectID
+      const projectid = urlParams.get('projectID'); // 获取参数 projectID
       const submitData = this.prepareFormData();
-      submitData.projectID=projectid;
+      submitData.projectID = projectid;
       this.$refs.form.validate((valid) => {
         if (valid) {
           // 提交逻辑
@@ -829,7 +863,7 @@ export default {
               window.location.href = `http://localhost/evaluate/productbudget`;
               //这里可以继续增加跳转
             });
-            }
+          }
           console.log(submitData);
           this.$message.success("提交成功");
         } else {
@@ -837,6 +871,105 @@ export default {
         }
       });
     },
+
+    async getAIDependencies() {
+      if (!this.projectRequirement) {
+        this.$message.warning("项目需求内容为空，无法获取推荐系数！");
+        return;
+      }
+
+      this.aiLoading = true;
+
+      try {
+        const messages = [
+          {
+            role: 'system',
+            content: `你是一个专业的软件造价评估分析师。请根据以下项目需求，推荐合适的造价评估系数（PDR、SF、BD、AT、QR、SL、DT）。请**严格**以**纯 JSON**格式返回推荐的系数，且**不要**包含任何额外的文字。格式如下：
+    {
+      "PDR": value,
+      "SF": value,
+      "BD": value,
+      "AT": value,
+      "QR": value,
+      "SL": value,
+      "DT": value
+    }`
+          },
+          { role: 'user', content: this.projectRequirement }
+        ];
+
+
+        const aiResponse = await bgtAI(messages);
+
+        // 解析AI返回的JSON内容
+        const recommendations = JSON.parse(aiResponse);
+
+        this.recommendations = recommendations;
+
+        // 自动填充表单中的推荐值（可选）
+        // this.form.pdr = recommendations.PDR;
+        // this.form.sf = recommendations.SF;
+        // this.form.bd = recommendations.BD;
+        // this.form.at = recommendations.AT;
+        // this.form.qr = recommendations.QR;
+        // this.form.sl = recommendations.SL;
+        // this.form.dt = recommendations.DT;
+
+      } catch (error) {
+        console.error("获取AI推荐系数失败:", error);
+        this.$message.error("获取AI推荐系数失败，请稍后再试！");
+      } finally {
+        this.aiLoading = false;
+      }
+    },
+
+
+    openAIAssistant() {
+      this.isAIAssistantVisible = true;
+      // 初始化聊天记录，如果需要的话
+      if (this.messages.length === 0) {
+        this.messages.push({ type: 'ai', content: '您好！我是您的造价评估AI助手，有什么可以帮您的吗？' });
+      }
+    },
+
+    async sendMessage() {
+      const input = this.userInput.trim();
+      if (!input) return;
+
+      // 添加用户消息到聊天记录
+      this.messages.push({ type: 'user', content: input });
+      this.userInput = '';
+
+      // 发送消息给AI
+      try {
+        const messages = this.messages.map(msg => ({
+          role: msg.type === 'user' ? 'user' : 'assistant',
+          content: msg.content
+        }));
+
+        // 添加系统消息，如果需要的话
+        // messages.unshift({ role: 'system', content: '...' });
+
+        const aiResponse = await bgtAI(messages);
+
+        // 添加AI回复到聊天记录
+        this.messages.push({ type: 'ai', content: aiResponse });
+
+      } catch (error) {
+        console.error("发送消息到AI失败:", error);
+        this.$message.error("发送消息到AI失败，请稍后再试！");
+      }
+    },
+
+
+
+
+
+    // 获取当前页面的 projectID
+    getProjectID() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('projectID');
+    }
   },
 };
 </script>
@@ -846,13 +979,60 @@ export default {
   padding: 20px;
 }
 
+/* AI助手样式 */
+.ai-assistant {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.messages .user {
+  text-align: right;
+  margin: 5px 0;
+}
+
+.messages .ai {
+  text-align: left;
+  margin: 5px 0;
+}
+
+.messages .user span {
+  background-color: #409EFF;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 10px;
+  display: inline-block;
+}
+
+.messages .ai span {
+  background-color: #f1f1f1;
+  padding: 5px 10px;
+  border-radius: 10px;
+  display: inline-block;
+}
+
 .step-footer {
   margin-top: 20px;
   text-align: center;
 }
+
 .mt20 {
   margin-top: 20px;
 }
+
 .el-steps {
   margin-bottom: 20px;
 }

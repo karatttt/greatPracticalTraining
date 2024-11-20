@@ -2,12 +2,8 @@
   <div class="app-container">
     <!-- 表格部分 -->
     <!-- 表格部分 -->
-    <el-table
-      v-loading="loading"
-      :data="productbudgetList"
-      @selection-change="handleSelectionChange"
-      style="width: 100%"
-    >
+    <el-table v-loading="loading" :data="productbudgetList" @selection-change="handleSelectionChange"
+      style="width: 100%">
       <!--      <el-table-column type="selection" width="55" align="center" />-->
       <el-table-column label="项目ID" align="center" prop="projectID" />
 
@@ -120,8 +116,8 @@ export default {
     this.initializeData();
   },
   methods: {
-     /** 初始化数据：获取项目列表和评估列表 */
-     async initializeData() {
+    /** 初始化数据：获取项目列表和评估列表 */
+    async initializeData() {
       await this.fetchProjects();
       this.getList();
     },
