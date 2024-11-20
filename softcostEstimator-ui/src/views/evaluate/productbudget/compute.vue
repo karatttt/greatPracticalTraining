@@ -898,7 +898,7 @@ export default {
             updateProductbudget(submitData).then(response => {
               this.$message.success("修改成功");
               this.isAIAssistantVisible = false;
-              window.location.href = 'http://localhost/evaluate/productbudget';
+              window.location.href = 'http://localhost:1024/evaluate/productbudget';
               //这里可以继续增加跳转
             }).catch(error => {
               console.error("提交表单失败:", error);
@@ -1084,7 +1084,7 @@ DT（开发团队背景调整因子，Development Team）
           {
             role: 'system',
             content: `你是一名资深的软件造价评估分析师。软件造价评估使用以下关键系数来衡量项目成本：
-        
+
         PDR（生产率，Productivity Rate）
         含义：每个功能点所需的工作时间（人时/功能点）。
         推荐范围：根据团队能力，通常为5-20人时/功能点。
@@ -1106,7 +1106,7 @@ DT（开发团队背景调整因子，Development Team）
         DT（开发团队背景调整因子，Development Team）
         含义：反映团队经验对生产率的影响。
         推荐范围：经验丰富0.8-1.0，经验中等1.0-1.2，经验不足1.2-1.5。
-        
+
         请继续以软件造价评估分析师的身份，回答用户的问题。`
           },
           // 添加对话历史，用户消息添加前缀
