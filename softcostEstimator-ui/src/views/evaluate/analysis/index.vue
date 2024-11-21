@@ -823,6 +823,7 @@ export default {
     /** 提交AI按钮 */
     submitFormAI() {
       if (this.openAI == true) {
+        this.$modal.msgSuccess("开始修改");
         this.$refs.formAI.validate((valid => {
           if (valid) {
             updateAnalysisAI(this.formAI.textarea).then(response => {
