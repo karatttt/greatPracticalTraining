@@ -2,7 +2,10 @@ package com.softcostEstimator.evaluate.controller;
 
 import java.util.List;
 import javax.annotation.Resource;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +24,7 @@ import com.softcostEstimator.evaluate.domain.FunctionPointAnalysis;
 import com.softcostEstimator.evaluate.service.IFunctionPointAnalysisService;
 import com.softcostEstimator.common.utils.poi.ExcelUtil;
 import com.softcostEstimator.common.core.page.TableDataInfo;
+
 
 /**
  * 功能点分析Controller
@@ -46,7 +50,20 @@ public class FunctionPointAnalysisController extends BaseController
         List<FunctionPointAnalysis> list = functionPointAnalysisService.selectFunctionPointAnalysisList(functionPointAnalysis);
         return getDataTable(list);
     }
-
+    @PreAuthorize("@ss.hasPermi('evaluate:analysis:load')")
+    @GetMapping("/load")
+    public ResponseEntity<List<Map<String, Object>>> loadFunctionPointAnalysis(FunctionPointAnalysis functionPointAnalysis) {
+        List<Map<String, Object>> data = functionPointAnalysisService.loadFunctionPointAnalysis(functionPointAnalysis);
+        return ResponseEntity.ok(data);
+    }
+    @PreAuthorize("@ss.hasPermi('evaluate:analysis:search')")
+    @GetMapping("/search")
+    public TableDataInfo search(FunctionPointAnalysis functionPointAnalysis)
+    {
+        startPage();
+        List<FunctionPointAnalysis> search = functionPointAnalysisService.searchFunctionPointAnalysisList(functionPointAnalysis);
+        return getDataTable(search);
+    }
     /**
      * 导出功能点分析列表
      */
@@ -78,6 +95,7 @@ public class FunctionPointAnalysisController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody FunctionPointAnalysis functionPointAnalysis)
     {
+        System.out.println(functionPointAnalysis);
         return toAjax(functionPointAnalysisService.insertFunctionPointAnalysis(functionPointAnalysis));
     }
 
@@ -102,4 +120,5 @@ public class FunctionPointAnalysisController extends BaseController
     {
         return toAjax(functionPointAnalysisService.deleteFunctionPointAnalysisByProjectIds(projectIds));
     }
+
 }

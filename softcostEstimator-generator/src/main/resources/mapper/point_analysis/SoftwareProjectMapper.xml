@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.softcostEstimator.system.mapper.SoftwareProjectMapper">
+    
+    <resultMap type="SoftwareProject" id="SoftwareProjectResult">
+        <result property="projectId"    column="project_id"    />
+        <result property="ILF"    column="ILF"    />
+        <result property="EIF"    column="EIF"    />
+        <result property="EI"    column="EI"    />
+        <result property="EO"    column="EO"    />
+        <result property="EQ"    column="EQ"    />
+        <result property="UFP"    column="UFP"    />
+        <result property="GSC"    column="GSC"    />
+        <result property="TCF"    column="TCF"    />
+        <result property="AFP"    column="AFP"    />
+    </resultMap>
+
+    <sql id="selectSoftwareProjectVo">
+        select project_id, ILF, EIF, EI, EO, EQ, UFP, GSC, TCF, AFP from software_project
+    </sql>
+
+    <select id="selectSoftwareProjectList" parameterType="SoftwareProject" resultMap="SoftwareProjectResult">
+        <include refid="selectSoftwareProjectVo"/>
+        <where>  
+            <if test="ILF != null "> and ILF = #{ILF}</if>
+            <if test="EIF != null "> and EIF = #{EIF}</if>
+            <if test="EI != null "> and EI = #{EI}</if>
+            <if test="EO != null "> and EO = #{EO}</if>
+            <if test="EQ != null "> and EQ = #{EQ}</if>
+            <if test="UFP != null "> and UFP = #{UFP}</if>
+            <if test="GSC != null "> and GSC = #{GSC}</if>
+            <if test="TCF != null "> and TCF = #{TCF}</if>
+            <if test="AFP != null "> and AFP = #{AFP}</if>
+        </where>
+    </select>
+    
+    <select id="selectSoftwareProjectByProjectId" parameterType="String" resultMap="SoftwareProjectResult">
+        <include refid="selectSoftwareProjectVo"/>
+        where project_id = #{projectId}
+    </select>
+
+    <insert id="insertSoftwareProject" parameterType="SoftwareProject" useGeneratedKeys="true" keyProperty="projectId">
+        insert into software_project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ILF != null">ILF,</if>
+            <if test="EIF != null">EIF,</if>
+            <if test="EI != null">EI,</if>
+            <if test="EO != null">EO,</if>
+            <if test="EQ != null">EQ,</if>
+            <if test="UFP != null">UFP,</if>
+            <if test="GSC != null">GSC,</if>
+            <if test="TCF != null">TCF,</if>
+            <if test="AFP != null">AFP,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ILF != null">#{ILF},</if>
+            <if test="EIF != null">#{EIF},</if>
+            <if test="EI != null">#{EI},</if>
+            <if test="EO != null">#{EO},</if>
+            <if test="EQ != null">#{EQ},</if>
+            <if test="UFP != null">#{UFP},</if>
+            <if test="GSC != null">#{GSC},</if>
+            <if test="TCF != null">#{TCF},</if>
+            <if test="AFP != null">#{AFP},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSoftwareProject" parameterType="SoftwareProject">
+        update software_project
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ILF != null">ILF = #{ILF},</if>
+            <if test="EIF != null">EIF = #{EIF},</if>
+            <if test="EI != null">EI = #{EI},</if>
+            <if test="EO != null">EO = #{EO},</if>
+            <if test="EQ != null">EQ = #{EQ},</if>
+            <if test="UFP != null">UFP = #{UFP},</if>
+            <if test="GSC != null">GSC = #{GSC},</if>
+            <if test="TCF != null">TCF = #{TCF},</if>
+            <if test="AFP != null">AFP = #{AFP},</if>
+        </trim>
+        where project_id = #{projectId}
+    </update>
+
+    <delete id="deleteSoftwareProjectByProjectId" parameterType="String">
+        delete from software_project where project_id = #{projectId}
+    </delete>
+
+    <delete id="deleteSoftwareProjectByProjectIds" parameterType="String">
+        delete from software_project where project_id in 
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </delete>
+</mapper>

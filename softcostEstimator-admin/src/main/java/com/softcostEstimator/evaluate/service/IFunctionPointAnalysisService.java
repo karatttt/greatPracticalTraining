@@ -1,6 +1,8 @@
 package com.softcostEstimator.evaluate.service;
 
 import java.util.List;
+import java.util.Map;
+
 import com.softcostEstimator.evaluate.domain.FunctionPointAnalysis;
 import com.softcostEstimator.evaluate.domain.Productbudget;
 
@@ -42,6 +44,13 @@ public interface IFunctionPointAnalysisService
      * @param functionPointAnalysis 功能点分析
      * @return 结果
      */
+    /**
+     * 根据条件查询功能点分析列表
+     *
+     * @param functionPointAnalysis 包含查询条件的对象
+     * @return 功能点分析列表
+     */
+    List<FunctionPointAnalysis> searchFunctionPointAnalysisList(FunctionPointAnalysis functionPointAnalysis);
     public int updateFunctionPointAnalysis(FunctionPointAnalysis functionPointAnalysis);
 
     /**
@@ -51,7 +60,13 @@ public interface IFunctionPointAnalysisService
      * @return 结果
      */
     public int deleteFunctionPointAnalysisByProjectIds(Long[] projectIds);
-
+    /**
+     *
+     *
+     *
+     * @return 结果
+     */
+    public List<Map<String, Object>> loadFunctionPointAnalysis(FunctionPointAnalysis functionPointAnalysis);
     /**
      * 删除功能点分析信息
      * 

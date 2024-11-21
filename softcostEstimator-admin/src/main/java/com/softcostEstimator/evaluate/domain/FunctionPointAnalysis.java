@@ -17,7 +17,7 @@ public class FunctionPointAnalysis extends BaseEntity
 
     /** 项目ID */
     private Long projectId;
-
+    private String projectName;
     /** ILF */
     @Excel(name = "ILF")
     private Long ILF;
@@ -48,11 +48,11 @@ public class FunctionPointAnalysis extends BaseEntity
 
     /** TCF */
     @Excel(name = "TCF")
-    private Long TCF;
+    private Float TCF;
 
     /** AFP */
     @Excel(name = "AFP")
-    private Long AFP;
+    private Float AFP;
 
     public void setProjectId(Long projectId) 
     {
@@ -126,25 +126,31 @@ public class FunctionPointAnalysis extends BaseEntity
     {
         return GSC;
     }
-    public void setTCF(Long TCF) 
+    public void setTCF(float TCF)
     {
         this.TCF = TCF;
     }
 
-    public Long getTCF() 
+    public Float getTCF()
     {
         return TCF;
     }
-    public void setAFP(Long AFP) 
+    public void setAFP(float AFP)
     {
         this.AFP = AFP;
     }
 
-    public Long getAFP() 
+    public Float getAFP()
     {
         return AFP;
     }
+    public String getProjectName() {
+        return projectName;
+    }
 
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

@@ -4,6 +4,8 @@ import java.util.List;
 
 import cn.hutool.json.JSONUtil;
 import com.softcostEstimator.evaluate.domain.Productbudget;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.softcostEstimator.evaluate.mapper.FunctionPointAnalysisMapper;
@@ -47,7 +49,16 @@ public class FunctionPointAnalysisServiceImpl implements IFunctionPointAnalysisS
     {
         return functionPointAnalysisMapper.selectFunctionPointAnalysisList(functionPointAnalysis);
     }
-
+    /**
+     * 根据条件查询功能点分析列表
+     *
+     * @param functionPointAnalysis 包含查询条件的对象
+     * @return 功能点分析列表
+     */
+    @Override
+    public List<FunctionPointAnalysis> searchFunctionPointAnalysisList(FunctionPointAnalysis functionPointAnalysis) {
+        return functionPointAnalysisMapper.searchFunctionPointAnalysisList(functionPointAnalysis);
+    }
     /**
      * 新增功能点分析
      * 
@@ -100,5 +111,10 @@ public class FunctionPointAnalysisServiceImpl implements IFunctionPointAnalysisS
 
         String json = JSONUtil.toJsonStr(functionPointAnalysis);
         return json;
+    }
+    @Override
+    public List<Map<String, Object>> loadFunctionPointAnalysis(FunctionPointAnalysis functionPointAnalysis) {
+        List<Map<String, Object>> result = functionPointAnalysisMapper.loadFunctionPointAnalysis(functionPointAnalysis);
+        return result;
     }
 }
