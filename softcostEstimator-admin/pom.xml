@@ -10,18 +10,13 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <artifactId>softcostEstimator-admin</artifactId>
-<repositories>
-    <repository>
-        <id>com.e-iceblue</id>
-        <name>e-iceblue</name>
-        <url>https://repo.e-iceblue.cn/repository/maven-public</url>
-    </repository>
-</repositories>
-    <description>
-        web服务入口
-    </description>
 
     <repositories>
+        <repository>
+            <id>com.e-iceblue</id>
+            <name>e-iceblue</name>
+            <url>https://repo.e-iceblue.cn/repository/maven-public</url>
+        </repository>
         <repository>
             <id>spring-snapshots</id>
             <name>Spring Snapshots</name>
@@ -31,9 +26,11 @@
             </releases>
         </repository>
     </repositories>
+    <description>
+        web服务入口
+    </description>
 
     <dependencies>
-
 
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -54,8 +51,6 @@
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional> <!-- 表示依赖不会传递 -->
         </dependency>
-
-
 
          <!-- Mysql驱动包 -->
         <dependency>
